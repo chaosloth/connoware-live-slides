@@ -1,80 +1,33 @@
 "use client";
-import { ConnectionState, SyncClient } from "twilio-sync";
-import { useState, useEffect } from "react";
-import { generateSlug } from "random-word-slugs";
-import useWindowFocus from "use-window-focus";
-import { Theme } from "@twilio-paste/core/theme";
 
+import { useState, useEffect } from "react";
+import useWindowFocus from "use-window-focus";
 import { Phase } from "@/types/Phases";
-import { AnalyticsProvider } from "@/components/Analytics";
 import CenterLayout from "@/components/CenterLayout";
 import WelcomeCard from "@/components/WelcomeCard";
 import ErrorCard from "@/components/ErrorCard";
-import { Cta, CurrentState, LiveSlides, Page } from "@/types/LiveSlides";
+import {
+  Action,
+  CurrentState,
+  LiveSlidePresentation,
+  Slide,
+} from "@/types/LiveSlides";
 import DynamicCardWrapper from "@/components/DynamicCardWrapper";
-import { Paragraph } from "@twilio-paste/core";
+import { State, useSyncClient } from "@/app/context/Sync";
+import { useAnalytics } from "@/app/context/Analytics";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
-  const [currentPage, setCurrentPage] = useState<Page>();
+  const [currentSlide, setCurrentSlide] = useState<Slide>();
   const [presentationState, setCurrentState] = useState<CurrentState>();
-  const [identity, setIdentity] = useState<string>();
   const [pid, setPresentationId] = useState<string | undefined>();
-  const [status, setStatus] = useState<string>();
-  const [syncClient, setSyncClient] = useState<SyncClient>();
-  const [token, setToken] = useState<string>();
-  const [pages, setPages] = useState<LiveSlides>();
-  const [connectionState, setConnectionState] = useState<ConnectionState>();
+  const [presentation, setPresentation] = useState<LiveSlidePresentation>();
 
   const windowFocused = useWindowFocus();
+  const { client, identity, state } = useSyncClient();
+  const analytics = useAnalytics();
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
-
-  /**
-   *
-   * Get a token and register the device
-   *
-   */
-  // Helper method to get an access token
-  const getToken = () =>
-    fetch(`${BASE_URL}/api/token?identity=${identity}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(`Received access token`, data);
-        setStatus("Got access token");
-        // Create Twilio Sync client with newly received token
-        return data.token;
-      })
-      .catch((reason: any) => {
-        setStatus("Could not fetch token");
-        console.error("Error getting token", reason);
-      });
-
-  /**
-   *
-   * Set the users identity based on passed in parameters or local cache
-   *
-   */
-  useEffect(() => {
-    // Get client ID from local storage or generate new one
-    let localIdentity =
-      localStorage.getItem("identity") || "web:" + generateSlug();
-
-    // Parse identity query parameter (optional)
-    const searchParams = new URLSearchParams(document.location.search);
-    const searchParamsIdentity = searchParams.get("identity");
-    if (searchParamsIdentity) {
-      console.log(
-        `Setting identity from search params [${searchParamsIdentity}]`
-      );
-      localIdentity = searchParamsIdentity || localIdentity;
-    }
-
-    // Set the local identity
-    localStorage.setItem("identity", localIdentity);
-    console.log(`Using identity [${localIdentity}]`);
-    setIdentity(localIdentity);
-  }, []);
 
   /**
    *
@@ -105,12 +58,24 @@ export default function Home() {
 
   /**
    *
+   * Monitor Sync state
+   *
+   */
+  useEffect(() => {
+    if (state === State.Initializing || state === State.Ready) return;
+    console.log(`Setting ErrorSync - state is [${state}]`);
+    setPhase(Phase.ErrorSync);
+  }, [state]);
+
+  /**
+   *
    * Detect focus on app
    *
    */
   useEffect(() => {
     if (!identity || identity === "") return;
-    //TODO: Ensure reconnect of Sync
+    const controller = new AbortController();
+    const signal = controller.signal;
 
     //TODO: Let app know that we've changed focus, need to pass client ID
     fetch(
@@ -121,79 +86,11 @@ export default function Home() {
       .catch((err) =>
         console.log(`Error sending focus event [${windowFocused}]`, err)
       );
-  }, [windowFocused, identity, BASE_URL]);
-
-  /**
-   *
-   * Create sync client and logic for token refresh
-   *
-   */
-  useEffect(() => {
-    if (!identity || identity === "") return;
-
-    (async () => {
-      console.log(`Fetching access token with identity [${identity}]`);
-      setStatus("Fetching access token");
-
-      try {
-        // Get a new token on load
-        let token = await getToken();
-
-        if (!token) {
-          console.warn(`Twilio token unavailable, see error logs`);
-          setPhase(Phase.ErrorNoToken);
-          return;
-        }
-
-        console.log("Creating new sync client");
-        setStatus("Creating new sync client");
-
-        let client = new SyncClient(token);
-        setSyncClient(client);
-
-        client.on("tokenAboutToExpire", async () => {
-          console.log("tokenAboutToExpire - Fetching token for sync client");
-          const newToken = await getToken();
-          if (!newToken) {
-            console.warn(`Twilio token unavailable, see error logs`);
-            setPhase(Phase.ErrorNoToken);
-            return;
-          }
-          setToken(newToken);
-          await client.updateToken(newToken);
-          console.log("tokenAboutToExpire - Updated access token", newToken);
-        });
-
-        client.on("tokenExpired", async () => {
-          console.log("tokenExpired - Fetching token for sync client");
-          setPhase(Phase.ErrorTokeExpired);
-        });
-
-        client.on("connectionError", async (connectionError) => {
-          console.log("Sync Client Connection error", connectionError);
-        });
-
-        client.on("connectionStateChanged", async (newState) => {
-          console.log("Sync Connection State", newState);
-          setConnectionState(newState);
-        });
-      } catch (err) {
-        setStatus("Error creating sync client. Check logs");
-        console.error(err);
-      }
-
-      setToken(token);
-    })();
-
     return () => {
-      if (syncClient) {
-        console.log("Shutting down sync client");
-        setStatus("Shutting down sync client");
-        syncClient.shutdown();
-        setSyncClient(undefined);
-      }
+      // cancel the request before component unmounts
+      controller.abort();
     };
-  }, [identity]);
+  }, [windowFocused, identity, BASE_URL]);
 
   /**
    *
@@ -201,7 +98,7 @@ export default function Home() {
    *
    */
   useEffect(() => {
-    if (!syncClient) return;
+    if (!client) return;
     if (!pid) return;
 
     const presentationDefinitionDoc = `PRESENTATION-${pid}`;
@@ -210,31 +107,29 @@ export default function Home() {
     );
 
     // Create a subscription to the document
-    syncClient.document(presentationDefinitionDoc).then((doc) => {
-      console.log("SYNC presentation pages retrieved", doc.data);
-      if (doc) setPages(doc.data as LiveSlides);
+    client.document(presentationDefinitionDoc).then((doc) => {
+      console.log("SYNC presentation definition retrieved", doc.data);
+      if (doc) setPresentation(doc.data as LiveSlidePresentation);
 
       doc.on("updated", (event) => {
-        if (event) setPages(event.data as LiveSlides);
-        console.log("SYNC presentation pages updated", event.data);
-        setStatus("Last activity " + new Date().toTimeString());
+        if (event) setPresentation(event.data as LiveSlidePresentation);
+        console.log("SYNC presentation definition updated", event.data);
       });
     });
 
     const presentationStateDoc = `STATE-${pid}`;
     console.log(`Creating subscription to document ${presentationStateDoc}`);
 
-    syncClient.document(presentationStateDoc).then((doc) => {
+    client.document(presentationStateDoc).then((doc) => {
       console.log("SYNC presentation state retrieved", doc.data);
       if (doc) setCurrentState(doc.data as CurrentState);
 
       doc.on("updated", (event) => {
         if (event) setCurrentState(event.data as CurrentState);
         console.log("SYNC presentation state updated", event.data);
-        setStatus("Last activity " + new Date().toTimeString());
       });
     });
-  }, [syncClient, pid]);
+  }, [client, pid]);
 
   /**
    *
@@ -243,50 +138,55 @@ export default function Home() {
    */
   useEffect(() => {
     if (!presentationState) return;
-    let targetPage = pages?.pages.find(
-      (p) => p.id === presentationState.currentPageId
+    let targetSlide = presentation?.slides.find(
+      (p) => p.id === presentationState.currentSlideId
     );
 
-    if (!targetPage) return;
+    if (!targetSlide) return;
 
-    if (targetPage.type) {
-      console.log(`Setting phase to [${targetPage.type}]`, targetPage);
-      setCurrentPage(targetPage);
-      setPhase(Phase[targetPage.type]);
+    if (targetSlide.kind) {
+      console.log(`Setting phase to [${targetSlide.kind}]`, targetSlide);
+      setCurrentSlide(targetSlide);
+      setPhase(Phase[targetSlide.kind]);
     }
-  }, [presentationState?.currentPageId]);
+  }, [presentationState?.currentSlideId]);
 
-  const callNextPage = (target: string) => {
-    let targetPage = pages?.pages.find((p) => p.id === target);
-    console.log(`Local request for page [${target}]`, targetPage);
-    if (!targetPage) return;
+  /**
+   *
+   * Perform the actions in response to user activity
+   *
+   */
+  const performActions = (actions: Action[]) => {
+    console.log(`Performing [${actions.length}] actions`);
 
-    if (targetPage.type) {
-      console.log(`Setting phase to [${targetPage.type}]`, targetPage);
-      setCurrentPage(targetPage);
-      setPhase(Phase[targetPage.type]);
-    }
-  };
+    actions.map((action) => {
+      switch (action.type) {
+        case "slide":
+          let targetSlide = presentation?.slides.find(
+            (p) => p.id === action.slide
+          );
+          if (!targetSlide) return;
+          setCurrentSlide(targetSlide);
+          setPhase(Phase[targetSlide.kind]);
+          return;
+        case "track":
+          console.log(`Track users activity`, action);
+          //TODO: Add Segment tracking
+          analytics.track(action.event, {
+            ...action.properties,
+          });
 
-  const trackCta = (cta: Cta) => {
-    console.log(`Tracking action for cta [${cta.label}] => [${cta.url}]`);
-  };
-
-  const performCta = (cta: Cta) => {
-    console.log(`User performed cta [${cta.label}] => [${cta.url}]`);
-    const url = new URL(cta.url);
-    switch (url.protocol) {
-      case "page":
-        callNextPage(url.hostname);
-        return;
-      case "track":
-        trackCta(cta);
-        return;
-      case "tel":
-      case "http":
-      case "https":
-        window.open(cta.url);
-    }
+          return;
+        case "identify":
+          console.log(`Track users activity`, action);
+          //TODO: Add Segment tracking
+          analytics.identify(identity, action.properties);
+          return;
+        case "url":
+          window.open(action.url);
+          return;
+      }
+    });
   };
 
   /**
@@ -294,28 +194,9 @@ export default function Home() {
    * Return the component fot the current phase
    *
    */
-  const getComponentForPhase = () => {
-    switch (phase) {
-      case Phase.Welcome:
-        return <WelcomeCard />;
-      case Phase.Question:
-      case Phase.Submitted:
-      case Phase.WatchPresenter:
-      case Phase.Identify:
-      case Phase.DemoCta:
-      case Phase.WebRtc:
-        return (
-          <DynamicCardWrapper page={currentPage} performCta={performCta} />
-        );
-      case Phase.ErrorNoPid:
-        return (
-          <ErrorCard
-            title="Let's try that again..."
-            emphasis="Please scan the QR code again. "
-            message="If symptoms persists for more than 4 hours consult a doctor!"
-          />
-        );
-      case Phase.ErrorNoToken:
+  const getComponentForError = () => {
+    switch (state) {
+      case State.ErrorNoToken:
         return (
           <ErrorCard
             title="Let's try that again..."
@@ -324,7 +205,7 @@ export default function Home() {
             showReloadButton={true}
           />
         );
-      case Phase.ErrorTokeExpired:
+      case State.ErrorTokeExpired:
         return (
           <ErrorCard
             title="Let's try that again..."
@@ -344,13 +225,39 @@ export default function Home() {
     }
   };
 
-  return (
-    <AnalyticsProvider
-      writeKey={process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"}
-    >
-      <Theme.Provider theme="twilio">
-        <CenterLayout>{getComponentForPhase()}</CenterLayout>
-      </Theme.Provider>
-    </AnalyticsProvider>
-  );
+  /**
+   *
+   * Return the component fot the current phase
+   *
+   */
+  const getComponentForPhase = () => {
+    switch (phase) {
+      case Phase.Welcome:
+        return <WelcomeCard />;
+      case Phase.Question:
+      case Phase.Submitted:
+      case Phase.WatchPresenter:
+      case Phase.Identify:
+      case Phase.DemoCta:
+      case Phase.WebRtc:
+        return (
+          <DynamicCardWrapper
+            slide={currentSlide}
+            performActions={performActions}
+          />
+        );
+      case Phase.ErrorSync:
+        return getComponentForError();
+      default:
+        return (
+          <ErrorCard
+            title="Nothing to see here..."
+            emphasis="Please scan the QR code again. "
+            message="If symptoms persists for more than 4 hours consult a doctor!"
+          />
+        );
+    }
+  };
+
+  return <CenterLayout>{getComponentForPhase()}</CenterLayout>;
 }

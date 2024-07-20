@@ -7,7 +7,6 @@ export enum Phase {
   Identify = "Identify",
   DemoCta = "DemoCta",
   WebRtc = "WebRtc",
+  ErrorSync = "ErrorSync",
   ErrorNoPid = "ErrorNoPid",
-  ErrorNoToken = "ErrorNoToken",
-  ErrorTokeExpired = "ErrorTokeExpired",
 }

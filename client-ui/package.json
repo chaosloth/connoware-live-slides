@@ -19,6 +19,7 @@
     "random-word-slugs": "^0.1.7",
     "react": "^18",
     "react-dom": "^18",
+    "react-qr-code": "^2.0.15",
     "twilio-sync": "^3.3.3",
     "use-window-focus": "^1.4.3",
     "utf-8-validate": "^6.0.4",

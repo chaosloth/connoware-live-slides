@@ -1,3 +1,5 @@
+"use client";
+
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import React from "react";
 

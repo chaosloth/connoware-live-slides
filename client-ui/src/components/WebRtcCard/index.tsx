@@ -8,9 +8,9 @@ import { Paragraph } from "@twilio-paste/core/paragraph";
 import { FC } from "react";
 
 import LogoHeader from "../LogoHeader";
-import { WebRtcPage } from "@/types/LiveSlides";
+import { WebRtcSlide } from "@/types/LiveSlides";
 export type WebRtcCardProps = {
-  data: WebRtcPage;
+  data: WebRtcSlide;
 };
 const WebRtcCard: FC<WebRtcCardProps> = (props: WebRtcCardProps) => {
   return (

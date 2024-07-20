@@ -12,12 +12,12 @@ import { Stack } from "@twilio-paste/core/stack";
 import { FC } from "react";
 
 import hoodieIcon from "@/icons/hoodie.svg";
-import { Cta, CtaPage } from "@/types/LiveSlides";
+import { Action, CtaSlide } from "@/types/LiveSlides";
 import LogoHeader from "../LogoHeader";
 
 export type CtaPageProps = {
-  data: CtaPage;
-  performCta: (cta: Cta) => void;
+  data: CtaSlide;
+  performActions: (actions: Action[]) => void;
 };
 
 const StartPhoneDemoCard: FC<CtaPageProps> = (props: CtaPageProps) => {
@@ -32,15 +32,15 @@ const StartPhoneDemoCard: FC<CtaPageProps> = (props: CtaPageProps) => {
       </Box>
       <Paragraph>{props.data.description}</Paragraph>
       <Stack orientation={"vertical"} spacing={"space50"}>
-        {props.data.cta &&
-          props.data.cta.map((cta, idx) => (
+        {props.data.options &&
+          props.data.options.map((option, idx) => (
             <Button
               key={idx}
               fullWidth={true}
-              variant={cta.primary ? "primary" : "secondary"}
-              onClick={() => props.performCta(cta)}
+              variant={option.primary ? "primary" : "secondary"}
+              onClick={() => props.performActions(option.afterSubmitActions)}
             >
-              {cta.label}
+              {option.optionLabel}
             </Button>
           ))}
       </Stack>

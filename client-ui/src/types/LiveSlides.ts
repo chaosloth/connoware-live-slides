@@ -1,73 +1,142 @@
 import { Phase } from "./Phases";
+import { ActionType } from "./ActionTypes";
 
-export type LiveSlides = {
-  name: string;
-  pages: Page[];
+export class LiveSlidePresentation {
+  title: string;
+  slides: Slide[];
+
+  constructor() {
+    this.title = "";
+    this.slides = [];
+  }
+}
+
+export type PresentationMapItem = {
+  key: string;
+  data: LiveSlidePresentation;
 };
 
 export type CurrentState = {
-  currentPageId: string;
+  currentSlideId: string;
 };
 
-export type Page = {
-  id: string;
-} & (WaitPage | GatePage | QuestionPage | SubmittedPage | CtaPage | WebRtcPage);
+export class Option {
+  primary: boolean = true;
+  optionLabel: string = "";
+  optionValue: string = "";
+  afterSubmitActions: Action[] = [];
+}
+export class Action {
+  type: ActionType = ActionType.Unknown;
+}
+export class TrackAction extends Action {
+  type: ActionType = ActionType.Track;
+  event: string = "";
+  properties: { [key: string]: string } = {};
+}
 
-export type WaitPage = {
-  type: "WatchPresenter";
-  title: string;
-  description: string;
-};
+export class IdentifyAction extends Action {
+  type: ActionType = ActionType.Identify;
+  properties: { [key: string]: string } = {};
+}
 
-export type WebRtcPage = {
-  type: "WebRtc";
-  title: string;
-  description: string;
-};
+export class SlideAction extends Action {
+  type: ActionType = ActionType.Slide;
+  slideId: string = "";
+}
 
-export type SubmittedPage = {
-  type: "Submitted";
-  title: string;
-  description: string;
-};
+export class UrlAction extends Action {
+  type: ActionType = ActionType.URL;
+  url: string = "";
+}
 
-export type GatePage = {
-  type: "Identify";
-  title: string;
-  description: string;
-  afterSubmitPage: string;
-};
+export class Slide {
+  id: string = "";
+  title: string = "";
+  description: string = "";
+  kind?: Phase;
+}
 
-export type QuestionPage = {
-  type: "Question";
+export class WaitSlide extends Slide {
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.WatchPresenter;
+  }
+}
+
+export class WebRtcSlide extends Slide {
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.WebRtc;
+  }
+}
+
+export class SubmittedSlide extends Slide {
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.Submitted;
+  }
+}
+
+export class GateSlide extends Slide {
+  afterSubmitPage: Action[];
+
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.Identify;
+    this.afterSubmitPage = [];
+  }
+}
+
+export class QuestionSlide extends Slide {
   key: string;
   options: Option[];
-  title: string;
-  description: string;
-};
 
-export type Option = {
-  optionLabel: string;
-  optionValue: string;
-  afterSubmitCta: Cta;
-};
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.Question;
+    this.key = "";
+    this.options = [];
+  }
+}
 
-export type CtaPage = {
-  type: "DemoCta";
-  title: string;
-  description: string;
-  cta: Cta[];
-};
+export class CtaSlide extends Slide {
+  options: Option[];
 
-export type Cta = {
-  label: string;
-  url: string;
-  primary: boolean;
-};
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.DemoCta;
+    this.options = [];
+  }
+}
 
-export type EndedPage = {
-  type: "Ended";
-  title: string;
-  label: string;
-  cta: Cta[];
-};
+export class EndedSlide extends Slide {
+  options: Option[];
+
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.Ended;
+    this.options = [];
+  }
+}
