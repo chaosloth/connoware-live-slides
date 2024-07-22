@@ -21,6 +21,7 @@ import { State, useSyncClient } from "@/app/context/Sync";
 import { useAnalytics } from "@/app/context/Analytics";
 import { ActionType } from "@/types/ActionTypes";
 import LiveSlidesService from "@/utils/LiveSlidesService";
+import { Box } from "@twilio-paste/core";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -281,5 +282,12 @@ export default function Home() {
     }
   };
 
-  return <CenterLayout>{getComponentForPhase()}</CenterLayout>;
+  return (
+    <CenterLayout>
+      {getComponentForPhase()}
+      <Box backgroundColor={"colorBackgroundAvailable"}>
+        Identity {identity}
+      </Box>
+    </CenterLayout>
+  );
 }
