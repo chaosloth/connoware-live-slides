@@ -1,6 +1,11 @@
+"use client";
+
 import type { Metadata, Viewport } from "next";
 import "@/app/styles.css";
-
+import { SyncProvider } from "@/app/context/Sync";
+import { PresentationProvider } from "@/app/context/Presentation";
+import { AnalyticsProvider } from "@/app/context/Analytics";
+import { Theme } from "@twilio-paste/core/theme";
 export const viewport: Viewport = {
   themeColor: "#000000",
   initialScale: 1,
@@ -10,10 +15,10 @@ export const viewport: Viewport = {
   height: "100vh",
 };
 
-export const metadata: Metadata = {
-  title: "Twilio Live Slides",
-  description: "Individualised Communications at Scale",
-};
+// export const metadata: Metadata = {
+//   title: "Twilio Live Slides",
+//   description: "Individualised Communications at Scale",
+// };
 
 export default function RootLayout({
   children,
@@ -23,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <title>Live Slides</title>
         <meta property="og:url" content="https://twilio.com" />
         <meta property="og:type" content="website" />
         <meta
@@ -36,7 +42,19 @@ export default function RootLayout({
         {/* <meta property="og:image" content="/preview.png"/> */}
       </head>
       <body>
-        <div className="main-layout">{children}</div>
+        <Theme.Provider theme="twilio">
+          <SyncProvider>
+            <PresentationProvider>
+              <AnalyticsProvider
+                writeKey={
+                  process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"
+                }
+              >
+                <div className="main-layout">{children}</div>
+              </AnalyticsProvider>
+            </PresentationProvider>
+          </SyncProvider>
+        </Theme.Provider>
       </body>
     </html>
   );

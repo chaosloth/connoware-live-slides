@@ -1,0 +1,35 @@
+{
+  "id": "Q1",
+  "title": "Cheese or Salmon",
+  "description": "What do you like better?",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Just cookies",
+      "afterSubmitActions": [
+        {
+          "type": "Track",
+          "event": "Presentation Response",
+          "properties": {
+            "cookies": "ANZAC"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Web page and ID",
+      "afterSubmitActions": [
+        {
+          "type": "URL",
+          "url": "http://www.twilio.com"
+        },
+        {
+          "type": "Slide",
+          "slideId": "ID1"
+        }
+      ]
+    }
+  ]
+}

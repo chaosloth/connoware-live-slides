@@ -10,9 +10,9 @@ import { Spinner } from "@twilio-paste/core/spinner";
 import { FC } from "react";
 
 import LogoHeader from "../LogoHeader";
-import { SubmittedPage } from "@/types/LiveSlides";
+import { SubmittedSlide } from "@/types/LiveSlides";
 export type SubmittedCardProps = {
-  data: SubmittedPage;
+  data: SubmittedSlide;
 };
 const SubmittedCard: FC<SubmittedCardProps> = (props: SubmittedCardProps) => {
   return (

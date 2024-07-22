@@ -62,8 +62,8 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (
 
     const accessToken = new AccessToken(ACCOUNT_SID, API_KEY, API_SECRET, {
       identity: event.identity,
-      // ttl: 60 * 60 * 3,
-      ttl: 30,
+      ttl: 60 * 60 * 3,
+      // ttl: 30,
     });
 
     accessToken.addGrant(chatGrant);
