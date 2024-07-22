@@ -202,7 +202,7 @@ export default function Home() {
           analytics.identify(identity, (action as IdentifyAction).properties);
           return;
         case ActionType.URL:
-          window.open((action as UrlAction).url);
+          window.open((action as UrlAction).url, "_self");
           return;
         default:
           console.log(`[/] Attempt to run unknown action`, action);
