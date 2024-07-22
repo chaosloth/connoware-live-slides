@@ -13,6 +13,7 @@ import { FC } from "react";
 import puzzleIcon from "@/icons/puzzle.svg";
 
 import LogoHeader from "../LogoHeader";
+import { Button } from "@twilio-paste/core";
 
 const WelcomeCard: FC = () => {
   return (
@@ -29,6 +30,12 @@ const WelcomeCard: FC = () => {
           size={"sizeIcon80"}
           color={"colorTextDestructive"}
         />
+        <Button
+          variant="destructive"
+          onClick={() => window.open(window.location.href, "_new")}
+        >
+          Open the experience
+        </Button>
       </Flex>
     </Card>
   );
