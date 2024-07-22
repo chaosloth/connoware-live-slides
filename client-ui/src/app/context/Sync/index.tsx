@@ -62,29 +62,29 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
 
   /**
    *
+   * Get a token and register the device
+   *
+   */
+  // Helper method to get an access token
+  const getToken = () =>
+    fetch(`${BASE_URL}/api/token?identity=${identity}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(`Received access token`, data);
+        // Create Twilio Sync client with newly received token
+        return data.token;
+      })
+      .catch((reason: any) => {
+        console.error("Error getting token", reason);
+      });
+
+  /**
+   *
    * Create sync client and logic for token refresh
    *
    */
   useEffect(() => {
     if (!identity || identity === "") return;
-
-    /**
-     *
-     * Get a token and register the device
-     *
-     */
-    const getToken = async () => {
-      try {
-        const response = await fetch(
-          `${BASE_URL}/api/token?identity=${identity}`
-        );
-        const data = await response.json();
-        console.log(`Received access token`, data);
-        return data.token;
-      } catch (reason: any) {
-        console.error("Error getting token", reason);
-      }
-    };
 
     (async () => {
       console.log(`Fetching access token with identity [${identity}]`);
@@ -142,7 +142,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
         setSyncClient(undefined);
       }
     };
-  }, [client, identity, token]);
+  }, [identity]);
 
   return (
     <SyncContext.Provider value={{ state, identity, client }}>
