@@ -13,6 +13,8 @@ import {
 } from "@twilio-paste/core/menu";
 import SlideListEmpty from "./SlideListEmpty";
 import { Anchor } from "@twilio-paste/core/anchor";
+import { Button } from "@twilio-paste/core/button";
+import { Flex, Stack } from "@twilio-paste/core";
 
 const LoadingRow = () => {
   return (
@@ -39,6 +41,7 @@ export interface SlideListProps {
   handleOpenSlide: (slide: Slide) => void;
   handleDeleteSlide: (slide: Slide) => void;
   handleNewSlide: () => void;
+  handelActivateSlide: (slide: Slide) => void;
 }
 
 export interface ActionMenuProps {
@@ -78,8 +81,8 @@ const SlideList: FC<SlideListProps> = (props) => {
         <THead>
           <Tr>
             <Th width="size10">ID</Th>
-            <Th width="size20">Kind</Th>
-            <Th width="size60">Title</Th>
+            <Th width="size10">Kind</Th>
+            <Th width="size40">Title</Th>
             <Th width="size10" textAlign="right">
               Actions
             </Th>
@@ -104,7 +107,15 @@ const SlideList: FC<SlideListProps> = (props) => {
               <Td>{item.kind}</Td>
               <Td>{item.title}</Td>
               <Td>
-                <ActionMenu slide={item} />
+                <Stack orientation={"horizontal"} spacing={"space40"}>
+                  <Button
+                    variant="primary"
+                    onClick={() => props.handelActivateSlide(item)}
+                  >
+                    Activate
+                  </Button>
+                  <ActionMenu slide={item} />
+                </Stack>
               </Td>
             </Tr>
           ))}

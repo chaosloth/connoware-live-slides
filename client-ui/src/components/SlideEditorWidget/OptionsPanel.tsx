@@ -80,6 +80,7 @@ const OptionsPanel: FC<OptionsPanelProps> = (props: OptionsPanelProps) => {
   };
 
   const handleActionsUpdated = (idx: number, actions: Action[]) => {
+    console.log(`OptionsPanel - handleActionsUpdated - idx [${idx}]`, actions);
     const updatedOptions = [...options];
     updatedOptions[idx] = {
       ...updatedOptions[idx],

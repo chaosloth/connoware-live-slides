@@ -3,7 +3,7 @@ import React from "react";
 import { FC } from "react";
 
 import { Phase } from "@/types/Phases";
-import { Action, Slide } from "@/types/LiveSlides";
+import { Action, CtaSlide, QuestionSlide, Slide } from "@/types/LiveSlides";
 
 import QuestionCard from "@/components/QuestionCard";
 import WatchPresenterCard from "@/components/WatchPresenterCard";
@@ -12,6 +12,7 @@ import StartPhoneDemoCard from "@/components/StartPhoneDemoCard";
 import ErrorCard from "@/components/ErrorCard";
 import SubmittedCard from "@/components/SubmittedCard";
 import WebRtcCard from "@/components/WebRtcCard";
+import EndedCard from "@/components/EndedCard";
 
 export type DynamicCardWrapperProps = {
   slide: Slide | undefined;
@@ -40,7 +41,7 @@ const DynamicCardWrapper: FC<DynamicCardWrapperProps> = (
       case Phase.Question:
         return (
           <QuestionCard
-            data={props.slide}
+            data={props.slide as QuestionSlide}
             performActions={props.performActions}
           />
         );
@@ -48,6 +49,7 @@ const DynamicCardWrapper: FC<DynamicCardWrapperProps> = (
         return <SubmittedCard data={props.slide} />;
       case Phase.WatchPresenter:
         return <WatchPresenterCard />;
+
       case Phase.Identify:
         return <IdentifyCard />;
       case Phase.WebRtc:
@@ -55,10 +57,12 @@ const DynamicCardWrapper: FC<DynamicCardWrapperProps> = (
       case Phase.DemoCta:
         return (
           <StartPhoneDemoCard
-            data={props.slide}
+            data={props.slide as CtaSlide}
             performActions={props.performActions}
           />
         );
+      case Phase.Ended:
+        return <EndedCard />;
     }
   };
 

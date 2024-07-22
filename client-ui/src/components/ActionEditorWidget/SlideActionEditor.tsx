@@ -1,36 +1,28 @@
 import React, { useEffect } from "react";
-import { Action, SlideAction } from "../../types/LiveSlides";
 import { Form, FormControl } from "@twilio-paste/core/form";
 import { Label } from "@twilio-paste/core/label";
 import { HelpText } from "@twilio-paste/core/help-text";
 import { Select, Option } from "@twilio-paste/core/select";
-import { usePresentationContext } from "../../app/context/Presentation";
+import { usePresentationContext } from "@/app/context/Presentation";
+import { useActionContext } from "@/app/context/ActionContext";
+import { SlideAction } from "@/types/LiveSlides";
 
-interface SlideActionEditorProps {
-  action: SlideAction;
-  handleActionChange: (action: Action) => void;
-}
+interface SlideActionEditorProps {}
 
 const SlideActionEditor: React.FC<SlideActionEditorProps> = (
   props: SlideActionEditorProps
 ) => {
   const { presentation } = usePresentationContext();
-  const [action, setAction] = React.useState(props.action || new SlideAction());
+  const { action, setAction } = useActionContext();
 
-  const handleSlideChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedSlideId = event.target.value;
-    const selectedSlide = presentation?.slides.find(
-      (slide) => slide.id === selectedSlideId
-    );
-    if (selectedSlide) {
-      const updatedAction: SlideAction = {
-        ...action,
-        slideId: selectedSlideId,
-      };
-      setAction(updatedAction);
-      props.handleActionChange(updatedAction);
-    }
+  const handleSetSlideKind = (slideId: string) => {
+    setAction((prev: SlideAction) => ({ ...prev, slideId }));
   };
+
+  if (!action) {
+    console.log(`SlideActionEditor - Action is: `, action);
+    return <div>No action has been set</div>;
+  }
 
   return (
     <Form>
@@ -39,7 +31,7 @@ const SlideActionEditor: React.FC<SlideActionEditorProps> = (
         <Select
           id={"slide-action-editor-select-slide"}
           disabled={!presentation || presentation?.slides.length === 0}
-          onChange={handleSlideChange}
+          onChange={(evt) => handleSetSlideKind(evt.target.value)}
           value={action.slideId}
         >
           {presentation?.slides.map((slide, idx) => (

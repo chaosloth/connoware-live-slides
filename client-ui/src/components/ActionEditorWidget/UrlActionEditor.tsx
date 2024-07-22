@@ -1,34 +1,38 @@
 import React, { useEffect } from "react";
-import { Action, UrlAction } from "../../types/LiveSlides";
+import { UrlAction } from "../../types/LiveSlides";
 import { Form, FormControl } from "@twilio-paste/core/form";
 import { Label } from "@twilio-paste/core/label";
 import { HelpText } from "@twilio-paste/core/help-text";
 import { Input } from "@twilio-paste/core/input";
-import { usePresentationContext } from "../../app/context/Presentation";
+import { useActionContext } from "@/app/context/ActionContext";
 
-interface UrlActionEditorProps {
-  action: UrlAction;
-  handleActionChange: (action: Action) => void;
-}
+interface UrlActionEditorProps {}
 
 const UrlActionEditor: React.FC<UrlActionEditorProps> = (
   props: UrlActionEditorProps
 ) => {
-  const [action, setAction] = React.useState(props.action);
+  const { action, setAction } = useActionContext();
+
+  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newUrl = event.target.value;
+    setAction((prev: UrlAction) => ({ ...prev, url: newUrl }));
+  };
 
   useEffect(() => {
-    props.handleActionChange(action);
-  }, [action]);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAction({ ...action, url: event.target.value });
-  };
+    // Do something with the updated URL
+    console.log(`Updated url ${action.url}`);
+  }, [action.url]);
 
   return (
     <Form>
       <FormControl>
-        <Label>Select slide</Label>
-        <Input type={"url"} onChange={handleInputChange}></Input>
+        <Label htmlFor={`url-action-input`}>URL</Label>
+        <Input
+          id={`url-action-input`}
+          type={"url"}
+          value={action.url}
+          onChange={handleUrlChange}
+        ></Input>
         <HelpText>
           URL Actions will open in a new window. You can use tel:// to dial
           phone numbers, or https:// for websites

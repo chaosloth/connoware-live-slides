@@ -45,6 +45,11 @@ const ActionsPanel: FC<ActionsPanelProps> = (props: ActionsPanelProps) => {
     setActions(updatedActions);
   };
 
+  const handleSetAction = (idx: number, arg: any) => {
+    console.log(`ActionsPanel - handleSetAction`, arg);
+    handleActionUpdate(idx, arg);
+  };
+
   return (
     <Box
       padding={"space60"}
@@ -69,8 +74,8 @@ const ActionsPanel: FC<ActionsPanelProps> = (props: ActionsPanelProps) => {
             <DisclosureContent>
               <ActionEditorWidget
                 action={action}
-                handleActionChange={(changedAction) =>
-                  handleActionUpdate(idx, changedAction)
+                updateAction={(updatedAction) =>
+                  handleActionUpdate(idx, updatedAction)
                 }
               >
                 <Box textAlign={"end"} alignContent={"center"} height={"100%"}>

@@ -9,4 +9,5 @@ export enum Phase {
   WebRtc = "WebRtc",
   ErrorSync = "ErrorSync",
   ErrorNoPid = "ErrorNoPid",
+  ErrorNoSid = "ErrorNoSid",
 }

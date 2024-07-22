@@ -1,0 +1,18 @@
+{
+  "id": "DEMO",
+  "title": "It's going to be a great demo",
+  "description": "This is the demo copy",
+  "kind": "DemoCta",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Call demo",
+      "afterSubmitActions": [
+        {
+          "type": "URL",
+          "url": "tel:+61467601932"
+        }
+      ]
+    }
+  ]
+}

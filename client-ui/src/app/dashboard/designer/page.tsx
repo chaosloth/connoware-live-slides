@@ -13,9 +13,7 @@ import { Breadcrumb, BreadcrumbItem } from "@twilio-paste/core/breadcrumb";
 import { Button } from "@twilio-paste/core/button";
 import { Form, FormControl } from "@twilio-paste/core/form";
 import { Input } from "@twilio-paste/core/input";
-import { Text } from "@twilio-paste/core/text";
 import { Stack } from "@twilio-paste/core/stack";
-import { Heading } from "@twilio-paste/core/heading";
 import { Label } from "@twilio-paste/core/label";
 import { HelpText } from "@twilio-paste/core/help-text";
 import { useRouter } from "next/navigation";
@@ -43,16 +41,19 @@ const Designer: FC = () => {
   const sideModalState = useSideModalState({});
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (!slides) return;
-  //   if (!presentation) return;
-  //   const newPresentation = { ...presentation };
-  //   newPresentation.slides = slides;
-
-  //   console.log(`Slides updated`, slides);
-  //   setPresentation(newPresentation);
-  //   setIsDirty(true);
-  // }, [slides]);
+  const handelActivateSlide = (slide: Slide) => {
+    if (!client) return;
+    if (!pid) return;
+    LiveSlidesService.activateSlideInPresentation(client, pid, slide.id)
+      .then(() =>
+        console.log(
+          `[Dashboard/Designer] Updated presentation ${pid} state to slide ${slide.id}`
+        )
+      )
+      .catch((err) =>
+        console.log(`Something went wrong update presentation site`, err)
+      );
+  };
 
   const savePresentation = () => {
     if (!presentation) return;
@@ -279,6 +280,7 @@ const Designer: FC = () => {
           handleOpenSlide={handleOpenSlide}
           handleDeleteSlide={handleDeleteSlide}
           handleNewSlide={handleNewSlide}
+          handelActivateSlide={handelActivateSlide}
         />
       </Stack>
 

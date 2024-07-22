@@ -59,6 +59,23 @@ class LiveSlidesService {
   ): Promise<PresentationMapItem[]> => {
     return SyncHelper.getMapItems(client, this.getPresentationMapName());
   };
+
+  activateSlideInPresentation = async (
+    client: SyncClient,
+    presentationId: string,
+    slideId: string
+  ) => {
+    console.log(
+      `LiveSlidesService - activateSlideInPresentation - Before updating document state, setting slide to ${slideId}`
+    );
+    const presentationStateDoc = `STATE-${presentationId}`;
+    client.document(presentationStateDoc).then((doc) => {
+      console.log(
+        `LiveSlidesService - activateSlideInPresentation - have doc [${presentationStateDoc}] from sync`
+      );
+      return doc.set({ currentSlideId: slideId });
+    });
+  };
 }
 
 const service = new LiveSlidesService();

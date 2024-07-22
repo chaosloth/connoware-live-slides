@@ -6,7 +6,8 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-    "build": "next build && npm run transfer-assets",
+    "build": "next build",
+    "build:serverless": "next build && npm run transfer-assets",
     "transfer-assets": "rm -rfv ../serverless/dist/assets/ && mkdir ../serverless/dist/assets/ && cp -R ./out/* ../serverless/dist/assets/"
   },
   "dependencies": {

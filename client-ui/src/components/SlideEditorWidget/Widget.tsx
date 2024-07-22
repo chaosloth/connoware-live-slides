@@ -4,6 +4,7 @@ import { Separator } from "@twilio-paste/core/separator";
 import { Slide } from "../../types/LiveSlides";
 import BasicInfo from "./BasicInfo";
 import OptionsPanel from "./OptionsPanel";
+import SlideCodePanel from "./SlideCodePanel";
 import { Phase } from "../../types/Phases";
 import LiveSlidesService from "@/utils/LiveSlidesService";
 
@@ -41,7 +42,11 @@ const Widget: FC<WidgetProps> = (props) => {
       <Box backgroundColor="colorBackgroundBody" padding="space50">
         <Separator orientation="horizontal" verticalSpacing="space50" />
       </Box>
-      <OptionsPanel options={[]} />
+      {/* <OptionsPanel options={[]} /> */}
+      <SlideCodePanel
+        slide={props.slide}
+        handleChangeSlideCode={(code) => setSlide((prev) => ({ ...code }))}
+      />
     </Box>
   );
 };

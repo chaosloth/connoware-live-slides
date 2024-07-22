@@ -9,12 +9,18 @@ import ErrorCard from "@/components/ErrorCard";
 import {
   Action,
   CurrentState,
+  IdentifyAction,
   LiveSlidePresentation,
   Slide,
+  SlideAction,
+  TrackAction,
+  UrlAction,
 } from "@/types/LiveSlides";
 import DynamicCardWrapper from "@/components/DynamicCardWrapper";
 import { State, useSyncClient } from "@/app/context/Sync";
 import { useAnalytics } from "@/app/context/Analytics";
+import { ActionType } from "@/types/ActionTypes";
+import LiveSlidesService from "@/utils/LiveSlidesService";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -101,34 +107,35 @@ export default function Home() {
     if (!client) return;
     if (!pid) return;
 
-    const presentationDefinitionDoc = `PRESENTATION-${pid}`;
-    console.log(
-      `Creating subscription to document ${presentationDefinitionDoc}`
-    );
+    console.log(`[/] Fetching presentation definition`);
 
-    // Create a subscription to the document
-    client.document(presentationDefinitionDoc).then((doc) => {
-      console.log("SYNC presentation definition retrieved", doc.data);
-      if (doc) setPresentation(doc.data as LiveSlidePresentation);
+    LiveSlidesService.getPresentation(client, pid)
+      .then((presentationSyncMapItem) => {
+        console.log(
+          `[/] Retrieved definition for pid [${pid}]`,
+          presentationSyncMapItem
+        );
+        if (presentationSyncMapItem)
+          setPresentation(
+            presentationSyncMapItem.data as LiveSlidePresentation
+          );
+      })
+      .then(() => {
+        const presentationStateDoc = `STATE-${pid}`;
+        console.log(
+          `[/] Creating subscription to document ${presentationStateDoc}`
+        );
 
-      doc.on("updated", (event) => {
-        if (event) setPresentation(event.data as LiveSlidePresentation);
-        console.log("SYNC presentation definition updated", event.data);
+        client.document(presentationStateDoc).then((doc) => {
+          console.log("[/] SYNC presentation state retrieved", doc.data);
+          if (doc) setCurrentState(doc.data as CurrentState);
+
+          doc.on("updated", (event) => {
+            if (event) setCurrentState(event.data as CurrentState);
+            console.log("[/] SYNC presentation state updated", event.data);
+          });
+        });
       });
-    });
-
-    const presentationStateDoc = `STATE-${pid}`;
-    console.log(`Creating subscription to document ${presentationStateDoc}`);
-
-    client.document(presentationStateDoc).then((doc) => {
-      console.log("SYNC presentation state retrieved", doc.data);
-      if (doc) setCurrentState(doc.data as CurrentState);
-
-      doc.on("updated", (event) => {
-        if (event) setCurrentState(event.data as CurrentState);
-        console.log("SYNC presentation state updated", event.data);
-      });
-    });
   }, [client, pid]);
 
   /**
@@ -138,16 +145,26 @@ export default function Home() {
    */
   useEffect(() => {
     if (!presentationState) return;
+    console.log(`[/] Searching slides`, presentation?.slides);
     let targetSlide = presentation?.slides.find(
       (p) => p.id === presentationState.currentSlideId
     );
 
-    if (!targetSlide) return;
+    if (!targetSlide) {
+      console.log(
+        `[/] !! presentationState.currentSlideId updated, but no target slide found`
+      );
+      return;
+    }
 
     if (targetSlide.kind) {
       console.log(`Setting phase to [${targetSlide.kind}]`, targetSlide);
       setCurrentSlide(targetSlide);
       setPhase(Phase[targetSlide.kind]);
+    } else {
+      console.log(
+        `[/] !! presentationState.currentSlideId updated, but kind is nullish`
+      );
     }
   }, [presentationState?.currentSlideId]);
 
@@ -161,30 +178,30 @@ export default function Home() {
 
     actions.map((action) => {
       switch (action.type) {
-        case "slide":
+        case ActionType.Slide:
           let targetSlide = presentation?.slides.find(
-            (p) => p.id === action.slide
+            (p) => p.id === (action as SlideAction).slideId
           );
           if (!targetSlide) return;
           setCurrentSlide(targetSlide);
-          setPhase(Phase[targetSlide.kind]);
+          setPhase(targetSlide.kind as Phase);
           return;
-        case "track":
+        case ActionType.Track:
           console.log(`Track users activity`, action);
-          //TODO: Add Segment tracking
-          analytics.track(action.event, {
-            ...action.properties,
-          });
-
+          analytics.track(
+            (action as TrackAction).event,
+            (action as TrackAction).properties
+          );
           return;
-        case "identify":
+        case ActionType.Identify:
           console.log(`Track users activity`, action);
-          //TODO: Add Segment tracking
-          analytics.identify(identity, action.properties);
+          analytics.identify(identity, (action as IdentifyAction).properties);
           return;
-        case "url":
-          window.open(action.url);
+        case ActionType.URL:
+          window.open((action as UrlAction).url);
           return;
+        default:
+          console.log(`[/] Attempt to run unknown action`, action);
       }
     });
   };
@@ -239,6 +256,7 @@ export default function Home() {
       case Phase.WatchPresenter:
       case Phase.Identify:
       case Phase.DemoCta:
+      case Phase.Ended:
       case Phase.WebRtc:
         return (
           <DynamicCardWrapper
