@@ -12,6 +12,8 @@ export default function PresenterPage() {
   const [pid, setPresentationId] = useState<string | undefined>();
   const [sid, setSlideId] = useState<string | undefined>();
   const { client, state } = useSyncClient();
+  const [lastEvent, setLastEvent] = useState<string>("");
+  const [eventList, setEventList] = useState<string[]>([]);
 
   /**
    *
@@ -60,15 +62,23 @@ export default function PresenterPage() {
     if (!pid) return;
     if (!sid) return;
 
-    LiveSlidesService.activateSlideInPresentation(client, pid, sid)
-      .then(() =>
-        console.log(
-          `[Presenter] Updated presentation ${pid} state to slide ${sid}`
-        )
-      )
-      .catch((err) =>
-        console.log(`Something went wrong update presentation site`, err)
-      );
+    client
+      .stream({
+        id: `STREAM-${pid}`,
+        mode: "open_or_create",
+      })
+      .then((stream) => {
+        stream.on("messagePublished", (data) => {
+          console.log(`New stream STREAM-${pid} data`, data);
+          if (data) {
+            setLastEvent(JSON.stringify(data, null, 2));
+            setEventList((prevEventList) => [
+              ...prevEventList,
+              JSON.stringify(data, null, 2),
+            ]);
+          }
+        });
+      });
   }, [client, pid, sid]);
 
   /**
@@ -85,8 +95,15 @@ export default function PresenterPage() {
   return (
     <Box>
       <Heading as={"div"} variant={"heading10"}>
-        Presenter View
+        Presenter View - [{pid}/{sid}]
       </Heading>
+      <Box>LAST: {lastEvent}</Box>
+      <Box>
+        EVENTS:
+        {eventList.map((event, idx) => (
+          <div key={idx}>{event}</div>
+        ))}
+      </Box>
     </Box>
   );
 }

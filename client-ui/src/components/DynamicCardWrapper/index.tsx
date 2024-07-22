@@ -3,7 +3,13 @@ import React from "react";
 import { FC } from "react";
 
 import { Phase } from "@/types/Phases";
-import { Action, CtaSlide, QuestionSlide, Slide } from "@/types/LiveSlides";
+import {
+  Action,
+  CtaSlide,
+  GateSlide,
+  QuestionSlide,
+  Slide,
+} from "@/types/LiveSlides";
 
 import QuestionCard from "@/components/QuestionCard";
 import WatchPresenterCard from "@/components/WatchPresenterCard";
@@ -51,7 +57,12 @@ const DynamicCardWrapper: FC<DynamicCardWrapperProps> = (
         return <WatchPresenterCard />;
 
       case Phase.Identify:
-        return <IdentifyCard />;
+        return (
+          <IdentifyCard
+            data={props.slide as GateSlide}
+            performActions={props.performActions}
+          />
+        );
       case Phase.WebRtc:
         return <WebRtcCard data={props.slide} />;
       case Phase.DemoCta:

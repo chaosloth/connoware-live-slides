@@ -1,0 +1,76 @@
+{
+  "id": "Q-TIME",
+  "title": "Timing is everything",
+  "description": "What time of day do you prefer to indulge in cookies?",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Morning",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-TIME-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Time Preference",
+          "properties": {
+            "time_preference": "Morning"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Noon",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-TIME-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Time Preference",
+          "properties": {
+            "time_preference": "Noon"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Night",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-TIME-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Time Preference",
+          "properties": {
+            "time_preference": "Night"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "All the time",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-TIME-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Time Preference",
+          "properties": {
+            "time_preference": "All"
+          }
+        }
+      ]
+    }
+  ]
+}

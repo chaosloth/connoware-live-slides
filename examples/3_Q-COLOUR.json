@@ -1,0 +1,76 @@
+{
+  "id": "Q-COLOUR",
+  "title": "Favourite Colour",
+  "description": "Which of these is your go to colour?",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Pink",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COLOUR-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Colour Preference",
+          "properties": {
+            "favourite_colour": "Pink"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Blue",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COLOUR-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Colour Preference",
+          "properties": {
+            "favourite_colour": "Blue"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Green",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COLOUR-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Colour Preference",
+          "properties": {
+            "favourite_colour": "Green"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Red",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COLOUR-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Colour Preference",
+          "properties": {
+            "favourite_colour": "Red"
+          }
+        }
+      ]
+    }
+  ]
+}

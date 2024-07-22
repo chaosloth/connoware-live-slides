@@ -1,0 +1,59 @@
+{
+  "id": "Q-FUTURE",
+  "title": "To the Future and Beyond!",
+  "description": "Where do you see the future of retail heading?",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Omnichannel",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-FUTURE-A"
+        },
+        {
+          "type": "Track",
+          "event": "Retail Future Prediction",
+          "properties": {
+            "retail_future_prediction": "Omnichannel"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Channel-less",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-FUTURE-B"
+        },
+        {
+          "type": "Track",
+          "event": "Retail Future Prediction",
+          "properties": {
+            "retail_future_prediction": "Channel-less"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "What the heck is channel-less?",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-FUTURE-C"
+        },
+        {
+          "type": "Track",
+          "event": "Retail Future Prediction",
+          "properties": {
+            "retail_future_prediction": "What is channel-less"
+          }
+        }
+      ]
+    }
+  ]
+}

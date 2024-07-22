@@ -1,0 +1,42 @@
+{
+  "id": "DEMO-1",
+  "title": "It's demo time with Twilio Voice AI!",
+  "description": "Voice AI Demo",
+  "kind": "DemoCta",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Call Conno",
+      "afterSubmitActions": [
+        {
+          "type": "URL",
+          "url": "tel:+61250167793"
+        },
+        {
+          "type": "Track",
+          "event": "Call via phone",
+          "properties": {
+            "demo": "ORSYD"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Call via web",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "DEMO-WEBRTC"
+        },
+        {
+          "type": "Track",
+          "event": "Start Demo",
+          "properties": {
+            "demo": "ORSYD"
+          }
+        }
+      ]
+    }
+  ]
+}

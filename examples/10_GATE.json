@@ -1,0 +1,19 @@
+{
+  "id": "GATE",
+  "title": "Tell us about yourself",
+  "description": "",
+  "kind": "Identify",
+  "afterSubmitActions": [
+    {
+      "type": "Slide",
+      "slideId": "AFTER-GATE"
+    },
+    {
+      "type": "Identify",
+      "event": "Identify",
+      "properties": {
+        "demo": "ORSYD"
+      }
+    }
+  ]
+}

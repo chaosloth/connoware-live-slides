@@ -1,0 +1,279 @@
+{
+  "slides": [
+    {
+      "id": "Q1",
+      "title": "What’s your favourite type of cookie? 🍪",
+      "description": "",
+      "kind": "Question",
+      "options": [
+        {
+          "primary": true,
+          "optionLabel": "Choc Chip",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q1ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Favourite Cookie",
+              "properties": {
+                "favourite_cookie": "Choc Chip"
+              }
+            }
+          ]
+        },
+
+        {
+          "primary": true,
+          "optionLabel": "Anzac Bikkie",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q1ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Favourite Cookie",
+              "properties": {
+                "favourite_cookie": "Anzac"
+              }
+            }
+          ]
+        },
+        {
+          "primary": true,
+          "optionLabel": "Tim Tams",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q1ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Favourite Cookie",
+              "properties": {
+                "favourite_cookie": "Tim Tams"
+              }
+            }
+          ]
+        },
+
+        {
+          "primary": true,
+          "optionLabel": "Scotch Finger",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q1ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Favourite Cookie",
+              "properties": {
+                "favourite_cookie": "Scotch Finger"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Q1ALL",
+      "title": "Mmmm Yum!",
+      "description": "Hold on a moment while the rest of the audience responds too",
+      "kind": "Submitted"
+    },
+
+    {
+      "id": "Q2",
+      "title": "Favourite Colour",
+      "description": "Which of these is your go to colour?",
+      "kind": "Question",
+      "options": [
+        {
+          "primary": true,
+          "optionLabel": "Pink",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q2ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Colour Preference",
+              "properties": {
+                "favourite_colour": "Pink"
+              }
+            }
+          ]
+        },
+        {
+          "primary": true,
+          "optionLabel": "Blue",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q2ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Colour Preference",
+              "properties": {
+                "favourite_colour": "Blue"
+              }
+            }
+          ]
+        },
+        {
+          "primary": true,
+          "optionLabel": "Green",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q2ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Colour Preference",
+              "properties": {
+                "favourite_colour": "Green"
+              }
+            }
+          ]
+        },
+        {
+          "primary": true,
+          "optionLabel": "Red",
+          "afterSubmitActions": [
+            {
+              "type": "Slide",
+              "slideId": "Q2ALL"
+            },
+            {
+              "type": "Track",
+              "event": "Colour Preference",
+              "properties": {
+                "favourite_colour": "Red"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "What time of day do you prefer to indulge in cookies? ",
+      "id": "Q4",
+      "kind": "Question",
+      "options": [
+        {
+          "afterSubmitActions": [
+            {
+              "event": "Presentation Response",
+              "properties": { "cookies": "ANZAC" },
+              "type": "Track"
+            }
+          ],
+          "optionLabel": "Just cookies",
+          "primary": true
+        },
+        {
+          "afterSubmitActions": [
+            { "type": "URL", "url": "http://www.twilio.com" },
+            { "slideId": "WAIT", "type": "Slide" }
+          ],
+          "optionLabel": "Web page and ID",
+          "primary": true
+        }
+      ],
+      "title": "Timing is everything"
+    },
+    {
+      "description": "What are you more interested in hearing about?",
+      "id": "Q5",
+      "kind": "Question",
+      "options": [
+        {
+          "afterSubmitActions": [
+            {
+              "event": "Presentation Response",
+              "properties": { "cookies": "ANZAC" },
+              "type": "Track"
+            }
+          ],
+          "optionLabel": "Getting started with individualisation",
+          "primary": true
+        },
+        {
+          "afterSubmitActions": [
+            { "type": "URL", "url": "http://www.twilio.com" },
+            { "slideId": "WAIT", "type": "Slide" }
+          ],
+          "optionLabel": "Creating a channel-less experience",
+          "primary": true
+        }
+      ],
+      "title": "Where to next?"
+    },
+    {
+      "description": "Four tips for getting started with individualisation",
+      "id": "TIPS1",
+      "kind": "DemoCta",
+      "options": [
+        {
+          "afterSubmitActions": [{ "type": "URL", "url": "tel:+61467601932" }],
+          "optionLabel": "Call conno",
+          "primary": true
+        },
+        {
+          "afterSubmitActions": [
+            { "type": "URL", "url": "https://www.twilio.com" }
+          ],
+          "optionLabel": "Rethink your approach to data",
+          "primary": true
+        }
+      ],
+      "title": "Here's a tip"
+    },
+    {
+      "description": "Something local something global?",
+      "id": "Q6",
+      "kind": "Question",
+      "options": [
+        {
+          "afterSubmitActions": [
+            {
+              "event": "Presentation Response",
+              "properties": { "cookies": "ANZAC" },
+              "type": "Track"
+            }
+          ],
+          "optionLabel": "A regional story",
+          "primary": true
+        },
+        {
+          "afterSubmitActions": [
+            { "type": "URL", "url": "http://www.twilio.com" },
+            { "slideId": "WAIT", "type": "Slide" }
+          ],
+          "optionLabel": "A global story ",
+          "primary": true
+        }
+      ],
+      "title": "Would you prefer:"
+    },
+    {
+      "description": "Waiting for others",
+      "id": "WAIT",
+      "kind": "WatchPresenter",
+      "title": "Hold on"
+    },
+    {
+      "description": "Use your phone to make a call",
+      "id": "WEBRTC",
+      "kind": "WebRtc",
+      "title": "WebRTC Call"
+    }
+  ],
+  "title": "Say Goodbye to\u000bCookie-Cutter Personalisation"
+}

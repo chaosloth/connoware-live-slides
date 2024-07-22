@@ -21,6 +21,8 @@ import { State, useSyncClient } from "@/app/context/Sync";
 import { useAnalytics } from "@/app/context/Analytics";
 import { ActionType } from "@/types/ActionTypes";
 import LiveSlidesService from "@/utils/LiveSlidesService";
+import { Box } from "@twilio-paste/core";
+import { SyncStream } from "twilio-sync";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -31,6 +33,8 @@ export default function Home() {
 
   const windowFocused = useWindowFocus();
   const { client, identity, state } = useSyncClient();
+  const [stream, setStream] = useState<SyncStream>();
+
   const analytics = useAnalytics();
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
@@ -75,6 +79,44 @@ export default function Home() {
 
   /**
    *
+   * Create stream
+   *
+   */
+  useEffect(() => {
+    if (!client) return;
+    if (!pid) return;
+
+    console.log(`[/] Creating sync connection`);
+    client
+      .stream({
+        id: `STREAM-${pid}`,
+        mode: "open_or_create",
+      })
+      .then((s) => {
+        console.log(`Created sync stream [STREAM-${pid}]`);
+        setStream(s);
+      })
+      .catch((err) => console.log(`Error creating sync stream`, err));
+  }, [client, pid]);
+
+  /**
+   *
+   * Emit event
+   *
+   */
+  const monitor = (eventName: string, props: any) => {
+    if (!stream) return;
+    const evt = {
+      sid: currentSlide?.id,
+      eventName,
+      properties: props,
+    };
+    console.log(`Sending to stream`, evt);
+    stream.publishMessage(evt);
+  };
+
+  /**
+   *
    * Detect focus on app
    *
    */
@@ -106,6 +148,9 @@ export default function Home() {
   useEffect(() => {
     if (!client) return;
     if (!pid) return;
+
+    console.log(`[/] Creating sync connection`);
+    client.stream(`STREAM-${pid}`).then((s) => setStream(s));
 
     console.log(`[/] Fetching presentation definition`);
 
@@ -196,6 +241,10 @@ export default function Home() {
             ...(action as TrackAction).properties,
             client_id: identity,
           });
+          monitor((action as TrackAction).event, {
+            ...(action as TrackAction).properties,
+            client_id: identity,
+          });
           return;
         case ActionType.Identify:
           console.log(`Track users activity`, action);
@@ -281,5 +330,10 @@ export default function Home() {
     }
   };
 
-  return <CenterLayout>{getComponentForPhase()}</CenterLayout>;
+  return (
+    <CenterLayout>
+      {getComponentForPhase()}
+      <Box backgroundColor={"colorBackgroundBody"}>State: {state}</Box>
+    </CenterLayout>
+  );
 }

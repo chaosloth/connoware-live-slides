@@ -1,0 +1,42 @@
+{
+  "id": "Q-TIPS",
+  "title": "Where to next?",
+  "description": "What story would you prefer to hear?",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Getting started with individualisation",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-TIPS-A"
+        },
+        {
+          "type": "Track",
+          "event": "Interest Path",
+          "properties": {
+            "interest_path": "individualisation"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Creating a channel-less experience",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-TIPS-B"
+        },
+        {
+          "type": "Track",
+          "event": "Interest Path",
+          "properties": {
+            "interest_path": "channel-less experience"
+          }
+        }
+      ]
+    }
+  ]
+}

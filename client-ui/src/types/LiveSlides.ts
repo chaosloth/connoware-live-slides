@@ -88,7 +88,7 @@ export class SubmittedSlide extends Slide {
 }
 
 export class GateSlide extends Slide {
-  afterSubmitPage: Action[];
+  afterSubmitActions: Action[];
 
   constructor(id: string, title: string, description: string) {
     super();
@@ -96,7 +96,7 @@ export class GateSlide extends Slide {
     this.title = title;
     this.description = description;
     this.kind = Phase.Identify;
-    this.afterSubmitPage = [];
+    this.afterSubmitActions = [];
   }
 }
 

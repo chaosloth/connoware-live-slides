@@ -1,0 +1,42 @@
+{
+  "id": "Q-STORY-2",
+  "title": "It’s time for a customer story",
+  "description": "Would you prefer",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "A global story",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-STORY-2-A"
+        },
+        {
+          "type": "Track",
+          "event": "Story Preference",
+          "properties": {
+            "story_1_preference": "Global Story"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "A regional story",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-STORY-2-B"
+        },
+        {
+          "type": "Track",
+          "event": "Story Preference",
+          "properties": {
+            "story_1_preference": "Regional Story"
+          }
+        }
+      ]
+    }
+  ]
+}

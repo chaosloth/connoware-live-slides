@@ -12,13 +12,19 @@ import { HelpText } from "@twilio-paste/core/help-text";
 import { FC } from "react";
 
 import LogoHeader from "../LogoHeader";
+import { GateSlide, Action } from "@/types/LiveSlides";
 
-const IdentifyCard: FC = () => {
+export type QuestionCardProps = {
+  data: GateSlide;
+  performActions: (actions: Action[]) => void;
+};
+
+const IdentifyCard: FC<QuestionCardProps> = (props) => {
   return (
     <Card>
       <LogoHeader />
       <Heading as={"div"} variant={"heading20"}>
-        Tell us about yourself
+        {props.data.title}
       </Heading>
       <Form>
         <FormControl>
@@ -49,7 +55,13 @@ const IdentifyCard: FC = () => {
           <HelpText>Use your real number for the demo</HelpText>
         </FormControl>
 
-        <Button fullWidth={true} variant="primary">
+        <Button
+          fullWidth={true}
+          variant="primary"
+          onClick={() => {
+            props.performActions(props.data.afterSubmitActions);
+          }}
+        >
           Next
         </Button>
       </Form>

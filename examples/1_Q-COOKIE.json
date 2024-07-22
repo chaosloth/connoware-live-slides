@@ -1,0 +1,78 @@
+{
+  "id": "Q-COOKIE",
+  "title": "What’s your favourite type of cookie? 🍪",
+  "description": "",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Choc Chip",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COOKIE-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Favourite Cookie",
+          "properties": {
+            "favourite_cookie": "Choc Chip"
+          }
+        }
+      ]
+    },
+
+    {
+      "primary": true,
+      "optionLabel": "Anzac Bikkie",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COOKIE-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Favourite Cookie",
+          "properties": {
+            "favourite_cookie": "Anzac"
+          }
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Tim Tams",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COOKIE-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Favourite Cookie",
+          "properties": {
+            "favourite_cookie": "Tim Tams"
+          }
+        }
+      ]
+    },
+
+    {
+      "primary": true,
+      "optionLabel": "Scotch Finger",
+      "afterSubmitActions": [
+        {
+          "type": "Slide",
+          "slideId": "Q-COOKIE-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Favourite Cookie",
+          "properties": {
+            "favourite_cookie": "Scotch Finger"
+          }
+        }
+      ]
+    }
+  ]
+}
