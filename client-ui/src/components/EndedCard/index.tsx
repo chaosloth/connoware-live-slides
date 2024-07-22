@@ -19,7 +19,7 @@ const EndedCard: FC = () => {
     <Card>
       <LogoHeader />
       <Heading as={"div"} variant={"heading20"}>
-        And that's a wrap!
+        {"And that's a wrap!"}
       </Heading>
       <Paragraph>We hope you enjoyed the experience!</Paragraph>
       <Image src={puzzleIcon} alt={"Welcome"} priority={true} />

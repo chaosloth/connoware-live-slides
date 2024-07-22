@@ -20,7 +20,7 @@ const Widget: FC<WidgetProps> = (props) => {
 
   useEffect(() => {
     props.onSlideUpdate(slide);
-  }, [slide]);
+  }, [props, slide]);
 
   return (
     <Box>

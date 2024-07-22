@@ -26,7 +26,7 @@ const ActionEditorWidget: React.FC<ActionEditorWidgetProps> = (props) => {
   useEffect(() => {
     console.log(`ActionEditorWidget - action updated`, action);
     props.updateAction(action);
-  }, [action]);
+  }, [action, props]);
 
   useEffect(() => {
     console.log(`ActionEditorWidget - props.action updated`, props.action);

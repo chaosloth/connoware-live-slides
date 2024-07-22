@@ -166,7 +166,11 @@ export default function Home() {
         `[/] !! presentationState.currentSlideId updated, but kind is nullish`
       );
     }
-  }, [presentationState?.currentSlideId]);
+  }, [
+    presentation?.slides,
+    presentationState,
+    presentationState?.currentSlideId,
+  ]);
 
   /**
    *

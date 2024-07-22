@@ -17,7 +17,7 @@ const SlideListEmpty: FC<SlideListEmptyProps> = (props) => {
         <Stack orientation={"vertical"} spacing={"space70"}>
           <Flex hAlignContent={"center"}>
             <Heading as="h2" variant="heading20" marginBottom="space0">
-              🍭 Let's create your first slide
+              {"🍭 Let's create your first slide"}
             </Heading>
           </Flex>
           <Flex hAlignContent={"center"}>

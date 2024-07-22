@@ -44,7 +44,7 @@ const Dashboard: FC = () => {
 
   useEffect(() => {
     refreshData();
-  }, [client]);
+  });
 
   const handleNewPresentation = () => {
     const code = LiveSlidesService.generateRandomCode();

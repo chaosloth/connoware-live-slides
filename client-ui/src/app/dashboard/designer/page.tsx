@@ -111,7 +111,7 @@ const Designer: FC = () => {
       })
       .catch((err) => console.log(`Error fetching presentations`, err))
       .finally(() => setLoading(false));
-  }, [client, pid]);
+  }, [client, pid, setPresentation]);
 
   useEffect(() => {
     if (!presentation) return;
@@ -121,7 +121,7 @@ const Designer: FC = () => {
       presentation.slides
     );
     setSlides(presentation.slides);
-  }, [presentation?.slides]);
+  }, [presentation, presentation?.slides]);
 
   const handleNewSlide = () => {
     console.log(`Called - handleNewSlide`);

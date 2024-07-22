@@ -24,7 +24,7 @@ const ActionsPanel: FC<ActionsPanelProps> = (props: ActionsPanelProps) => {
 
   useEffect(() => {
     props.onActionsUpdated(actions);
-  }, [actions]);
+  }, [actions, props]);
 
   const handleActionUpdate = (index: number, updatedAction: Action) => {
     const updatedActions = [...actions];
