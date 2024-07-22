@@ -35,7 +35,7 @@ const QuestionCard: FC<QuestionCardProps> = (props: QuestionCardProps) => {
               key={idx}
               disabled={complete}
               fullWidth={true}
-              variant="secondary"
+              variant={option.primary ? "primary" : "secondary"}
               onClick={() => {
                 // setComplete(true);
                 props.performActions(option.afterSubmitActions);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { Stack } from "@twilio-paste/core/stack";
 import {
   PageHeader,
@@ -23,14 +23,14 @@ import NewPresentationModal from "../../components/NewPresentationModal";
 
 const Dashboard: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const { client, identity, state } = useSyncClient();
+  const { client, state } = useSyncClient();
   const [items, setItems] = useState<PresentationMapItem[]>([]);
   const [isNewPresentationModalOpen, setNewPresentationModalOpen] =
     useState<boolean>(false);
   const router = useRouter();
   const [code, setCode] = useState<string>("");
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     if (!client) return;
     setLoading(true);
     LiveSlidesService.getLiveSlides(client)
@@ -40,11 +40,13 @@ const Dashboard: FC = () => {
       })
       .catch((err) => console.log(`Error fetching presentations`, err))
       .finally(() => setLoading(false));
-  };
+
+    console.log(`[/dashboard] Calling refreshData()`);
+  }, [client]);
 
   useEffect(() => {
     refreshData();
-  });
+  }, [client, refreshData]);
 
   const handleNewPresentation = () => {
     const code = LiveSlidesService.generateRandomCode();

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { State, useSyncClient } from "../context/Sync";
 import { Phase } from "../../types/Phases";
-import { LiveSlidePresentation } from "../../types/LiveSlides";
 import { Box } from "@twilio-paste/core/box";
 import { Heading } from "@twilio-paste/core/heading";
 import LiveSlidesService from "../../utils/LiveSlidesService";
@@ -12,8 +11,7 @@ export default function PresenterPage() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
   const [pid, setPresentationId] = useState<string | undefined>();
   const [sid, setSlideId] = useState<string | undefined>();
-  const [presentation, setPresentation] = useState<LiveSlidePresentation>();
-  const { client, identity, state } = useSyncClient();
+  const { client, state } = useSyncClient();
 
   /**
    *

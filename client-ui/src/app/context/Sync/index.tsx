@@ -87,14 +87,13 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
     if (!identity || identity === "") return;
 
     (async () => {
-      console.log(`Fetching access token with identity [${identity}]`);
+      console.log(`Fetching access token with identity before connect`);
       try {
         // Get a new token on load
         let token = await getToken();
 
         if (!token) {
           console.warn(`Twilio token unavailable, see error logs`);
-          //   setPhase(Phase.ErrorNoToken);
           return;
         }
         console.log("Creating new sync client");
@@ -142,6 +141,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
         setSyncClient(undefined);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [identity]);
 
   return (

@@ -21,7 +21,6 @@ import { State, useSyncClient } from "@/app/context/Sync";
 import { useAnalytics } from "@/app/context/Analytics";
 import { ActionType } from "@/types/ActionTypes";
 import LiveSlidesService from "@/utils/LiveSlidesService";
-import { Box } from "@twilio-paste/core";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -193,10 +192,10 @@ export default function Home() {
           return;
         case ActionType.Track:
           console.log(`Track users activity`, action);
-          analytics.track(
-            (action as TrackAction).event,
-            (action as TrackAction).properties
-          );
+          analytics.track((action as TrackAction).event, {
+            ...(action as TrackAction).properties,
+            client_id: identity,
+          });
           return;
         case ActionType.Identify:
           console.log(`Track users activity`, action);
@@ -282,12 +281,5 @@ export default function Home() {
     }
   };
 
-  return (
-    <CenterLayout>
-      {getComponentForPhase()}
-      <Box backgroundColor={"colorBackgroundAvailable"}>
-        Identity {identity}
-      </Box>
-    </CenterLayout>
-  );
+  return <CenterLayout>{getComponentForPhase()}</CenterLayout>;
 }
