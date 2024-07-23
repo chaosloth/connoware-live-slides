@@ -15,6 +15,7 @@ specifiers:
   random-word-slugs: ^0.1.7
   react: ^18
   react-dom: ^18
+  react-donut-chart: ^1.3.3
   react-qr-code: ^2.0.15
   twilio-sync: ^3.3.3
   typescript: ^5
@@ -33,6 +34,7 @@ dependencies:
   random-word-slugs: 0.1.7
   react: 18.3.1
   react-dom: 18.3.1_react@18.3.1
+  react-donut-chart: 1.3.3_nnrd3gsncyragczmpvfhocinkq
   react-qr-code: 2.0.15_react@18.3.1
   twilio-sync: 3.3.3_dtjklpojuurstdxgbc2gyvljzq
   use-window-focus: 1.4.3_react@18.3.1
@@ -9917,6 +9919,16 @@ packages:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+    dev: false
+
+  /react-donut-chart/1.3.3_nnrd3gsncyragczmpvfhocinkq:
+    resolution: {integrity: sha512-z3lYY7bL33DGYY+OOU57WkoMMeAaMKgPR+LJaWftCSAcOBhadVolvIk3gVB/g9ry7sc6RZs0Z+UQgXMgd0l3Hw==}
+    peerDependencies:
+      react: '>=16.3.0'
+      react-dom: '>=16.3.0'
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1_react@18.3.1
     dev: false
 
   /react-error-boundary/3.1.4_react@18.3.1:
