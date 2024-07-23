@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Card } from "@twilio-paste/core/card";
 import { Heading } from "@twilio-paste/core/heading";
@@ -13,24 +13,111 @@ import { FC } from "react";
 
 import LogoHeader from "../LogoHeader";
 import { GateSlide, Action } from "@/types/LiveSlides";
+import { Stack } from "@twilio-paste/core/stack";
+import { Spinner } from "@twilio-paste/core/spinner";
+import { Box } from "@twilio-paste/core/box";
+import { Anchor } from "@twilio-paste/core/anchor";
+import { IPInfo } from "@/types/IPInfo";
 
-export type QuestionCardProps = {
+export type IdentifyCardProps = {
   data: GateSlide;
-  performActions: (actions: Action[]) => void;
+  performActions: (
+    actions: Action[],
+    properties?: { [key: string]: any }
+  ) => void;
 };
 
-const IdentifyCard: FC<QuestionCardProps> = (props) => {
+const IdentifyCard: FC<IdentifyCardProps> = (props) => {
+  const [ip_info, setIPInfo] = useState<IPInfo>();
+  const [isFetchingPhone, setIsFetchingPhone] = useState<boolean>(false);
+  const [isValidPhone, setIsValidPhone] = useState<boolean>(false);
+
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [company, setCompany] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [normalizedPhone, setNormalizedPhone] = useState<string>("");
+
+  const validatePhone = async (number: string) => {
+    if (!number) return;
+    setIsValidPhone(false);
+
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+
+    try {
+      setIsFetchingPhone(true);
+      const response = await fetch(
+        `${API_BASE}/api/number-lookup?countryCode=${
+          ip_info?.countryCode || "AU"
+        }&From=${encodeURIComponent(number)}`
+      );
+      const bodyJson = await response.json();
+      const normalizedPhoneNumber = bodyJson.phoneNumber;
+      if (normalizedPhoneNumber && normalizedPhoneNumber.length > 0) {
+        setNormalizedPhone(normalizedPhoneNumber);
+        setIsValidPhone(true);
+      }
+    } catch (error) {
+      setIsValidPhone(false);
+    } finally {
+      setIsFetchingPhone(false);
+    }
+  };
+
+  useEffect(() => {
+    const getInfo = async () => {
+      const resp = await fetch("https://freeipapi.com/api/json");
+      const data = await resp.json();
+      setIPInfo(data);
+    };
+    getInfo().catch((err) => {
+      return err;
+    });
+  }, [phone]);
+
+  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone(e.target.value);
+    validatePhone(e.target.value);
+  };
+
+  useEffect(() => {
+    validatePhone(phone || "");
+    // eslint-disable-next-line
+  }, [ip_info, phone]);
+
   return (
     <Card>
       <LogoHeader />
-      <Heading as={"div"} variant={"heading20"}>
+      <Heading as={"div"} variant={"heading20"} marginBottom="space0">
         {props.data.title}
       </Heading>
-      <Form>
+      <Form element="CUSTOM_ID_FORM">
         <FormControl>
           <Label>Name</Label>
-          <Input type="text" id={"name"} name="name" placeholder="Jess Smith" />
-          <HelpText>So we know what to call you</HelpText>
+          <Input
+            type="text"
+            id={"name"}
+            name="name"
+            placeholder="Jess Smith"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <HelpText>So we know what to call you.</HelpText>
+        </FormControl>
+
+        <FormControl>
+          <Label>Company</Label>
+          <Input
+            type="text"
+            id={"company"}
+            name="company"
+            placeholder="ACME Corp"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            required
+          />
+          <HelpText>Who do you work for? Tell me! Who!?</HelpText>
         </FormControl>
 
         <FormControl>
@@ -40,8 +127,11 @@ const IdentifyCard: FC<QuestionCardProps> = (props) => {
             id={"email"}
             name="email"
             placeholder="j.smith@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
-          <HelpText>Want a copy of the ebook?</HelpText>
+          <HelpText>Want a copy of the ebook? Fill this in!</HelpText>
         </FormControl>
 
         <FormControl>
@@ -50,16 +140,47 @@ const IdentifyCard: FC<QuestionCardProps> = (props) => {
             type="tel"
             id={"phone"}
             name="phone"
+            value={phone}
             placeholder="+61491570006"
+            onChange={handleOnChange}
+            required
           />
-          <HelpText>Use your real number for the demo</HelpText>
+          <HelpText
+            variant={isValidPhone && !isFetchingPhone ? "default" : "error"}
+          >
+            <Stack orientation="horizontal" spacing="space10">
+              {isFetchingPhone && (
+                <Spinner decorative={true} size="sizeIcon10" title="" />
+              )}
+              {isValidPhone && !isFetchingPhone
+                ? `Using phone number ${normalizedPhone}`
+                : "Use your real number for the demo"}
+            </Stack>
+          </HelpText>
         </FormControl>
+
+        <Box>
+          We will use the information you provide consistent with our{" "}
+          <Anchor
+            href="https://www.twilio.com/legal/privacy"
+            showExternal
+            target="_blank"
+          >
+            Privacy Policy.
+          </Anchor>
+        </Box>
 
         <Button
           fullWidth={true}
           variant="primary"
+          disabled={!isValidPhone}
           onClick={() => {
-            props.performActions(props.data.afterSubmitActions);
+            props.performActions(props.data.afterSubmitActions, {
+              name,
+              company,
+              phone: normalizedPhone,
+              email,
+            });
           }}
         >
           Next

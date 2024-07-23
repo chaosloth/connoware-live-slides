@@ -9,6 +9,10 @@
       "optionLabel": "Getting started with individualisation",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Individualisation"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-TIPS-A"
         },
@@ -26,6 +30,10 @@
       "optionLabel": "Creating a channel-less experience",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Channel-less experience"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-TIPS-B"
         },
@@ -33,7 +41,7 @@
           "type": "Track",
           "event": "Interest Path",
           "properties": {
-            "interest_path": "channel-less experience"
+            "interest_path": "Channel-less experience"
           }
         }
       ]

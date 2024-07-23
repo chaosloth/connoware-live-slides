@@ -22,7 +22,10 @@ import EndedCard from "@/components/EndedCard";
 
 export type DynamicCardWrapperProps = {
   slide: Slide | undefined;
-  performActions: (actions: Action[]) => void;
+  performActions: (
+    actions: Action[],
+    properties?: { [key: string]: any }
+  ) => void;
 };
 
 const DynamicCardWrapper: FC<DynamicCardWrapperProps> = (

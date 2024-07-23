@@ -122,25 +122,25 @@ export default function Home() {
    * Detect focus on app
    *
    */
-  useEffect(() => {
-    if (!identity || identity === "") return;
-    const controller = new AbortController();
-    const signal = controller.signal;
+  // useEffect(() => {
+  //   if (!identity || identity === "") return;
+  //   const controller = new AbortController();
+  //   const signal = controller.signal;
 
-    //TODO: Let app know that we've changed focus, need to pass client ID
-    fetch(
-      `${BASE_URL}/api/focus?windowFocused=${windowFocused}&identity=${identity}&ts=${Date.now()}`
-    )
-      .then((response) => response.json())
-      // .then((data) => console.log(`Focus changed`, data))
-      .catch((err) =>
-        console.log(`Error sending focus event [${windowFocused}]`, err)
-      );
-    return () => {
-      // cancel the request before component unmounts
-      controller.abort();
-    };
-  }, [windowFocused, identity, BASE_URL]);
+  //   //TODO: Let app know that we've changed focus, need to pass client ID
+  //   fetch(
+  //     `${BASE_URL}/api/focus?windowFocused=${windowFocused}&identity=${identity}&ts=${Date.now()}`
+  //   )
+  //     .then((response) => response.json())
+  //     // .then((data) => console.log(`Focus changed`, data))
+  //     .catch((err) =>
+  //       console.log(`Error sending focus event [${windowFocused}]`, err)
+  //     );
+  //   return () => {
+  //     // cancel the request before component unmounts
+  //     controller.abort();
+  //   };
+  // }, [windowFocused, identity, BASE_URL]);
 
   /**
    *
@@ -224,7 +224,10 @@ export default function Home() {
    * Perform the actions in response to user activity
    *
    */
-  const performActions = (actions: Action[]) => {
+  const performActions = (
+    actions: Action[],
+    properties?: { [key: string]: any }
+  ) => {
     console.log(`Performing [${actions.length}] actions`);
 
     actions.map((action) => {
@@ -237,13 +240,7 @@ export default function Home() {
           setCurrentSlide(targetSlide);
           setPhase(targetSlide.kind as Phase);
           return;
-        case ActionType.Track:
-          console.log(`Track users activity`, action);
-          analytics.track((action as TrackAction).event, {
-            ...(action as TrackAction).properties,
-            client_id: identity,
-          });
-          return;
+
         case ActionType.Tally:
           monitor({
             type: (action as TallyAction).type,
@@ -251,9 +248,22 @@ export default function Home() {
             client_id: identity,
           });
           return;
-        case ActionType.Identify:
+
+        case ActionType.Track:
           console.log(`Track users activity`, action);
-          analytics.identify(identity, (action as IdentifyAction).properties);
+          analytics.track((action as TrackAction).event, {
+            ...(action as TrackAction).properties,
+            ...properties,
+            client_id: identity,
+          });
+          return;
+
+        case ActionType.Identify:
+          console.log(`Sending Identify, action`, action, properties);
+          analytics.identify(identity, {
+            ...(action as IdentifyAction).properties,
+            ...properties,
+          });
           return;
         case ActionType.URL:
           window.open((action as UrlAction).url, "_self");
@@ -345,6 +355,7 @@ export default function Home() {
       backgroundImage={`url(${bgImage.src})`}
       backgroundSize="cover" // This ensures that the background covers the full screen
       backgroundPosition="center" // This centers the background image
+      overflow={"scroll"}
     >
       <CenterLayout>{getComponentForPhase()}</CenterLayout>
     </Box>

@@ -6,6 +6,8 @@ import { SyncProvider } from "@/app/context/Sync";
 import { PresentationProvider } from "@/app/context/Presentation";
 import { AnalyticsProvider } from "@/app/context/Analytics";
 import { Theme } from "@twilio-paste/core/theme";
+import { CustomizationProvider } from "@twilio-paste/core/customization";
+
 export const viewport: Viewport = {
   themeColor: "#000000",
   initialScale: 1,
@@ -43,17 +45,25 @@ export default function RootLayout({
       </head>
       <body>
         <Theme.Provider theme="twilio">
-          <SyncProvider>
-            <PresentationProvider>
-              <AnalyticsProvider
-                writeKey={
-                  process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"
-                }
-              >
-                {children}
-              </AnalyticsProvider>
-            </PresentationProvider>
-          </SyncProvider>
+          <CustomizationProvider
+            elements={{
+              CUSTOM_ID_FORM: {
+                rowGap: "space20",
+              },
+            }}
+          >
+            <SyncProvider>
+              <PresentationProvider>
+                <AnalyticsProvider
+                  writeKey={
+                    process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"
+                  }
+                >
+                  {children}
+                </AnalyticsProvider>
+              </PresentationProvider>
+            </SyncProvider>
+          </CustomizationProvider>
         </Theme.Provider>
       </body>
     </html>
