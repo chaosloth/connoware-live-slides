@@ -317,8 +317,6 @@ export default function Home() {
    */
   const getComponentForPhase = () => {
     switch (phase) {
-      case Phase.Welcome:
-        return <WelcomeCard />;
       case Phase.Question:
       case Phase.Submitted:
       case Phase.WatchPresenter:
@@ -334,14 +332,16 @@ export default function Home() {
         );
       case Phase.ErrorSync:
         return getComponentForError();
+      case Phase.Welcome:
       default:
-        return (
-          <ErrorCard
-            title="Nothing to see here..."
-            emphasis="Please scan the QR code again. "
-            message="If symptoms persists for more than 4 hours consult a doctor!"
-          />
-        );
+        return <WelcomeCard />;
+      // return (
+      //   <ErrorCard
+      //     title="Nothing to see here..."
+      //     emphasis="Please scan the QR code again. "
+      //     message="If symptoms persists for more than 4 hours consult a doctor!"
+      //   />
+      // );
     }
   };
 
