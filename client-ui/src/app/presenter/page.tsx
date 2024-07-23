@@ -21,6 +21,7 @@ import {
   Spinner,
   Stack,
 } from "@twilio-paste/core";
+import LiveSlidesService from "@/utils/LiveSlidesService";
 
 function getWindowDimensions() {
   if (!global || !global.window)
@@ -33,23 +34,6 @@ function getWindowDimensions() {
     width,
     height,
   };
-}
-
-export function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  return windowDimensions;
 }
 
 export type TallyEvent = {
@@ -138,6 +122,27 @@ export default function PresenterPage() {
 
   /**
    *
+   * Activate Slide
+   *
+   */
+  useEffect(() => {
+    if (!client) return;
+    if (!pid) return;
+    if (!sid) return;
+
+    LiveSlidesService.activateSlideInPresentation(client, pid, sid)
+      .then(() =>
+        console.log(
+          `[Presenter] Updated presentation ${pid} state to slide ${sid}`
+        )
+      )
+      .catch((err) =>
+        console.log(`Something went wrong update presentation site`, err)
+      );
+  }, [client, pid, sid]);
+
+  /**
+   *
    * Monitor Sync state
    *
    */
@@ -192,6 +197,23 @@ export default function PresenterPage() {
       </Flex>
     );
   };
+
+  function useWindowDimensions() {
+    const [windowDimensions, setWindowDimensions] = useState(
+      getWindowDimensions()
+    );
+
+    useEffect(() => {
+      function handleResize() {
+        setWindowDimensions(getWindowDimensions());
+      }
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return windowDimensions;
+  }
 
   const { height, width } = useWindowDimensions();
 
