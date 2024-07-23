@@ -9,6 +9,10 @@
       "optionLabel": "Morning",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Morning"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-TIME-ALL"
         },
@@ -25,6 +29,10 @@
       "primary": true,
       "optionLabel": "Noon",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Noon"
+        },
         {
           "type": "Slide",
           "slideId": "Q-TIME-ALL"
@@ -43,6 +51,10 @@
       "optionLabel": "Night",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Night"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-TIME-ALL"
         },
@@ -60,6 +72,10 @@
       "optionLabel": "All the time",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "All the time"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-TIME-ALL"
         },
@@ -67,7 +83,7 @@
           "type": "Track",
           "event": "Time Preference",
           "properties": {
-            "time_preference": "All"
+            "time_preference": "All the time"
           }
         }
       ]

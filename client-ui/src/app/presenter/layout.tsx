@@ -8,12 +8,17 @@ export default function PresenterLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Box width={"100%"} height={"100%"} overflowY={"scroll"}>
+    <Box
+      id="AAAA"
+      overflowY={"hidden"}
+      position="fixed" // Use "absolute" if "fixed" doesn't fit your use case
+      top={0}
+      right={0}
+      bottom={0}
+      left={0}
+    >
       <Box
-        marginBottom="space60"
-        marginTop={["space10", "space60"]}
-        marginLeft="space60"
-        marginRight="space60"
+        id="BBBBBB"
         backgroundColor={"colorBackgroundBody"}
         padding={"space70"}
         borderRadius={"borderRadius30"}

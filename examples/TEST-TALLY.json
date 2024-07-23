@@ -1,0 +1,48 @@
+{
+  "id": "TEST-TALLY",
+  "title": "(TEST TALLY) Favourite Colour",
+  "description": "Which of these is your go to colour?",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": true,
+      "optionLabel": "Pink",
+      "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Pink"
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Blue",
+      "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Blue"
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Green",
+      "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Green"
+        }
+      ]
+    },
+    {
+      "primary": true,
+      "optionLabel": "Red",
+      "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Red"
+        }
+      ]
+    }
+  ]
+}

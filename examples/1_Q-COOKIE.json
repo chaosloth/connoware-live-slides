@@ -9,6 +9,10 @@
       "optionLabel": "Choc Chip",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Choc Chip"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-COOKIE-ALL"
         },
@@ -21,11 +25,14 @@
         }
       ]
     },
-
     {
       "primary": true,
       "optionLabel": "Anzac Bikkie",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Anzac"
+        },
         {
           "type": "Slide",
           "slideId": "Q-COOKIE-ALL"
@@ -44,6 +51,10 @@
       "optionLabel": "Tim Tams",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Tim Tams"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-COOKIE-ALL"
         },
@@ -56,11 +67,14 @@
         }
       ]
     },
-
     {
       "primary": true,
       "optionLabel": "Scotch Finger",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Scotch Finger"
+        },
         {
           "type": "Slide",
           "slideId": "Q-COOKIE-ALL"

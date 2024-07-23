@@ -9,6 +9,10 @@
       "optionLabel": "A travel story",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Travel Story"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-STORY-1-A"
         },
@@ -25,6 +29,10 @@
       "primary": true,
       "optionLabel": "A fashion retail story",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Retail Story"
+        },
         {
           "type": "Slide",
           "slideId": "Q-STORY-1-B"

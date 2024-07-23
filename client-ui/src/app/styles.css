@@ -3,7 +3,7 @@ html {
 }
 
 body {
-    background: url(../../public/cookies.png) lightgray 50% / cover no-repeat;
+    height: 100%;
 }
 
 .main-layout {

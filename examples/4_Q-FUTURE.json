@@ -9,6 +9,10 @@
       "optionLabel": "Omnichannel",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Omnichannel"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-FUTURE-A"
         },
@@ -26,6 +30,10 @@
       "optionLabel": "Channel-less",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Channel-less"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-FUTURE-B"
         },
@@ -42,6 +50,10 @@
       "primary": true,
       "optionLabel": "What the heck is channel-less?",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "What is channel-less"
+        },
         {
           "type": "Slide",
           "slideId": "Q-FUTURE-C"

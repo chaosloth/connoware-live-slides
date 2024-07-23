@@ -9,6 +9,10 @@
       "optionLabel": "Pink",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Pink"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-COLOUR-ALL"
         },
@@ -25,6 +29,10 @@
       "primary": true,
       "optionLabel": "Blue",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Blue"
+        },
         {
           "type": "Slide",
           "slideId": "Q-COLOUR-ALL"
@@ -43,6 +51,10 @@
       "optionLabel": "Green",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Green"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-COLOUR-ALL"
         },
@@ -59,6 +71,10 @@
       "primary": true,
       "optionLabel": "Red",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Red"
+        },
         {
           "type": "Slide",
           "slideId": "Q-COLOUR-ALL"

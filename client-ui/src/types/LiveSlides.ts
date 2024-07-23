@@ -50,6 +50,11 @@ export class UrlAction extends Action {
   url: string = "";
 }
 
+export class TallyAction extends Action {
+  type: ActionType = ActionType.Tally;
+  answer: string = "";
+}
+
 export class Slide {
   id: string = "";
   title: string = "";

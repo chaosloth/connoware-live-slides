@@ -13,6 +13,7 @@ import {
   LiveSlidePresentation,
   Slide,
   SlideAction,
+  TallyAction,
   TrackAction,
   UrlAction,
 } from "@/types/LiveSlides";
@@ -21,8 +22,10 @@ import { State, useSyncClient } from "@/app/context/Sync";
 import { useAnalytics } from "@/app/context/Analytics";
 import { ActionType } from "@/types/ActionTypes";
 import LiveSlidesService from "@/utils/LiveSlidesService";
-import { Box } from "@twilio-paste/core";
 import { SyncStream } from "twilio-sync";
+
+import bgImage from "../../public/cookies.png";
+import { Box } from "@twilio-paste/core";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -104,12 +107,11 @@ export default function Home() {
    * Emit event
    *
    */
-  const monitor = (eventName: string, props: any) => {
+  const monitor = (props: any) => {
     if (!stream) return;
     const evt = {
       sid: currentSlide?.id,
-      eventName,
-      properties: props,
+      ...props,
     };
     console.log(`Sending to stream`, evt);
     stream.publishMessage(evt);
@@ -241,8 +243,11 @@ export default function Home() {
             ...(action as TrackAction).properties,
             client_id: identity,
           });
-          monitor((action as TrackAction).event, {
-            ...(action as TrackAction).properties,
+          return;
+        case ActionType.Tally:
+          monitor({
+            type: (action as TallyAction).type,
+            answer: (action as TallyAction).answer,
             client_id: identity,
           });
           return;
@@ -331,9 +336,17 @@ export default function Home() {
   };
 
   return (
-    <CenterLayout>
-      {getComponentForPhase()}
-      <Box backgroundColor={"colorBackgroundBody"}>State: {state}</Box>
-    </CenterLayout>
+    <Box
+      position="fixed" // Use "absolute" if "fixed" doesn't fit your use case
+      top={0}
+      right={0}
+      bottom={0}
+      left={0}
+      backgroundImage={`url(${bgImage.src})`}
+      backgroundSize="cover" // This ensures that the background covers the full screen
+      backgroundPosition="center" // This centers the background image
+    >
+      <CenterLayout>{getComponentForPhase()}</CenterLayout>
+    </Box>
   );
 }

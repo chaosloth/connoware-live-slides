@@ -50,7 +50,7 @@ export default function RootLayout({
                   process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"
                 }
               >
-                <div className="main-layout">{children}</div>
+                {children}
               </AnalyticsProvider>
             </PresentationProvider>
           </SyncProvider>

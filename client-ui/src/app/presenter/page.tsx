@@ -1,19 +1,75 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, createRef } from "react";
 import { State, useSyncClient } from "../context/Sync";
 import { Phase } from "../../types/Phases";
-import { Box } from "@twilio-paste/core/box";
+import { Text } from "@twilio-paste/core/text";
 import { Heading } from "@twilio-paste/core/heading";
-import LiveSlidesService from "../../utils/LiveSlidesService";
+import DonutChart from "react-donut-chart";
+import {
+  Avatar,
+  Box,
+  Card,
+  ChatBubble,
+  ChatLog,
+  ChatMessage,
+  ChatMessageMeta,
+  ChatMessageMetaItem,
+  Column,
+  Flex,
+  Grid,
+  Spinner,
+  Stack,
+} from "@twilio-paste/core";
+
+function getWindowDimensions() {
+  if (!global || !global.window)
+    return {
+      width: 750,
+      height: 500,
+    };
+  const { innerWidth: width, innerHeight: height } = global.window;
+  return {
+    width,
+    height,
+  };
+}
+
+export function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
+export type TallyEvent = {
+  sid: string;
+  type: string;
+  answer: string;
+  client_id: string;
+};
+
+type ChartData = { label: string; value: number; isEmpty: boolean };
 
 export default function PresenterPage() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
   const [pid, setPresentationId] = useState<string | undefined>();
   const [sid, setSlideId] = useState<string | undefined>();
   const { client, state } = useSyncClient();
-  const [lastEvent, setLastEvent] = useState<string>("");
-  const [eventList, setEventList] = useState<string[]>([]);
+  const [eventList, setEventList] = useState<TallyEvent[]>([]);
+  const [tallyData, setTallyData] = useState<ChartData[]>([
+    { label: "TBD", value: 0, isEmpty: true },
+  ]);
 
   /**
    *
@@ -71,10 +127,9 @@ export default function PresenterPage() {
         stream.on("messagePublished", (data) => {
           console.log(`New stream STREAM-${pid} data`, data);
           if (data) {
-            setLastEvent(JSON.stringify(data, null, 2));
             setEventList((prevEventList) => [
+              data.message.data as TallyEvent,
               ...prevEventList,
-              JSON.stringify(data, null, 2),
             ]);
           }
         });
@@ -92,18 +147,168 @@ export default function PresenterPage() {
     setPhase(Phase.ErrorSync);
   }, [state]);
 
+  /*
+   *
+   * Make Tally of Data
+   *
+   */
+  const sumAnswers = useCallback(() => {
+    const tally: { [key: string]: number } = {};
+
+    eventList.forEach((event) => {
+      const answer = event.answer;
+      if (tally[answer]) {
+        tally[answer] += 1;
+      } else {
+        tally[answer] = 1;
+      }
+    });
+
+    console.log(`Sum Answers`, tally);
+
+    return tally;
+  }, [eventList]);
+
+  useEffect(() => {
+    const answers = sumAnswers();
+    const data: ChartData[] = [];
+    Object.keys(answers).forEach((key) => {
+      const tallyItem = {
+        label: key,
+        value: answers[key],
+        isEmpty: answers[key] === 0 ? true : false,
+      };
+      data.push(tallyItem);
+    });
+
+    setTallyData(data);
+    console.log(`Setting chart data`, data);
+  }, [sumAnswers]);
+
+  const CenteredComponent = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <Flex hAlignContent="center" vAlignContent="center" height="100%">
+        {children}
+      </Flex>
+    );
+  };
+
+  const { height, width } = useWindowDimensions();
+
+  type MessageWithMetaProps = {
+    message: React.ReactNode;
+    person: string;
+  };
+  const MessageWithMeta: React.FC<MessageWithMetaProps> = (props) => {
+    return (
+      <ChatMessage variant="inbound">
+        <ChatBubble>{props.message}</ChatBubble>
+        <ChatMessageMeta aria-label={`said by ${props.person}`}>
+          <ChatMessageMetaItem>
+            <Avatar name={props.person} size="sizeIcon20" />
+            {props.person}
+          </ChatMessageMetaItem>
+        </ChatMessageMeta>
+      </ChatMessage>
+    );
+  };
+
+  if (!client || eventList.length === 0)
+    return (
+      <CenteredComponent>
+        <Box
+          height={"100vh"}
+          alignContent={"center"}
+          alignItems={"center"}
+          textAlign={"center"}
+        >
+          <Stack orientation={"vertical"} spacing={"space40"}>
+            <Heading as={"div"} variant={"heading10"}>
+              Waiting for responses
+            </Heading>
+            <Flex hAlignContent={"center"}>
+              <Spinner
+                decorative={true}
+                size={"sizeIcon110"}
+                color={"colorTextDestructive"}
+              />
+            </Flex>
+          </Stack>
+        </Box>
+      </CenteredComponent>
+    );
+
   return (
-    <Box>
-      <Heading as={"div"} variant={"heading10"}>
-        Presenter View - [{pid}/{sid}]
-      </Heading>
-      <Box>LAST: {lastEvent}</Box>
-      <Box>
-        EVENTS:
-        {eventList.map((event, idx) => (
-          <div key={idx}>{event}</div>
-        ))}
-      </Box>
-    </Box>
+    <CenteredComponent>
+      <Grid gutter="space0">
+        <Column span={8} id="chart-col">
+          <Box
+            position={"relative"}
+            alignContent={"center"}
+            verticalAlign={"middle"}
+          >
+            <Box>
+              <DonutChart
+                data={tallyData}
+                colors={["#F22F46", "#FFB37A", "#6D2ED1", "#36D576", "#008CFF"]}
+                legend={true}
+                interactive={false}
+                width={width * 0.75}
+                height={height}
+              />
+            </Box>
+            <Box
+              position={"absolute"}
+              top={"30%"}
+              width={"80%"}
+              textAlign={"center"}
+            >
+              {/* <Box width={"100%"}>
+                <Heading as={"div"} variant={"heading10"}>
+                  {getMaxAnswer()}
+                </Heading>
+              </Box> */}
+            </Box>
+          </Box>
+        </Column>
+        <Column span={4}>
+          <Flex vertical vAlignContent={"bottom"}>
+            <Box
+              minWidth={"400px"}
+              display="flex"
+              flexDirection="column"
+              paddingY="space120"
+              paddingX="space180"
+              borderRadius="borderRadius30"
+              borderBottomColor={"colorBorder"}
+              borderStyle={"dashed"}
+              overflow={"hidden"}
+            >
+              <Heading as={"div"} variant={"heading30"}>
+                Responses
+              </Heading>
+              <ChatLog>
+                {eventList.map((event, idx) => (
+                  <MessageWithMeta
+                    key={idx}
+                    message={
+                      `Someone chose ` && (
+                        <>
+                          Someone said{" "}
+                          <Text as={"span"} fontWeight={"fontWeightBold"}>
+                            {event.answer}
+                          </Text>
+                        </>
+                      )
+                    }
+                    person={event.client_id}
+                  />
+                ))}
+              </ChatLog>
+            </Box>
+          </Flex>
+        </Column>
+      </Grid>
+    </CenteredComponent>
   );
 }

@@ -9,6 +9,10 @@
       "optionLabel": "A global story",
       "afterSubmitActions": [
         {
+          "type": "Tally",
+          "answer": "Global Story"
+        },
+        {
           "type": "Slide",
           "slideId": "Q-STORY-2-A"
         },
@@ -25,6 +29,10 @@
       "primary": true,
       "optionLabel": "A regional story",
       "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Regional Story"
+        },
         {
           "type": "Slide",
           "slideId": "Q-STORY-2-B"
