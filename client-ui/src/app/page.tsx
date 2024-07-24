@@ -245,7 +245,7 @@ export default function Home() {
           monitor({
             type: (action as TallyAction).type,
             answer: (action as TallyAction).answer,
-            client_id: identity,
+            client_id: identity?.split(":")[1] || identity,
           });
           return;
 
@@ -254,13 +254,13 @@ export default function Home() {
           analytics.track((action as TrackAction).event, {
             ...(action as TrackAction).properties,
             ...properties,
-            client_id: identity,
+            client_id: identity?.split(":")[1] || identity,
           });
           return;
 
         case ActionType.Identify:
           console.log(`Sending Identify, action`, action, properties);
-          analytics.identify(identity, {
+          analytics.identify(identity?.split(":")[1] || identity, {
             ...(action as IdentifyAction).properties,
             ...properties,
           });

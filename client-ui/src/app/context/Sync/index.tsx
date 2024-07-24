@@ -16,12 +16,14 @@ export type SyncProviderProps = {
   state: State;
   identity: string | undefined;
   client: SyncClient | undefined;
+  token: string | undefined;
 };
 
 const initialState: SyncProviderProps = {
   state: State.Initializing,
   identity: undefined,
   client: undefined,
+  token: undefined,
 };
 
 const SyncContext = createContext(initialState);
@@ -42,7 +44,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Get client ID from local storage or generate new one
     let localIdentity =
-      localStorage.getItem("identity") || "web:" + generateSlug();
+      localStorage.getItem("identity") || "client_id:" + generateSlug();
 
     // Parse identity query parameter (optional)
     const searchParams = new URLSearchParams(document.location.search);
@@ -96,6 +98,8 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
           console.warn(`Twilio token unavailable, see error logs`);
           return;
         }
+
+        setToken(token);
         console.log("Creating new sync client");
 
         let client = new SyncClient(token);
@@ -130,8 +134,6 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
       } catch (err) {
         console.error("Error creating sync client. Check logs", err);
       }
-
-      setToken(token);
     })();
 
     return () => {
@@ -145,7 +147,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
   }, [identity]);
 
   return (
-    <SyncContext.Provider value={{ state, identity, client }}>
+    <SyncContext.Provider value={{ state, identity, client, token }}>
       {children}
     </SyncContext.Provider>
   );
