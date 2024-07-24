@@ -2,15 +2,6 @@
 import { useEffect, useState } from "react";
 import { AssistantChat } from "@/components/Assistant/AssistantChat";
 import { useSyncClient } from "../context/Sync";
-// import dynamic from "next/dynamic";
-
-// const AssistantChat = dynamic(
-//   () =>
-//     import("@twilio-alpha/assistants-react").then(
-//       (module) => module.AssistantChat
-//     ),
-//   { ssr: false }
-// );
 
 export default function Home() {
   const { token } = useSyncClient();

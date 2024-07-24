@@ -56,6 +56,40 @@ export function AssistantChatDialog(props: AssistantChatDialogProps) {
   };
 
   return (
+    <>
+      <AssistantChatLog {...props} />
+      <Box
+        borderStyle="solid"
+        borderWidth="borderWidth0"
+        borderTopWidth="borderWidth10"
+        borderColor="colorBorderWeak"
+        display="flex"
+        flexDirection="row"
+        columnGap="space30"
+        paddingX="space70"
+        paddingY="space50"
+      >
+        <ChatComposer
+          maxHeight="size10"
+          config={{
+            namespace: "foo",
+            onError: (error) => {
+              throw error;
+            },
+          }}
+          ariaLabel="Message"
+          placeholder="Type here..."
+          onChange={handleComposerChange}
+        >
+          <ClearEditorPlugin />
+          <SendButtonPlugin onClick={submitMessage} />
+          <EnterKeySubmitPlugin onKeyDown={submitMessage} />
+        </ChatComposer>
+      </Box>
+    </>
+  );
+
+  return (
     <Theme.Provider theme="default">
       <MinimizableDialogContainer>
         <MinimizableDialogButton

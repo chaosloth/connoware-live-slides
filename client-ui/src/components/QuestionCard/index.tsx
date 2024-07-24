@@ -32,7 +32,7 @@ const QuestionCard: FC<QuestionCardProps> = (props: QuestionCardProps) => {
         {props.data.options &&
           props.data.options.map((option, idx) => (
             <Button
-              key={idx}
+              key={props.data.id + "-" + idx}
               disabled={complete}
               fullWidth={true}
               variant={option.primary ? "primary" : "secondary"}
