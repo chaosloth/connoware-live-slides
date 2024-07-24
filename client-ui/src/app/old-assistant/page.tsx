@@ -1,16 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import { AssistantChat } from "@/components/Assistant/AssistantChat";
-import { useSyncClient } from "../context/Sync";
-// import dynamic from "next/dynamic";
+// import { AssistantChat } from "@twilio-alpha/assistants-react";
+import { useSyncClient } from "../../app/context/Sync";
+import dynamic from "next/dynamic";
 
-// const AssistantChat = dynamic(
-//   () =>
-//     import("@twilio-alpha/assistants-react").then(
-//       (module) => module.AssistantChat
-//     ),
-//   { ssr: false }
-// );
+const AssistantChat = dynamic(
+  () =>
+    import("@twilio-alpha/assistants-react").then(
+      (module) => module.AssistantChat
+    ),
+  { ssr: false }
+);
 
 export default function Home() {
   const { token } = useSyncClient();
@@ -36,7 +36,7 @@ export default function Home() {
         Twilio Assistants Demo
       </h1>
       <div className="mt-10">
-        {isReady && token && (
+        {isReady && (
           <AssistantChat
             token={token || ""}
             conversationSid={conversationSid}
