@@ -27,39 +27,67 @@ const ReconnectingCard: FC = () => {
     <Card>
       <LogoHeader />
       <Heading as={"div"} variant={"heading30"}>
-        {!showReloadButton && <>{"Standby, we're reconnecting..."}</>}
-        {showReloadButton && <>{"Hit the refresh button below..."}</>}
+        {"Hit the refresh button to reconnect..."}
       </Heading>
       <Stack orientation={"vertical"} spacing={"space40"}>
         <Flex hAlignContent="center" vertical>
           <Image src={reconnectIcon} alt={"Reconnecting"} priority={true} />
         </Flex>
         <Flex hAlignContent={"center"} paddingTop={"space40"}>
-          {!showReloadButton && (
-            <Spinner
-              decorative={true}
-              size={"sizeIcon80"}
-              color={"colorTextDestructive"}
-            />
-          )}
-          {showReloadButton && (
-            <Button
-              disabled={processing}
-              variant="primary"
-              fullWidth={true}
-              onClick={() => {
-                setProcessing(true);
-                window.location.reload();
-              }}
-            >
-              Tap here to reload
-              {processing && <Spinner decorative={true} />}
-            </Button>
-          )}
+          <Button
+            disabled={processing}
+            variant="primary"
+            fullWidth={true}
+            onClick={() => {
+              setProcessing(true);
+              window.location.reload();
+            }}
+          >
+            Tap here to reload
+            {processing && <Spinner decorative={true} />}
+          </Button>
         </Flex>
       </Stack>
     </Card>
   );
+
+  // return (
+  //   <Card>
+  //     <LogoHeader />
+  //     <Heading as={"div"} variant={"heading30"}>
+  //       {!showReloadButton && <>{"Standby, we're reconnecting..."}</>}
+  //       {showReloadButton && <>{"Hit the refresh button below..."}</>}
+  //     </Heading>
+  //     <Stack orientation={"vertical"} spacing={"space40"}>
+  //       <Flex hAlignContent="center" vertical>
+  //         <Image src={reconnectIcon} alt={"Reconnecting"} priority={true} />
+  //       </Flex>
+  //       <Flex hAlignContent={"center"} paddingTop={"space40"}>
+  //         {!showReloadButton && (
+  //           <Spinner
+  //             decorative={true}
+  //             size={"sizeIcon80"}
+  //             color={"colorTextDestructive"}
+  //           />
+  //         )}
+  //         {showReloadButton && (
+  //           <Button
+  //             disabled={processing}
+  //             variant="primary"
+  //             fullWidth={true}
+  //             onClick={() => {
+  //               setProcessing(true);
+  //               window.location.reload();
+  //             }}
+  //           >
+  //             Tap here to reload
+  //             {processing && <Spinner decorative={true} />}
+  //           </Button>
+  //         )}
+  //       </Flex>
+  //     </Stack>
+  //   </Card>
+  // );
 };
 
 export default ReconnectingCard;

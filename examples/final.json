@@ -7,6 +7,7 @@
       "options": [
         {
           "afterSubmitActions": [
+            { "answer": "Choc Chip", "type": "Tally" },
             { "slideId": "Q-COOKIE-ALL", "type": "Slide" },
             {
               "event": "Favourite Cookie",
@@ -15,10 +16,11 @@
             }
           ],
           "optionLabel": "Choc Chip",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Anzac", "type": "Tally" },
             { "slideId": "Q-COOKIE-ALL", "type": "Slide" },
             {
               "event": "Favourite Cookie",
@@ -27,10 +29,11 @@
             }
           ],
           "optionLabel": "Anzac Bikkie",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Tim Tams", "type": "Tally" },
             { "slideId": "Q-COOKIE-ALL", "type": "Slide" },
             {
               "event": "Favourite Cookie",
@@ -39,10 +42,11 @@
             }
           ],
           "optionLabel": "Tim Tams",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Scotch Finger", "type": "Tally" },
             { "slideId": "Q-COOKIE-ALL", "type": "Slide" },
             {
               "event": "Favourite Cookie",
@@ -51,7 +55,7 @@
             }
           ],
           "optionLabel": "Scotch Finger",
-          "primary": true
+          "primary": false
         }
       ],
       "title": "What’s your favourite type of cookie? 🍪"
@@ -69,6 +73,7 @@
       "options": [
         {
           "afterSubmitActions": [
+            { "answer": "Travel Story", "type": "Tally" },
             { "slideId": "Q-STORY-1-A", "type": "Slide" },
             {
               "event": "Story Preference",
@@ -77,10 +82,11 @@
             }
           ],
           "optionLabel": "A travel story",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Retail Story", "type": "Tally" },
             { "slideId": "Q-STORY-1-B", "type": "Slide" },
             {
               "event": "Story Preference",
@@ -89,7 +95,7 @@
             }
           ],
           "optionLabel": "A fashion retail story",
-          "primary": true
+          "primary": false
         }
       ],
       "title": "What story would you prefer to hear?"
@@ -113,6 +119,7 @@
       "options": [
         {
           "afterSubmitActions": [
+            { "answer": "Pink", "type": "Tally" },
             { "slideId": "Q-COLOUR-ALL", "type": "Slide" },
             {
               "event": "Colour Preference",
@@ -121,10 +128,11 @@
             }
           ],
           "optionLabel": "Pink",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Blue", "type": "Tally" },
             { "slideId": "Q-COLOUR-ALL", "type": "Slide" },
             {
               "event": "Colour Preference",
@@ -133,10 +141,11 @@
             }
           ],
           "optionLabel": "Blue",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Green", "type": "Tally" },
             { "slideId": "Q-COLOUR-ALL", "type": "Slide" },
             {
               "event": "Colour Preference",
@@ -145,10 +154,11 @@
             }
           ],
           "optionLabel": "Green",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Red", "type": "Tally" },
             { "slideId": "Q-COLOUR-ALL", "type": "Slide" },
             {
               "event": "Colour Preference",
@@ -157,7 +167,7 @@
             }
           ],
           "optionLabel": "Red",
-          "primary": true
+          "primary": false
         }
       ],
       "title": "Favourite Colour"
@@ -175,6 +185,7 @@
       "options": [
         {
           "afterSubmitActions": [
+            { "answer": "Omnichannel", "type": "Tally" },
             { "slideId": "Q-FUTURE-A", "type": "Slide" },
             {
               "event": "Retail Future Prediction",
@@ -187,6 +198,7 @@
         },
         {
           "afterSubmitActions": [
+            { "answer": "Channel-less", "type": "Tally" },
             { "slideId": "Q-FUTURE-B", "type": "Slide" },
             {
               "event": "Retail Future Prediction",
@@ -199,6 +211,7 @@
         },
         {
           "afterSubmitActions": [
+            { "answer": "What is channel-less", "type": "Tally" },
             { "slideId": "Q-FUTURE-C", "type": "Slide" },
             {
               "event": "Retail Future Prediction",
@@ -239,6 +252,7 @@
       "options": [
         {
           "afterSubmitActions": [
+            { "answer": "Morning", "type": "Tally" },
             { "slideId": "Q-TIME-ALL", "type": "Slide" },
             {
               "event": "Time Preference",
@@ -247,10 +261,11 @@
             }
           ],
           "optionLabel": "Morning",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Noon", "type": "Tally" },
             { "slideId": "Q-TIME-ALL", "type": "Slide" },
             {
               "event": "Time Preference",
@@ -259,10 +274,11 @@
             }
           ],
           "optionLabel": "Noon",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Night", "type": "Tally" },
             { "slideId": "Q-TIME-ALL", "type": "Slide" },
             {
               "event": "Time Preference",
@@ -271,19 +287,20 @@
             }
           ],
           "optionLabel": "Night",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "All the time", "type": "Tally" },
             { "slideId": "Q-TIME-ALL", "type": "Slide" },
             {
               "event": "Time Preference",
-              "properties": { "time_preference": "All" },
+              "properties": { "time_preference": "All the time" },
               "type": "Track"
             }
           ],
           "optionLabel": "All the time",
-          "primary": true
+          "primary": false
         }
       ],
       "title": "Timing is everything"
@@ -301,6 +318,7 @@
       "options": [
         {
           "afterSubmitActions": [
+            { "answer": "Individualisation", "type": "Tally" },
             { "slideId": "Q-TIPS-A", "type": "Slide" },
             {
               "event": "Interest Path",
@@ -309,19 +327,20 @@
             }
           ],
           "optionLabel": "Getting started with individualisation",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Channel-less experience", "type": "Tally" },
             { "slideId": "Q-TIPS-B", "type": "Slide" },
             {
               "event": "Interest Path",
-              "properties": { "interest_path": "channel-less experience" },
+              "properties": { "interest_path": "Channel-less experience" },
               "type": "Track"
             }
           ],
           "optionLabel": "Creating a channel-less experience",
-          "primary": true
+          "primary": false
         }
       ],
       "title": "Where to next?"
@@ -339,32 +358,20 @@
       "title": "Let's go channel-less!"
     },
     {
-      "description": "Voice AI Demo",
+      "description": "",
       "id": "DEMO-1",
       "kind": "DemoCta",
       "options": [
         {
           "afterSubmitActions": [
-            { "slideId": "tel:+61250167793", "type": "URL" },
+            { "type": "URL", "url": "tel:+61483988638" },
             {
               "event": "Call via phone",
               "properties": { "demo": "ORSYD" },
               "type": "Track"
             }
           ],
-          "optionLabel": "Call Conno",
-          "primary": true
-        },
-        {
-          "afterSubmitActions": [
-            { "slideId": "DEMO-WEBRTC", "type": "Slide" },
-            {
-              "event": "Start Demo",
-              "properties": { "demo": "ORSYD" },
-              "type": "Track"
-            }
-          ],
-          "optionLabel": "Call via web",
+          "optionLabel": "Call your personalised Voice AI",
           "primary": true
         }
       ],
@@ -383,6 +390,7 @@
       "options": [
         {
           "afterSubmitActions": [
+            { "answer": "Global Story", "type": "Tally" },
             { "slideId": "Q-STORY-2-A", "type": "Slide" },
             {
               "event": "Story Preference",
@@ -391,10 +399,11 @@
             }
           ],
           "optionLabel": "A global story",
-          "primary": true
+          "primary": false
         },
         {
           "afterSubmitActions": [
+            { "answer": "Regional Story", "type": "Tally" },
             { "slideId": "Q-STORY-2-B", "type": "Slide" },
             {
               "event": "Story Preference",
@@ -403,7 +412,7 @@
             }
           ],
           "optionLabel": "A regional story",
-          "primary": true
+          "primary": false
         }
       ],
       "title": "It’s time for a customer story"
@@ -419,6 +428,61 @@
       "id": "Q-STORY-2-B",
       "kind": "Submitted",
       "title": "Keep it local"
+    },
+    {
+      "afterSubmitActions": [
+        { "slideId": "AFTER-GATE", "type": "Slide" },
+        {
+          "event": "Identify",
+          "properties": { "demo": "ORSYD" },
+          "type": "Identify"
+        }
+      ],
+      "description": "",
+      "id": "GATE",
+      "kind": "Identify",
+      "title": "Tell us about yourself"
+    },
+    {
+      "description": "It's great to get to know you!",
+      "id": "AFTER-GATE",
+      "kind": "Submitted",
+      "title": "Hey new friend"
+    },
+    {
+      "description": "Which of these is your go to colour?",
+      "id": "TEST-TALLY",
+      "kind": "Question",
+      "options": [
+        {
+          "afterSubmitActions": [{ "answer": "Pink", "type": "Tally" }],
+          "optionLabel": "Pink",
+          "primary": true
+        },
+        {
+          "afterSubmitActions": [{ "answer": "Blue", "type": "Tally" }],
+          "optionLabel": "Blue",
+          "primary": true
+        },
+        {
+          "afterSubmitActions": [{ "answer": "Green", "type": "Tally" }],
+          "optionLabel": "Green",
+          "primary": true
+        },
+        {
+          "afterSubmitActions": [{ "answer": "Red", "type": "Tally" }],
+          "optionLabel": "Red",
+          "primary": true
+        }
+      ],
+      "title": "(TEST TALLY) Favourite Colour"
+    },
+    { "description": "", "id": "WELCOME", "kind": "Welcome", "title": "Hey" },
+    {
+      "description": "",
+      "id": "WAIT",
+      "kind": "WatchPresenter",
+      "title": "Time to look at the big screen"
     }
   ],
   "title": "Say Goodbye to Cookie-Cutter Personalisation"

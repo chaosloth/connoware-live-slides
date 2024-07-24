@@ -13,6 +13,7 @@ import LogoHeader from "../LogoHeader";
 import { SubmittedSlide } from "@/types/LiveSlides";
 
 import planeIcon from "@/icons/plane.svg";
+import { Stack } from "@twilio-paste/core";
 
 export type SubmittedCardProps = {
   data: SubmittedSlide;
@@ -26,13 +27,16 @@ const SubmittedCard: FC<SubmittedCardProps> = (props: SubmittedCardProps) => {
       </Heading>
       <Paragraph>{props.data.description}</Paragraph>
       <Image src={planeIcon} alt={"Plane"} priority={true} />
-      <Flex hAlignContent={"center"} paddingTop={"space40"}>
-        <Spinner
-          decorative={true}
-          size={"sizeIcon80"}
-          color={"colorTextDestructive"}
-        />
-      </Flex>
+      <Stack spacing="space40" orientation={"vertical"}>
+        <Flex hAlignContent={"center"}>
+          <Spinner
+            decorative={true}
+            size={"sizeIcon80"}
+            color={"colorTextDestructive"}
+          />
+        </Flex>
+        <Paragraph>We're tallying the responses</Paragraph>
+      </Stack>
     </Card>
   );
 };

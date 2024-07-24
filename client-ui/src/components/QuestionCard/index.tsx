@@ -33,11 +33,12 @@ const QuestionCard: FC<QuestionCardProps> = (props: QuestionCardProps) => {
           props.data.options.map((option, idx) => (
             <Button
               key={props.data.id + "-" + idx}
+              id={props.data.id + "-" + idx}
               disabled={complete}
               fullWidth={true}
               variant={option.primary ? "primary" : "secondary"}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                setComplete(true);
+                (document.activeElement as HTMLButtonElement).blur();
                 (e.target as HTMLButtonElement).blur();
                 props.performActions(option.afterSubmitActions);
               }}
