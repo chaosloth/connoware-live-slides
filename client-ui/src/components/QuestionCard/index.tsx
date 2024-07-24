@@ -37,9 +37,9 @@ const QuestionCard: FC<QuestionCardProps> = (props: QuestionCardProps) => {
               fullWidth={true}
               variant={option.primary ? "primary" : "secondary"}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                // setComplete(true);
-                props.performActions(option.afterSubmitActions);
+                setComplete(true);
                 (e.target as HTMLButtonElement).blur();
+                props.performActions(option.afterSubmitActions);
               }}
             >
               {option.optionLabel}
