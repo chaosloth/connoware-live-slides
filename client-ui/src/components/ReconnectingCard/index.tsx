@@ -27,8 +27,8 @@ const ReconnectingCard: FC = () => {
     <Card>
       <LogoHeader />
       <Heading as={"div"} variant={"heading30"}>
-        {!showReloadButton && <>Standby, we're reconnecting...</>}
-        {showReloadButton && <>Hit the refresh button below...</>}
+        {!showReloadButton && <>{"Standby, we're reconnecting..."}</>}
+        {showReloadButton && <>{"Hit the refresh button below..."}</>}
       </Heading>
       <Stack orientation={"vertical"} spacing={"space40"}>
         <Flex hAlignContent="center" vertical>
