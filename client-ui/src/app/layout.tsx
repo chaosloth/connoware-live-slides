@@ -7,6 +7,7 @@ import { PresentationProvider } from "@/app/context/Presentation";
 import { AnalyticsProvider } from "@/app/context/Analytics";
 import { Theme } from "@twilio-paste/core/theme";
 import { CustomizationProvider } from "@twilio-paste/core/customization";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -44,6 +45,7 @@ export default function RootLayout({
         {/* <meta property="og:image" content="/preview.png"/> */}
       </head>
       <body>
+        <SpeedInsights />
         <Theme.Provider theme="twilio">
           <CustomizationProvider
             elements={{

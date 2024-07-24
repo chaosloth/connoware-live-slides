@@ -8,6 +8,7 @@ specifiers:
   '@types/node': ^20
   '@types/react': ^18
   '@types/react-dom': ^18
+  '@vercel/speed-insights': ^1.0.12
   bufferutil: ^4.0.8
   eslint: ^8
   eslint-config-next: 14.2.2
@@ -30,6 +31,7 @@ dependencies:
   '@twilio-paste/core': 20.13.0_5b3mrdeejtuosia5wtftvkeyhi
   '@twilio-paste/icons': 12.5.0_vc723lagdedqmpeoumrk43rvka
   '@twilio-paste/theme': 11.1.0_ma437sazqanxqsgjws34kond6i
+  '@vercel/speed-insights': 1.0.12_next@14.2.4+react@18.3.1
   bufferutil: 4.0.8
   next: 14.2.4_nnrd3gsncyragczmpvfhocinkq
   random-word-slugs: 0.1.7
@@ -7982,6 +7984,34 @@ packages:
 
   /@ungap/structured-clone/1.2.0:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
+
+  /@vercel/speed-insights/1.0.12_next@14.2.4+react@18.3.1:
+    resolution: {integrity: sha512-ZGQ+a7bcfWJD2VYEp2R1LHvRAMyyaFBYytZXsfnbOMkeOvzGNVxUL7aVUvisIrTZjXTSsxG45DKX7yiw6nq2Jw==}
+    requiresBuild: true
+    peerDependencies:
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      react: ^18 || ^19
+      svelte: ^4
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
+    dependencies:
+      next: 14.2.4_nnrd3gsncyragczmpvfhocinkq
+      react: 18.3.1
+    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.12.1:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
