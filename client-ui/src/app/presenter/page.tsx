@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, createRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { State, useSyncClient } from "../context/Sync";
 import { Phase } from "../../types/Phases";
 import { Text } from "@twilio-paste/core/text";
 import { Heading } from "@twilio-paste/core/heading";
-import DonutChart from "react-donut-chart";
+import DonutChart from "@/components/DonutChart";
+
 import {
   Avatar,
   Box,
-  Card,
   ChatBubble,
   ChatLog,
   ChatMessage,
@@ -22,6 +22,7 @@ import {
   Stack,
 } from "@twilio-paste/core";
 import LiveSlidesService from "@/utils/LiveSlidesService";
+import LogoHeader from "@/components/LogoHeader";
 
 function getWindowDimensions() {
   if (!global || !global.window)
@@ -252,9 +253,11 @@ export default function PresenterPage() {
               <Spinner
                 decorative={true}
                 size={"sizeIcon110"}
-                color={"colorTextDestructive"}
+                color={!client ? "colorTextBrand" : "colorTextDestructive"}
               />
             </Flex>
+            Powered by
+            <LogoHeader />
           </Stack>
         </Box>
       </CenteredComponent>
@@ -273,6 +276,7 @@ export default function PresenterPage() {
               <DonutChart
                 data={tallyData}
                 colors={["#F22F46", "#FFB37A", "#6D2ED1", "#36D576", "#008CFF"]}
+                strokeColor="#CCCCCC"
                 legend={true}
                 interactive={false}
                 width={width * 0.75}
