@@ -26,6 +26,7 @@ import { SyncStream } from "twilio-sync";
 
 import bgImage from "../../public/cookies.png";
 import { Box } from "@twilio-paste/core";
+import ReconnectingCard from "@/components/ReconnectingCard";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -300,13 +301,7 @@ export default function Home() {
           />
         );
       default:
-        return (
-          <ErrorCard
-            title="Nothing to see here..."
-            emphasis="Please scan the QR code again. "
-            message="If symptoms persists for more than 4 hours consult a doctor!"
-          />
-        );
+        return <ReconnectingCard />;
     }
   };
 

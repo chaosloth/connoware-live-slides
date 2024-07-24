@@ -36,9 +36,10 @@ const QuestionCard: FC<QuestionCardProps> = (props: QuestionCardProps) => {
               disabled={complete}
               fullWidth={true}
               variant={option.primary ? "primary" : "secondary"}
-              onClick={() => {
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 // setComplete(true);
                 props.performActions(option.afterSubmitActions);
+                (e.target as HTMLButtonElement).blur();
               }}
             >
               {option.optionLabel}
