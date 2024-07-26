@@ -35,7 +35,7 @@ const SubmittedCard: FC<SubmittedCardProps> = (props: SubmittedCardProps) => {
             color={"colorTextDestructive"}
           />
         </Flex>
-        <Paragraph>We're tallying the responses</Paragraph>
+        <Paragraph>{"We're tallying the responses"}</Paragraph>
       </Stack>
     </Card>
   );
