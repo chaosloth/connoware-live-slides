@@ -1,0 +1,50 @@
+{
+  "id": "Q-EMAIL",
+  "title": "Are you truly impressed when brands use your first name to personalise their emails?",
+  "description": "",
+  "kind": "Question",
+  "options": [
+    {
+      "primary": false,
+      "optionLabel": "It blows my mind",
+      "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "It blows my mind"
+        },
+        {
+          "type": "Slide",
+          "slideId": "Q-EMAIL-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Email Personalisation",
+          "properties": {
+            "favourite_cookie": "It blows my mind"
+          }
+        }
+      ]
+    },
+    {
+      "primary": false,
+      "optionLabel": "Meh",
+      "afterSubmitActions": [
+        {
+          "type": "Tally",
+          "answer": "Meh"
+        },
+        {
+          "type": "Slide",
+          "slideId": "Q-EMAIL-ALL"
+        },
+        {
+          "type": "Track",
+          "event": "Email Personalisation",
+          "properties": {
+            "favourite_cookie": "Meh"
+          }
+        }
+      ]
+    }
+  ]
+}
