@@ -260,12 +260,24 @@ export default function Home() {
           return;
 
         case ActionType.Identify:
-          console.log(`Sending Identify, action`, action, properties);
-          analytics.identify(identity?.split(":")[1] || identity, {
+          console.log(
+            `Sending Identify (email or identity), action`,
+            action,
+            properties
+          );
+          analytics.identify(properties?.email || identity, {
             ...(action as IdentifyAction).properties,
             ...properties,
           });
           return;
+
+        // case ActionType.Identify:
+        //   console.log(`Sending Identify, action`, action, properties);
+        //   analytics.identify(identity?.split(":")[1] || identity, {
+        //     ...(action as IdentifyAction).properties,
+        //     ...properties,
+        //   });
+        //   return;
         case ActionType.URL:
           window.open((action as UrlAction).url, "_self");
           return;
