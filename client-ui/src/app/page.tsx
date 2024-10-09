@@ -261,18 +261,30 @@ export default function Home() {
 
         case ActionType.Identify:
           console.log(
-            `Sending Identify (phone, email or identity), action`,
+            `Sending Identify (anonymousId), action`,
             action,
             properties
           );
-          analytics.identify(
-            properties?.phone || properties?.email || identity,
-            {
-              ...(action as IdentifyAction).properties,
-              ...properties,
-            }
-          );
+          analytics.identify({
+            ...(action as IdentifyAction).properties,
+            ...properties,
+          });
           return;
+
+        // case ActionType.Identify:
+        //   console.log(
+        //     `Sending Identify (phone, email or identity), action`,
+        //     action,
+        //     properties
+        //   );
+        //   analytics.identify(
+        //     properties?.phone || properties?.email || identity,
+        //     {
+        //       ...(action as IdentifyAction).properties,
+        //       ...properties,
+        //     }
+        //   );
+        //   return;
 
         // case ActionType.Identify:
         //   console.log(
