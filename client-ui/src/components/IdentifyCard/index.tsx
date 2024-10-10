@@ -38,31 +38,69 @@ const IdentifyCard: FC<IdentifyCardProps> = (props) => {
   const [phone, setPhone] = useState<string>("");
   const [normalizedPhone, setNormalizedPhone] = useState<string>("");
 
-  const validatePhone = async (number: string) => {
-    if (!number) return;
-    setIsValidPhone(false);
+  // const validatePhone = async (number: string) => {
+  //   if (!number) return;
+  //   setIsValidPhone(false);
 
+  //   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+
+  //   try {
+  //     setIsFetchingPhone(true);
+  //     const response = await fetch(
+  //       `${API_BASE}/api/number-lookup?countryCode=${
+  //         ip_info?.countryCode || "AU"
+  //       }&From=${encodeURIComponent(number)}`
+  //     );
+  //     const bodyJson = await response.json();
+  //     const normalizedPhoneNumber = bodyJson.phoneNumber;
+  //     if (normalizedPhoneNumber && normalizedPhoneNumber.length > 0) {
+  //       setNormalizedPhone(normalizedPhoneNumber);
+  //       setIsValidPhone(true);
+  //     }
+  //   } catch (error) {
+  //     setIsValidPhone(false);
+  //   } finally {
+  //     setIsFetchingPhone(false);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (!phone || phone === "") return;
+    setIsValidPhone(false);
+    const controller = new AbortController();
+    const signal = controller.signal;
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
-    try {
-      setIsFetchingPhone(true);
-      const response = await fetch(
-        `${API_BASE}/api/number-lookup?countryCode=${
-          ip_info?.countryCode || "AU"
-        }&From=${encodeURIComponent(number)}`
-      );
-      const bodyJson = await response.json();
-      const normalizedPhoneNumber = bodyJson.phoneNumber;
-      if (normalizedPhoneNumber && normalizedPhoneNumber.length > 0) {
-        setNormalizedPhone(normalizedPhoneNumber);
-        setIsValidPhone(true);
-      }
-    } catch (error) {
-      setIsValidPhone(false);
-    } finally {
-      setIsFetchingPhone(false);
-    }
-  };
+    setIsFetchingPhone(true);
+    fetch(
+      `${API_BASE}/api/number-lookup?countryCode=${
+        ip_info?.countryCode || "AU"
+      }&From=${encodeURIComponent(phone)}`,
+      { signal }
+    )
+      .then((resp) => resp.json())
+      .then((data) => {
+        const normalizedPhoneNumber = data.phoneNumber;
+        if (normalizedPhoneNumber && normalizedPhoneNumber.length > 0) {
+          setNormalizedPhone(normalizedPhoneNumber);
+          setIsValidPhone(true);
+        }
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") {
+          console.log(`Aborted number validation`);
+        } else {
+          console.log(`Error normalizing phone number`, err);
+        }
+        setIsValidPhone(false);
+      })
+      .finally(() => setIsFetchingPhone(false));
+
+    return () => {
+      // Abort the request when the component unmounts or when a dependency changes
+      controller.abort();
+    };
+  }, [ip_info?.countryCode, phone]);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -77,13 +115,13 @@ const IdentifyCard: FC<IdentifyCardProps> = (props) => {
 
   const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(e.target.value);
-    validatePhone(e.target.value);
+    // validatePhone(e.target.value);
   };
 
-  useEffect(() => {
-    validatePhone(phone || "");
-    // eslint-disable-next-line
-  }, [ip_info, phone]);
+  // useEffect(() => {
+  //   validatePhone(phone || "");
+  //   // eslint-disable-next-line
+  // }, [ip_info, phone]);
 
   return (
     <Card>
