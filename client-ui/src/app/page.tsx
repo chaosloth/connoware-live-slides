@@ -255,17 +255,21 @@ export default function Home() {
           analytics.track((action as TrackAction).event, {
             ...(action as TrackAction).properties,
             ...properties,
-            client_id: identity?.split(":")[1] || identity,
           });
           return;
 
+        // case ActionType.Track:
+        //   console.log(`Track users activity`, action);
+        //   analytics.track((action as TrackAction).event, {
+        //     ...(action as TrackAction).properties,
+        //     ...properties,
+        //     client_id: identity?.split(":")[1] || identity,
+        //   });
+        //   return;
+
         case ActionType.Identify:
-          console.log(
-            `Sending Identify (anonymousId), action`,
-            action,
-            properties
-          );
-          analytics.identify({
+          console.log(`Sending Identify (phone), action`, action, properties);
+          analytics.identify(properties?.phone, {
             ...(action as IdentifyAction).properties,
             ...properties,
           });
