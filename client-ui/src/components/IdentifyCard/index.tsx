@@ -38,32 +38,6 @@ const IdentifyCard: FC<IdentifyCardProps> = (props) => {
   const [phone, setPhone] = useState<string>("");
   const [normalizedPhone, setNormalizedPhone] = useState<string>("");
 
-  // const validatePhone = async (number: string) => {
-  //   if (!number) return;
-  //   setIsValidPhone(false);
-
-  //   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
-  //   try {
-  //     setIsFetchingPhone(true);
-  //     const response = await fetch(
-  //       `${API_BASE}/api/number-lookup?countryCode=${
-  //         ip_info?.countryCode || "AU"
-  //       }&From=${encodeURIComponent(number)}`
-  //     );
-  //     const bodyJson = await response.json();
-  //     const normalizedPhoneNumber = bodyJson.phoneNumber;
-  //     if (normalizedPhoneNumber && normalizedPhoneNumber.length > 0) {
-  //       setNormalizedPhone(normalizedPhoneNumber);
-  //       setIsValidPhone(true);
-  //     }
-  //   } catch (error) {
-  //     setIsValidPhone(false);
-  //   } finally {
-  //     setIsFetchingPhone(false);
-  //   }
-  // };
-
   useEffect(() => {
     if (!phone || phone === "") return;
     setIsValidPhone(false);
@@ -115,13 +89,7 @@ const IdentifyCard: FC<IdentifyCardProps> = (props) => {
 
   const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(e.target.value);
-    // validatePhone(e.target.value);
   };
-
-  // useEffect(() => {
-  //   validatePhone(phone || "");
-  //   // eslint-disable-next-line
-  // }, [ip_info, phone]);
 
   return (
     <Card>
