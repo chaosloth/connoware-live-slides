@@ -29,6 +29,12 @@ export class Option {
 export class Action {
   type: ActionType = ActionType.Unknown;
 }
+export class StreamAction extends Action {
+  type: ActionType = ActionType.Stream;
+  message: string = "";
+  properties: { [key: string]: string } = {};
+}
+
 export class TrackAction extends Action {
   type: ActionType = ActionType.Track;
   event: string = "";

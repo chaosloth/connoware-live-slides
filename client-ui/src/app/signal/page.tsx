@@ -1,41 +1,23 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { State, useSyncClient } from "../context/Sync";
 import { Phase } from "../../types/Phases";
-import { Text } from "@twilio-paste/core/text";
 import { Heading } from "@twilio-paste/core/heading";
 
-import {
-  Avatar,
-  Box,
-  ChatBubble,
-  ChatLog,
-  ChatMessage,
-  ChatMessageMeta,
-  ChatMessageMetaItem,
-  Flex,
-  Spinner,
-  Stack,
-} from "@twilio-paste/core";
-import LiveSlidesService from "@/utils/LiveSlidesService";
+import { Box, ChatLog, Flex, Spinner, Stack } from "@twilio-paste/core";
 import LogoHeader from "@/components/LogoHeader";
-
-export type TallyEvent = {
-  sid: string;
-  type: string;
-  answer: string;
-  client_id: string;
-  timestamp: string;
-};
-
-type ChartData = { label: string; value: number; isEmpty: boolean };
+import { GenericEvent } from "@/types/EventTypes";
+import HighlightedResponse from "@/components/HighlightedResponse";
+import Image from "next/image";
+import LeftPathImage from "@/icons/Left Path.svg";
+import RightPathImage from "@/icons/Right Path.svg";
 
 export default function PresenterPage() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
   const [pid, setPresentationId] = useState<string | undefined>();
   const { client, state } = useSyncClient();
-  const [eventList, setEventList] = useState<TallyEvent[]>([]);
+  const [eventList, setEventList] = useState<GenericEvent[]>([]);
 
   /**
    *
@@ -83,7 +65,7 @@ export default function PresenterPage() {
               {
                 ...data.message.data,
                 timestamp: new Date().toLocaleTimeString("en-US"),
-              } as TallyEvent,
+              } as GenericEvent,
               ...prevEventList,
             ]);
           }
@@ -107,25 +89,6 @@ export default function PresenterPage() {
       <Flex hAlignContent="center" vAlignContent="center" height="100%">
         {children}
       </Flex>
-    );
-  };
-
-  type MessageWithMetaProps = {
-    message: React.ReactNode;
-    person: string;
-    timestamp?: string;
-  };
-  const MessageWithMeta: React.FC<MessageWithMetaProps> = (props) => {
-    return (
-      <ChatMessage variant="inbound">
-        <ChatBubble>{props.message}</ChatBubble>
-        <ChatMessageMeta aria-label={`said by ${props.person}`}>
-          <ChatMessageMetaItem>
-            <Avatar name={props.person} size="sizeIcon20" />
-            {props.person} - {props.timestamp}
-          </ChatMessageMetaItem>
-        </ChatMessageMeta>
-      </ChatMessage>
     );
   };
 
@@ -157,41 +120,40 @@ export default function PresenterPage() {
     );
 
   return (
-    <CenteredComponent>
-      <Flex vertical vAlignContent={"bottom"}>
-        <Box
-          minWidth={"400px"}
-          display="flex"
-          flexDirection="column"
-          paddingY="space120"
-          paddingX="space100"
-          borderRadius="borderRadius30"
-          borderBottomColor={"colorBorder"}
-          borderStyle={"dashed"}
-          overflow={"scroll"}
-        >
-          <Heading as={"div"} variant={"heading30"}>
-            Responses
-          </Heading>
-          <ChatLog>
-            {eventList.map((event, idx) => (
-              <MessageWithMeta
-                key={idx}
-                message={
-                  <>
-                    Someone said{" "}
-                    <Text as={"span"} fontWeight={"fontWeightBold"}>
-                      {event.answer}
-                    </Text>
-                  </>
-                }
-                person={event.client_id}
-                timestamp={event.timestamp}
-              />
-            ))}
-          </ChatLog>
+    <Flex>
+      <Flex></Flex>
+      <Flex grow hAlignContent={"center"}>
+        <Box>
+          <Box
+            minWidth={"400px"}
+            display="flex"
+            flexDirection="column"
+            paddingY="space120"
+            paddingX="space100"
+            borderRadius="borderRadius30"
+            borderBottomColor={"colorBorder"}
+            borderStyle={"none"}
+            overflow={"scroll"}
+          >
+            <Box paddingLeft={"space120"}>
+              <Heading as={"div"} variant={"heading10"}>
+                Responses
+              </Heading>
+            </Box>
+
+            <ChatLog>
+              {eventList.map((event, idx) => (
+                <HighlightedResponse
+                  key={`entry-${idx}`}
+                  event={event}
+                  highlight={idx === 1 ? true : false}
+                />
+              ))}
+            </ChatLog>
+          </Box>
         </Box>
       </Flex>
-    </CenteredComponent>
+      <Flex></Flex>
+    </Flex>
   );
 }

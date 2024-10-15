@@ -4,5 +4,6 @@ export enum ActionType {
   Slide = "Slide",
   URL = "URL",
   Tally = "Tally",
+  Stream = "Stream",
   Unknown = "Unknown",
 }

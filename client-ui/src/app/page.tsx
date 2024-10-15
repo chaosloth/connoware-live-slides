@@ -13,6 +13,7 @@ import {
   LiveSlidePresentation,
   Slide,
   SlideAction,
+  StreamAction,
   TallyAction,
   TrackAction,
   UrlAction,
@@ -24,9 +25,11 @@ import { ActionType } from "@/types/ActionTypes";
 import LiveSlidesService from "@/utils/LiveSlidesService";
 import { SyncStream } from "twilio-sync";
 
-import bgImage from "../../public/cookies.png";
+// import bgImage from "../../public/cookies.png";
+import bgImage from "../../public/signal_bg.svg";
 import { Box } from "@twilio-paste/core";
 import ReconnectingCard from "@/components/ReconnectingCard";
+import { Theme } from "@twilio-paste/theme";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -108,7 +111,7 @@ export default function Home() {
    * Emit event
    *
    */
-  const monitor = (props: any) => {
+  const publishEventToStream = (props: any) => {
     if (!stream) return;
     const evt = {
       sid: currentSlide?.id,
@@ -243,7 +246,7 @@ export default function Home() {
           return;
 
         case ActionType.Tally:
-          monitor({
+          publishEventToStream({
             type: (action as TallyAction).type,
             answer: (action as TallyAction).answer,
             client_id: identity?.split(":")[1] || identity,
@@ -258,14 +261,40 @@ export default function Home() {
           });
           return;
 
-        // case ActionType.Track:
-        //   console.log(`Track users activity`, action);
-        //   analytics.track((action as TrackAction).event, {
-        //     ...(action as TrackAction).properties,
-        //     ...properties,
-        //     client_id: identity?.split(":")[1] || identity,
-        //   });
-        //   return;
+        case ActionType.Stream:
+          console.log(`Stream users activity`, action);
+
+          // Interpolate function to enable user to use templates
+          const interpolate = (str: string, params: { [key: string]: any }) => {
+            const names = Object.keys(params);
+            console.log(`Names`, names);
+            const values = Object.values(params);
+            console.log(`Values`, values);
+            return new Function(...names, `return \`${str}\`;`)(...values);
+          };
+
+          try {
+            let act = action as StreamAction;
+
+            console.log(`Interpolating string: ${act.message}`);
+            console.log(`act = `, act);
+            console.log(`properties = `, properties);
+            const res = interpolate(act.message, {
+              ...act,
+              ...properties,
+            });
+
+            console.log(`Interpolation result: ${res}`);
+
+            publishEventToStream({
+              type: act.type,
+              message: res,
+              client_id: identity?.split(":")[1] || identity,
+            });
+          } catch (err) {
+            console.warn(`Error sending stream event`, err);
+          }
+          return;
 
         case ActionType.Identify:
           console.log(`Sending Identify (phone), action`, action, properties);
@@ -372,7 +401,7 @@ export default function Home() {
         return getComponentForError();
       case Phase.Welcome:
       default:
-        return <WelcomeCard />;
+        return <WelcomeCard data={currentSlide || new Slide()} />;
       // return (
       //   <ErrorCard
       //     title="Nothing to see here..."
@@ -394,6 +423,9 @@ export default function Home() {
       backgroundSize="cover" // This ensures that the background covers the full screen
       backgroundPosition="center" // This centers the background image
       overflow={"scroll"}
+      style={{
+        backgroundColor: "#000000",
+      }}
     >
       <CenterLayout>{getComponentForPhase()}</CenterLayout>
     </Box>

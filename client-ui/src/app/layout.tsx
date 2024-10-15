@@ -49,25 +49,17 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <Theme.Provider theme="twilio">
-          <CustomizationProvider
-            elements={{
-              CUSTOM_ID_FORM: {
-                rowGap: "space20",
-              },
-            }}
-          >
-            <SyncProvider>
-              <PresentationProvider>
-                <AnalyticsProvider
-                  writeKey={
-                    process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"
-                  }
-                >
-                  {children}
-                </AnalyticsProvider>
-              </PresentationProvider>
-            </SyncProvider>
-          </CustomizationProvider>
+          <SyncProvider>
+            <PresentationProvider>
+              <AnalyticsProvider
+                writeKey={
+                  process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"
+                }
+              >
+                {children}
+              </AnalyticsProvider>
+            </PresentationProvider>
+          </SyncProvider>
         </Theme.Provider>
       </body>
     </html>
