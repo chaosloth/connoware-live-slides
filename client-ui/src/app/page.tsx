@@ -29,7 +29,6 @@ import { SyncStream } from "twilio-sync";
 import bgImage from "../../public/signal_bg.svg";
 import { Box } from "@twilio-paste/core";
 import ReconnectingCard from "@/components/ReconnectingCard";
-import { Theme } from "@twilio-paste/theme";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>(Phase.Welcome);
@@ -45,6 +44,9 @@ export default function Home() {
   const analytics = useAnalytics();
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
+
+  // Local user data for events
+  const [userData, setUserData] = useState<{ [key: string]: string }>({});
 
   /**
    *
@@ -255,8 +257,14 @@ export default function Home() {
 
         case ActionType.Track:
           console.log(`Track users activity`, action);
-          analytics.track((action as TrackAction).event, {
-            ...(action as TrackAction).properties,
+          const act: TrackAction = action as TrackAction;
+
+          // Cache data locally
+          setUserData((data) => ({ ...data, ...act.properties }));
+
+          // Send to Segment
+          analytics.track(act.event, {
+            ...(act as TrackAction).properties,
             ...properties,
           });
           return;
@@ -299,6 +307,7 @@ export default function Home() {
         case ActionType.Identify:
           console.log(`Sending Identify (phone), action`, action, properties);
           analytics.identify(properties?.phone, {
+            ...userData,
             ...(action as IdentifyAction).properties,
             ...properties,
           });
