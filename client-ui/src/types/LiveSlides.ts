@@ -4,10 +4,12 @@ import { ActionType } from "./ActionTypes";
 export class LiveSlidePresentation {
   title: string;
   slides: Slide[];
+  segmentWriteKey: string;
 
   constructor() {
     this.title = "";
     this.slides = [];
+    this.segmentWriteKey = "";
   }
 }
 
