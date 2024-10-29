@@ -175,6 +175,14 @@ const Designer: FC = () => {
     setIsDirty(true);
   };
 
+  const handleWriteKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!presentation) return;
+    const newPresentation = { ...presentation };
+    newPresentation.segmentWriteKey = e.target.value;
+    setPresentation(newPresentation);
+    setIsDirty(true);
+  };
+
   return (
     <>
       <PageHeader size="default">
@@ -218,6 +226,22 @@ const Designer: FC = () => {
 
           <PageHeaderActions>
             <Stack orientation={"horizontal"} spacing={"space40"}>
+              <Form>
+                <FormControl>
+                  <Label htmlFor="segment_write_key">Segment Write Key</Label>
+                  <Input
+                    aria-describedby="segment_write_key_help_text"
+                    id="segment_write_key"
+                    name="segment_write_key"
+                    type="text"
+                    value={presentation?.segmentWriteKey || ""}
+                    onChange={handleWriteKeyChange}
+                  />
+                  <HelpText id="presentation_id_help_text">
+                    Defaults to global key
+                  </HelpText>
+                </FormControl>
+              </Form>
               <Form>
                 <FormControl>
                   <Label htmlFor="presentation_id">Presentation ID</Label>
