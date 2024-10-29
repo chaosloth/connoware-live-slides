@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useWindowFocus from "use-window-focus";
+import { AnalyticsBrowser } from "@segment/analytics-next";
 import { Phase } from "@/types/Phases";
 import CenterLayout from "@/components/CenterLayout";
 import WelcomeCard from "@/components/WelcomeCard";
@@ -19,6 +20,7 @@ import {
   UrlAction,
 } from "@/types/LiveSlides";
 import DynamicCardWrapper from "@/components/DynamicCardWrapper";
+import { AnalyticsProvider } from "@/app/context/Analytics";
 import { State, useSyncClient } from "@/app/context/Sync";
 import { useAnalytics } from "@/app/context/Analytics";
 import { ActionType } from "@/types/ActionTypes";
@@ -41,9 +43,30 @@ export default function Home() {
   const { client, identity, state } = useSyncClient();
   const [stream, setStream] = useState<SyncStream>();
 
-  const analytics = useAnalytics();
+  /**
+   *
+   * Load WriteKey from presentation or global
+   *
+   */
+  const analytics = useMemo(
+    () =>
+      AnalyticsBrowser.load({
+        writeKey:
+          presentation?.segmentWriteKey ||
+          process.env.NEXT_PUBLIC_SEGMENT_API_KEY ||
+          "",
+      }),
+    [presentation?.segmentWriteKey]
+  );
 
-  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
+  useEffect(() => {
+    if (!presentation) return;
+    if (!presentation.segmentWriteKey) return;
+    console.log(
+      `Setting Segment Write key to [${presentation.segmentWriteKey}]`
+    );
+    AnalyticsBrowser.load({ writeKey: presentation?.segmentWriteKey });
+  }, [presentation, presentation?.segmentWriteKey]);
 
   // Local user data for events
   const [userData, setUserData] = useState<{ [key: string]: string }>({});
@@ -422,21 +445,29 @@ export default function Home() {
   };
 
   return (
-    <Box
-      position="fixed" // Use "absolute" if "fixed" doesn't fit your use case
-      top={0}
-      right={0}
-      bottom={0}
-      left={0}
-      backgroundImage={`url(${bgImage.src})`}
-      backgroundSize="cover" // This ensures that the background covers the full screen
-      backgroundPosition="center" // This centers the background image
-      overflow={"scroll"}
-      style={{
-        backgroundColor: "#000000",
-      }}
+    <AnalyticsProvider
+      writeKey={
+        presentation?.segmentWriteKey ||
+        process.env.NEXT_PUBLIC_SEGMENT_API_KEY ||
+        "not configured"
+      }
     >
-      <CenterLayout>{getComponentForPhase()}</CenterLayout>
-    </Box>
+      <Box
+        position="fixed" // Use "absolute" if "fixed" doesn't fit your use case
+        top={0}
+        right={0}
+        bottom={0}
+        left={0}
+        backgroundImage={`url(${bgImage.src})`}
+        backgroundSize="cover" // This ensures that the background covers the full screen
+        backgroundPosition="center" // This centers the background image
+        overflow={"scroll"}
+        style={{
+          backgroundColor: "#000000",
+        }}
+      >
+        <CenterLayout>{getComponentForPhase()}</CenterLayout>
+      </Box>
+    </AnalyticsProvider>
   );
 }
