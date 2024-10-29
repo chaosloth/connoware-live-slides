@@ -4,9 +4,8 @@ import type { Metadata, Viewport } from "next";
 import "@/app/styles.css";
 import { SyncProvider } from "@/app/context/Sync";
 import { PresentationProvider } from "@/app/context/Presentation";
-import { AnalyticsProvider } from "@/app/context/Analytics";
+
 import { Theme } from "@twilio-paste/core/theme";
-import { CustomizationProvider } from "@twilio-paste/core/customization";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -37,7 +36,7 @@ export default function RootLayout({
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="Twilio - Individualised Communications at Scale"
+          content="Twilio - Personalisation at Communications at Scale"
         />
         <meta
           property="og:description"
@@ -50,15 +49,7 @@ export default function RootLayout({
         <SpeedInsights />
         <Theme.Provider theme="twilio">
           <SyncProvider>
-            <PresentationProvider>
-              <AnalyticsProvider
-                writeKey={
-                  process.env.NEXT_PUBLIC_SEGMENT_API_KEY || "not configured"
-                }
-              >
-                {children}
-              </AnalyticsProvider>
-            </PresentationProvider>
+            <PresentationProvider>{children}</PresentationProvider>
           </SyncProvider>
         </Theme.Provider>
       </body>
