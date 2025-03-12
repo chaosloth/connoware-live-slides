@@ -28,7 +28,8 @@ import LiveSlidesService from "@/utils/LiveSlidesService";
 import { SyncStream } from "twilio-sync";
 
 // import bgImage from "../../public/cookies.png";
-import bgImage from "../../public/signal_bg.svg";
+// import bgImage from "../../public/signal_bg.svg";
+import bgImage from "../../public/2025_bg_3.svg";
 import { Box } from "@twilio-paste/core";
 import ReconnectingCard from "@/components/ReconnectingCard";
 
