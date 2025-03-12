@@ -43,7 +43,7 @@ const IconForEvent: React.FC<IconForEventProps> = (props) => {
       icon = IconCarnivore;
       break;
 
-    case "Cold":
+    case "A cold snack!":
       icon = IconCold;
       break;
 
