@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import "@/app/styles.css";
 import { SyncProvider } from "@/app/context/Sync";
 import { PresentationProvider } from "@/app/context/Presentation";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 import { Theme } from "@twilio-paste/core/theme";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -48,9 +49,11 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <Theme.Provider theme="twilio">
-          <SyncProvider>
-            <PresentationProvider>{children}</PresentationProvider>
-          </SyncProvider>
+          <ErrorBoundary>
+            <SyncProvider>
+              <PresentationProvider>{children}</PresentationProvider>
+            </SyncProvider>
+          </ErrorBoundary>
         </Theme.Provider>
       </body>
     </html>
