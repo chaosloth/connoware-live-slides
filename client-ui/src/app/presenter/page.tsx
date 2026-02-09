@@ -191,14 +191,6 @@ export default function PresenterPage() {
     console.log(`Setting chart data`, data);
   }, [sumAnswers]);
 
-  const CenteredComponent = ({ children }: { children: React.ReactNode }) => {
-    return (
-      <Flex hAlignContent="center" vAlignContent="center" height="100%">
-        {children}
-      </Flex>
-    );
-  };
-
   function useWindowDimensions() {
     const [windowDimensions, setWindowDimensions] = useState(
       getWindowDimensions()
@@ -238,33 +230,32 @@ export default function PresenterPage() {
 
   if (!client || eventList.length === 0)
     return (
-      <CenteredComponent>
-        <Box
-          height={"100vh"}
-          alignContent={"center"}
-          alignItems={"center"}
-          textAlign={"center"}
-        >
-          <Stack orientation={"vertical"} spacing={"space40"}>
-            <Heading as={"div"} variant={"heading10"}>
-              Waiting for responses
-            </Heading>
-            <Flex hAlignContent={"center"}>
-              <Spinner
-                decorative={true}
-                size={"sizeIcon110"}
-                color={!client ? "colorTextBrand" : "colorTextDestructive"}
-              />
-            </Flex>
-            Powered by
-            <LogoHeader />
-          </Stack>
-        </Box>
-      </CenteredComponent>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+        textAlign="center"
+      >
+        <Stack orientation={"vertical"} spacing={"space40"}>
+          <Heading as={"div"} variant={"heading10"}>
+            Waiting for responses
+          </Heading>
+          <Box display="flex" justifyContent="center">
+            <Spinner
+              decorative={true}
+              size={"sizeIcon110"}
+              color={!client ? "colorTextBrand" : "colorTextDestructive"}
+            />
+          </Box>
+          <Box>Powered by</Box>
+          <LogoHeader />
+        </Stack>
+      </Box>
     );
 
   return (
-    <CenteredComponent>
+    <Box minHeight="100vh">
       <Grid gutter="space0">
         <Column span={8} id="chart-col">
           <Box
@@ -335,6 +326,6 @@ export default function PresenterPage() {
           </Flex>
         </Column>
       </Grid>
-    </CenteredComponent>
+    </Box>
   );
 }

@@ -138,7 +138,7 @@ const Dashboard: FC = () => {
     router.push(`/dashboard/monitor?pid=${presentation.key}`);
   };
   const handleEditPresentation = (presentation: PresentationMapItem) => {
-    router.push(`/visual-designer?pid=${presentation.key}`);
+    router.push(`/dashboard/designer?pid=${presentation.key}`);
   };
   const handleVisualDesigner = (presentation: PresentationMapItem) => {
     router.push(`/visual-designer?pid=${presentation.key}`);
@@ -176,6 +176,12 @@ const Dashboard: FC = () => {
           <PageHeaderHeading>Live Slides Dashboard</PageHeaderHeading>
           <PageHeaderActions>
             <Stack orientation="horizontal" spacing="space40">
+              <Button
+                variant="secondary"
+                onClick={() => router.push("/dashboard/admin-users")}
+              >
+                Manage Users
+              </Button>
               <Button
                 variant="secondary"
                 disabled={loading}

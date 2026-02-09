@@ -7,7 +7,7 @@ import {
   ModalFooter,
   ModalFooterActions,
 } from "@twilio-paste/core/modal";
-import { Flex } from "@twilio-paste/core/flex";
+import { Box } from "@twilio-paste/core/box";
 import { useUID } from "@twilio-paste/core/dist/uid-library";
 import { Form, FormControl } from "@twilio-paste/core/form";
 import { Label } from "@twilio-paste/core/label";
@@ -54,7 +54,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = (props) => {
         </ModalHeading>
       </ModalHeader>
       <ModalBody>
-        <Flex vAlignContent={"center"} hAlignContent={"center"}>
+        <Box display="flex" justifyContent="center" alignItems="center">
           <Stack orientation={"vertical"} spacing={"space40"}>
             <QRCode value={code} />
             <Form>
@@ -86,7 +86,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = (props) => {
               </FormControl>
             </Form>
           </Stack>
-        </Flex>
+        </Box>
       </ModalBody>
       <ModalFooter>
         <ModalFooterActions>

@@ -23,7 +23,11 @@ Available slide types:
    - Fields: id, kind="DemoCta", title, description, options[]
 
 4. "Identify" - Collect user info
-   - Fields: id, kind="Identify", title, description
+   - Fields: id, kind="Identify", title, description, afterSubmitActions[]
+   - MUST include three afterSubmitActions in this order:
+     a) Identify action with userProperties containing demo name
+     b) Stream action with personalized greeting message
+     c) Slide action to navigate to next slide
 
 5. "Ended" - End screen
    - Fields: id, kind="Ended", title, description
@@ -33,6 +37,12 @@ Available action types for afterSubmitActions:
 - "Track" - Track analytics event (requires event name and properties)
 - "URL" - Open external URL (requires url)
 - "Stream" - Send message to stream (requires message)
+- "Tally" - Record vote/response (requires answer field matching the option's optionLabel)
+- "Identify" - Identify user in analytics (requires userProperties object)
+
+IMPORTANT:
+- ALL question slide options MUST include a Tally action to record the user's vote.
+- ALL Identify slides MUST include Identify, Stream, and Slide actions in afterSubmitActions.
 
 Best practices:
 1. Use clear, engaging slide IDs like "intro", "q1", "benefits", "conclusion"
@@ -42,6 +52,50 @@ Best practices:
 5. Include an "Ended" slide at the end
 6. Make primary option buttons visually distinct (primary: true)
 7. Link question options to relevant next slides
+8. **CRITICAL**: Every option in a Question slide MUST have a Tally action as the first action in afterSubmitActions, with answer matching the optionLabel
+
+Example Question slide option structure:
+{
+  "optionLabel": "Yes",
+  "optionValue": "yes",
+  "primary": true,
+  "afterSubmitActions": [
+    {
+      "type": "Tally",
+      "answer": "Yes"
+    },
+    {
+      "type": "Slide",
+      "slideId": "next-slide"
+    }
+  ]
+}
+
+Example Identify slide structure (convert presentation title to uppercase for demo name):
+{
+  "id": "identify",
+  "kind": "Identify",
+  "title": "Tell us about yourself",
+  "description": "Enter your details to continue",
+  "afterSubmitActions": [
+    {
+      "type": "Identify",
+      "userProperties": {
+        "demo": "PRESENTATIONNAME"
+      }
+    },
+    {
+      "type": "Stream",
+      "message": "Ahoy \${name}"
+    },
+    {
+      "type": "Slide",
+      "slideId": "next-slide"
+    }
+  ]
+}
+
+CRITICAL: For Identify slides, replace PRESENTATIONNAME with the presentation title in uppercase (e.g., "Product Demo" becomes "PRODUCTDEMO"). The Stream message MUST use \${name} placeholder (with dollar sign and curly braces) which will be replaced with the user's actual name.
 
 Return ONLY valid JSON matching this structure. No markdown, no explanations.`;
 

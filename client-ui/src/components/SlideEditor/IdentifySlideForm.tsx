@@ -12,9 +12,12 @@ import {
   Separator,
   Heading,
   Text,
+  Select,
+  Option,
 } from "@twilio-paste/core";
 import { GateSlide, Slide } from "@/types/LiveSlides";
 import { ActionBuilder } from "../ActionBuilder";
+import { Phase } from "@/types/Phases";
 
 interface IdentifySlideFormProps {
   slide: GateSlide;
@@ -30,6 +33,28 @@ export function IdentifySlideForm({ slide, onChange, allSlides = [] }: IdentifyS
 
   return (
     <Stack orientation="vertical" spacing="space60">
+      <FormControl>
+        <Label htmlFor="slide-type" required>
+          Slide Type
+        </Label>
+        <Select
+          id="slide-type"
+          value={slide.kind}
+          onChange={(e) => handleFieldChange("kind", e.target.value as Phase)}
+          required
+        >
+          <Option value={Phase.Welcome}>Welcome</Option>
+          <Option value={Phase.Question}>Question</Option>
+          <Option value={Phase.Identify}>Identify</Option>
+          <Option value={Phase.DemoCta}>Demo CTA</Option>
+          <Option value={Phase.WatchPresenter}>Watch Presenter</Option>
+          <Option value={Phase.WebRtc}>WebRTC</Option>
+          <Option value={Phase.Submitted}>Submitted</Option>
+          <Option value={Phase.Ended}>Ended</Option>
+        </Select>
+        <HelpText>The type of slide determines what form fields and behavior are available</HelpText>
+      </FormControl>
+
       <FormControl>
         <Label htmlFor="slide-id" required>
           Slide ID

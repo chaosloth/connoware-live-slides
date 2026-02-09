@@ -15,11 +15,14 @@ import {
   Heading,
   Separator,
   Text,
+  Select,
+  Option as SelectOption,
 } from "@twilio-paste/core";
 import { DeleteIcon } from "@twilio-paste/icons/esm/DeleteIcon";
 import { PlusIcon } from "@twilio-paste/icons/esm/PlusIcon";
 import { CtaSlide, EndedSlide, Option, Slide } from "@/types/LiveSlides";
 import { ActionBuilder } from "../ActionBuilder";
+import { Phase } from "@/types/Phases";
 
 interface CtaSlideFormProps {
   slide: CtaSlide | EndedSlide;
@@ -60,6 +63,28 @@ export function CtaSlideForm({ slide, onChange, allSlides = [] }: CtaSlideFormPr
 
   return (
     <Stack orientation="vertical" spacing="space60">
+      <FormControl>
+        <Label htmlFor="slide-type" required>
+          Slide Type
+        </Label>
+        <Select
+          id="slide-type"
+          value={slide.kind}
+          onChange={(e) => handleFieldChange("kind", e.target.value as Phase)}
+          required
+        >
+          <SelectOption value={Phase.Welcome}>Welcome</SelectOption>
+          <SelectOption value={Phase.Question}>Question</SelectOption>
+          <SelectOption value={Phase.Identify}>Identify</SelectOption>
+          <SelectOption value={Phase.DemoCta}>Demo CTA</SelectOption>
+          <SelectOption value={Phase.WatchPresenter}>Watch Presenter</SelectOption>
+          <SelectOption value={Phase.WebRtc}>WebRTC</SelectOption>
+          <SelectOption value={Phase.Submitted}>Submitted</SelectOption>
+          <SelectOption value={Phase.Ended}>Ended</SelectOption>
+        </Select>
+        <HelpText>The type of slide determines what form fields and behavior are available</HelpText>
+      </FormControl>
+
       <FormControl>
         <Label htmlFor="slide-id" required>
           Slide ID

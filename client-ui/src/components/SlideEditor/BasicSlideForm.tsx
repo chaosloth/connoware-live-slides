@@ -13,8 +13,11 @@ import {
   Disclosure,
   DisclosureHeading,
   DisclosureContent,
+  Select,
+  Option,
 } from "@twilio-paste/core";
 import { Slide } from "@/types/LiveSlides";
+import { Phase } from "@/types/Phases";
 
 interface BasicSlideFormProps {
   slide: Slide;
@@ -23,7 +26,7 @@ interface BasicSlideFormProps {
 }
 
 /**
- * Basic form for simple slides (WatchPresenter, WebRTC, Submitted)
+ * Basic form for simple slides (Welcome, WatchPresenter, WebRTC, Submitted)
  */
 export function BasicSlideForm({ slide, onChange, allSlides = [] }: BasicSlideFormProps) {
   const handleFieldChange = (field: keyof Slide, value: any) => {
@@ -39,6 +42,28 @@ export function BasicSlideForm({ slide, onChange, allSlides = [] }: BasicSlideFo
         </DisclosureHeading>
         <DisclosureContent>
           <Stack orientation="vertical" spacing="space50">
+            <FormControl>
+              <Label htmlFor="slide-type" required>
+                Slide Type
+              </Label>
+              <Select
+                id="slide-type"
+                value={slide.kind}
+                onChange={(e) => handleFieldChange("kind", e.target.value as Phase)}
+                required
+              >
+                <Option value={Phase.Welcome}>Welcome</Option>
+                <Option value={Phase.Question}>Question</Option>
+                <Option value={Phase.Identify}>Identify</Option>
+                <Option value={Phase.DemoCta}>Demo CTA</Option>
+                <Option value={Phase.WatchPresenter}>Watch Presenter</Option>
+                <Option value={Phase.WebRtc}>WebRTC</Option>
+                <Option value={Phase.Submitted}>Submitted</Option>
+                <Option value={Phase.Ended}>Ended</Option>
+              </Select>
+              <HelpText>The type of slide determines what form fields and behavior are available</HelpText>
+            </FormControl>
+
             <FormControl>
               <Label htmlFor="slide-id" required>
                 Slide ID

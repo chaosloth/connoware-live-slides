@@ -19,6 +19,7 @@ import ErrorCard from "@/components/ErrorCard";
 import SubmittedCard from "@/components/SubmittedCard";
 import WebRtcCard from "@/components/WebRtcCard";
 import EndedCard from "@/components/EndedCard";
+import WelcomeCard from "@/components/WelcomeCard";
 
 export type DynamicCardWrapperProps = {
   slide: Slide | undefined;
@@ -47,6 +48,8 @@ const DynamicCardWrapper: FC<DynamicCardWrapperProps> = (
       );
 
     switch (props.slide.kind) {
+      case Phase.Welcome:
+        return <WelcomeCard data={props.slide} />;
       case Phase.Question:
         return (
           <QuestionCard

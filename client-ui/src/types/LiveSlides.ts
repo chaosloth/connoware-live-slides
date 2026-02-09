@@ -116,6 +116,7 @@ export class GateSlide extends Slide {
 export class QuestionSlide extends Slide {
   key: string;
   options: Option[];
+  afterSubmitActions: Action[];
 
   constructor(id: string, title: string, description: string) {
     super();
@@ -125,6 +126,7 @@ export class QuestionSlide extends Slide {
     this.kind = Phase.Question;
     this.key = "";
     this.options = [];
+    this.afterSubmitActions = [];
   }
 }
 

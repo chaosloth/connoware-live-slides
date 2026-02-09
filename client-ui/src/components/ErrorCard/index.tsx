@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 
 import { Alert } from "@twilio-paste/core/alert";
+import { Box } from "@twilio-paste/core/box";
 import { Card } from "@twilio-paste/core/card";
-import { Flex } from "@twilio-paste/core/flex";
 import { Heading } from "@twilio-paste/core/heading";
 
 import { FC } from "react";
@@ -31,9 +31,9 @@ const ErrorCard: FC<ErrorCardProps> = (props: ErrorCardProps) => {
         {props.title}
       </Heading>
       <Stack orientation={"vertical"} spacing={"space40"}>
-        <Flex hAlignContent="center" vertical>
+        <Box display="flex" justifyContent="center">
           <Image src={errorIcon} alt={"Error"} priority={true} />
-        </Flex>
+        </Box>
         <Alert variant="error">
           <strong>{props.emphasis}</strong>
           {" " + props.message}

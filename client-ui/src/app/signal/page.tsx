@@ -5,7 +5,7 @@ import { State, useSyncClient } from "../context/Sync";
 import { Phase } from "../../types/Phases";
 import { Heading } from "@twilio-paste/core/heading";
 
-import { Box, ChatLog, Flex, Spinner, Stack } from "@twilio-paste/core";
+import { Box, ChatLog, Spinner, Stack } from "@twilio-paste/core";
 import LogoHeader from "@/components/LogoHeader";
 import { GenericEvent } from "@/types/EventTypes";
 import HighlightedResponse from "@/components/HighlightedResponse";
@@ -84,76 +84,63 @@ export default function PresenterPage() {
     setPhase(Phase.ErrorSync);
   }, [state]);
 
-  const CenteredComponent = ({ children }: { children: React.ReactNode }) => {
-    return (
-      <Flex hAlignContent="center" vAlignContent="center" height="100%">
-        {children}
-      </Flex>
-    );
-  };
-
   if (!client || eventList.length === 0)
     return (
-      <CenteredComponent>
-        <Box
-          height={"100vh"}
-          alignContent={"center"}
-          alignItems={"center"}
-          textAlign={"center"}
-        >
-          <Stack orientation={"vertical"} spacing={"space40"}>
-            <Heading as={"div"} variant={"heading10"}>
-              Waiting for responses
-            </Heading>
-            <Flex hAlignContent={"center"}>
-              <Spinner
-                decorative={true}
-                size={"sizeIcon110"}
-                color={!client ? "colorTextBrand" : "colorTextDestructive"}
-              />
-            </Flex>
-            Powered by
-            <LogoHeader />
-          </Stack>
-        </Box>
-      </CenteredComponent>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+        textAlign="center"
+      >
+        <Stack orientation={"vertical"} spacing={"space40"}>
+          <Heading as={"div"} variant={"heading10"}>
+            Waiting for responses
+          </Heading>
+          <Box display="flex" justifyContent="center">
+            <Spinner
+              decorative={true}
+              size={"sizeIcon110"}
+              color={!client ? "colorTextBrand" : "colorTextDestructive"}
+            />
+          </Box>
+          <Box>Powered by</Box>
+          <LogoHeader />
+        </Stack>
+      </Box>
     );
 
   return (
-    <Flex>
-      <Flex></Flex>
-      <Flex grow hAlignContent={"center"}>
-        <Box>
-          <Box
-            minWidth={"400px"}
-            display="flex"
-            flexDirection="column"
-            paddingY="space120"
-            paddingX="space100"
-            borderRadius="borderRadius30"
-            borderBottomColor={"colorBorder"}
-            borderStyle={"none"}
-            overflow={"scroll"}
-          >
-            <Box paddingLeft={"space120"}>
-              <Heading as={"div"} variant={"heading10"}>
-                Responses
-              </Heading>
-            </Box>
-
-            <ChatLog>
-              {eventList.map((event, idx) => (
-                <HighlightedResponse
-                  key={`entry-${idx}`}
-                  event={event}
-                  highlight={idx === 1 ? true : false}
-                />
-              ))}
-            </ChatLog>
+    <Box display="flex" justifyContent="center" minHeight="100vh">
+      <Box>
+        <Box
+          minWidth={"400px"}
+          display="flex"
+          flexDirection="column"
+          paddingY="space120"
+          paddingX="space100"
+          borderRadius="borderRadius30"
+          borderBottomColor={"colorBorder"}
+          borderStyle={"none"}
+          overflow={"scroll"}
+        >
+          <Box paddingLeft={"space120"}>
+            <Heading as={"div"} variant={"heading10"}>
+              Responses
+            </Heading>
           </Box>
+
+          <ChatLog>
+            {eventList.map((event, idx) => (
+              <HighlightedResponse
+                key={`entry-${idx}`}
+                event={event}
+                highlight={idx === 1 ? true : false}
+              />
+            ))}
+          </ChatLog>
         </Box>
-      </Flex>
-      <Flex></Flex>
-    </Flex>
+      </Box>
+    </Box>
   );
 }

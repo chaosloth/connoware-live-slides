@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import useWindowFocus from "use-window-focus";
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import { Phase } from "@/types/Phases";
@@ -31,6 +31,7 @@ export default function Home() {
   const [pid, setPresentationId] = useState<string | undefined>();
   const [presentation, setPresentation] = useState<LiveSlidePresentation>();
   const [error, setError] = useState<Error | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const windowFocused = useWindowFocus();
   const { client, identity, state } = useSyncClient();
@@ -62,10 +63,15 @@ export default function Home() {
     AnalyticsBrowser.load({ writeKey: presentation?.segmentWriteKey });
   }, [presentation, presentation?.segmentWriteKey]);
 
+  // Track the last user-initiated slide change (e.g., from form submission)
+  const userNavigatedSlideRef = useRef<string | null>(null);
+
   // Initialize action handler with current state
   const handleSlideChange = useCallback((slide: Slide, phase: Phase) => {
     setCurrentSlide(slide);
     setPhase(phase);
+    // Track that user navigated to this slide
+    userNavigatedSlideRef.current = slide.id;
   }, []);
 
   const handleUserDataChange = useCallback((data: { [key: string]: string }) => {
@@ -228,14 +234,42 @@ export default function Home() {
 
   /**
    *
-   * Set phase based on current state
+   * Set phase based on current state with animation
    *
    */
   useEffect(() => {
     if (!presentationState) return;
+
+    const syncSlideId = presentationState.currentSlideId;
+
+    // If user just navigated via form submission and sync is still on the OLD slide
+    // (the one they just left), ignore that sync update to prevent "snap back"
+    if (userNavigatedSlideRef.current &&
+        currentSlide?.id === userNavigatedSlideRef.current &&
+        syncSlideId !== userNavigatedSlideRef.current) {
+      // But only block if the sync slide is the one we just came from
+      // Check if we can find what slide the user was on before navigating
+      console.log(`[/] User just navigated to ${currentSlide?.id}, sync still on ${syncSlideId}, waiting for sync to catch up`);
+
+      // Set a timeout to clear the ref after a short period
+      // This prevents infinite blocking if presenter never catches up
+      const timeout = setTimeout(() => {
+        console.log(`[/] Timeout reached, clearing user navigation ref`);
+        userNavigatedSlideRef.current = null;
+      }, 2000); // 2 second grace period
+
+      return () => clearTimeout(timeout);
+    }
+
+    // Clear the ref when sync updates to any slide
+    if (userNavigatedSlideRef.current) {
+      console.log(`[/] Sync updated to ${syncSlideId}, clearing user navigation ref`);
+      userNavigatedSlideRef.current = null;
+    }
+
     console.log(`[/] Searching slides`, presentation?.slides);
     let targetSlide = presentation?.slides.find(
-      (p) => p.id === presentationState.currentSlideId
+      (p) => p.id === syncSlideId
     );
 
     if (!targetSlide) {
@@ -247,8 +281,20 @@ export default function Home() {
 
     if (targetSlide.kind) {
       console.log(`Setting phase to [${targetSlide.kind}]`, targetSlide);
-      setCurrentSlide(targetSlide);
-      setPhase(Phase[targetSlide.kind]);
+      const newPhase = Phase[targetSlide.kind];
+
+      // Only animate if phase is actually changing
+      if (newPhase !== phase) {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentSlide(targetSlide);
+          setPhase(newPhase);
+          setTimeout(() => setIsTransitioning(false), 50);
+        }, 300);
+      } else {
+        setCurrentSlide(targetSlide);
+        setPhase(newPhase);
+      }
     } else {
       console.log(
         `[/] !! presentationState.currentSlideId updated, but kind is nullish`
@@ -258,6 +304,8 @@ export default function Home() {
     presentation?.slides,
     presentationState,
     presentationState?.currentSlideId,
+    phase,
+    currentSlide,
   ]);
 
 
@@ -354,7 +402,17 @@ export default function Home() {
           backgroundColor: "#000000",
         }}
       >
-        <CenterLayout>{getComponentForPhase()}</CenterLayout>
+        <CenterLayout>
+          <Box
+            style={{
+              opacity: isTransitioning ? 0 : 1,
+              transform: isTransitioning ? "scale(0.95)" : "scale(1)",
+              transition: "opacity 300ms ease-in-out, transform 300ms ease-in-out",
+            }}
+          >
+            {getComponentForPhase()}
+          </Box>
+        </CenterLayout>
       </Box>
     </AnalyticsProvider>
   );

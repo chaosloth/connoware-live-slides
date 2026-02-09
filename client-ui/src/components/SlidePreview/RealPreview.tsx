@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Box, Card, Text } from "@twilio-paste/core";
+import React from "react";
+import { Box, Text } from "@twilio-paste/core";
 import { Slide } from "@/types/LiveSlides";
 import DynamicCardWrapper from "@/components/DynamicCardWrapper";
-import { AnalyticsBrowser } from "@segment/analytics-next";
 import bgImage from "../../../public/2025_bg_3.svg";
 
 interface RealSlidePreviewProps {
@@ -13,17 +12,9 @@ interface RealSlidePreviewProps {
 
 /**
  * Real preview using the actual DynamicCardWrapper component
+ * Note: Analytics are disabled in preview mode
  */
 export function RealSlidePreview({ slide }: RealSlidePreviewProps) {
-  // Create a dummy analytics instance for preview
-  const analytics = useMemo(
-    () =>
-      AnalyticsBrowser.load({
-        writeKey: "preview-mode",
-      }),
-    []
-  );
-
   // Dummy action handler for preview (doesn't actually do anything)
   const dummyPerformActions = () => {
     console.log("[Preview] Action triggered - this is just a preview");

@@ -143,19 +143,20 @@ const VisualDesigner: FC = () => {
     setIsDirty(true);
   };
 
-  const handleSaveSlide = () => {
-    if (!currentSlide) return;
+  const handleSaveSlide = (slideToSave?: Slide) => {
+    const slide = slideToSave || currentSlide;
+    if (!slide) return;
 
-    const existingIndex = slides.findIndex((s) => s.id === currentSlide.id);
+    const existingIndex = slides.findIndex((s) => s.id === slide.id);
 
     if (existingIndex >= 0) {
       // Update existing slide
       const updatedSlides = [...slides];
-      updatedSlides[existingIndex] = currentSlide;
+      updatedSlides[existingIndex] = slide;
       setSlides(updatedSlides);
     } else {
       // Add new slide
-      setSlides([...slides, currentSlide]);
+      setSlides([...slides, slide]);
     }
 
     setIsDirty(true);
@@ -163,7 +164,7 @@ const VisualDesigner: FC = () => {
 
   const handleSlideChange = (updatedSlide: Slide) => {
     setCurrentSlide(updatedSlide);
-    handleSaveSlide();
+    handleSaveSlide(updatedSlide);
   };
 
   const handleReorderSlide = (fromIndex: number, toIndex: number) => {
