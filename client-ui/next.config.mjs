@@ -9,9 +9,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   // output: "export",
   reactStrictMode: true,
-  turbopack: {
-    root: __dirname // Set the workspace root to the current directory
-  },
+  outputFileTracingRoot: __dirname,
+  // Disable Turbopack in production builds to avoid issues
+  ...(process.env.NODE_ENV === 'production' ? {} : {
+    turbopack: {
+      root: process.cwd() // Use process.cwd() to ensure correct directory in all environments
+    }
+  })
 };
 
 export default nextConfig;
