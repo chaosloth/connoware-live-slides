@@ -1,5 +1,7 @@
 {
-  "buildCommand": "cd client-ui && pnpm install --no-frozen-lockfile && pnpm build",
+  "version": 2,
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "client-ui/.next",
-  "installCommand": "cd client-ui && pnpm install --no-frozen-lockfile"
+  "installCommand": "npm install",
+  "framework": "nextjs"
 }
