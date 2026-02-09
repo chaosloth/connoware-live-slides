@@ -1,63 +1,62 @@
-import nodeExternals from "webpack-node-externals";
+// ESM version of next.config.js
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { createRequire } from 'module';
 
-// Debug information about environment
-console.log('===== BUILD DEBUG INFO =====');
-console.log('Current working directory:', process.cwd());
-console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('NEXT_TURBO:', process.env.NEXT_TURBO);
-console.log('__dirname (ESM):', path.dirname(fileURLToPath(import.meta.url)));
-
-// Get the directory of the current module
+const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Debug file structure
-try {
-  console.log('Files in current directory:', fs.readdirSync(process.cwd()));
-  console.log('Files in node_modules:', fs.existsSync(path.join(process.cwd(), 'node_modules')) ?
-    fs.readdirSync(path.join(process.cwd(), 'node_modules')).slice(0, 5).join(', ') + '...' : 'node_modules not found');
-  console.log('Next.js package exists:', fs.existsSync(path.join(process.cwd(), 'node_modules', 'next', 'package.json')));
-} catch (err) {
-  console.error('Error reading directory:', err);
-}
+console.log('Building with standalone output mode (ESM)...');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: "export",
   reactStrictMode: true,
+  // Configure standalone mode for serverless
+  output: 'standalone',
   outputFileTracingRoot: __dirname,
   // Add an empty turbopack config to silence the error
   turbopack: {},
   // Webpack configuration
-  webpack: (config) => {
-    console.log('Webpack configuration being applied');
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Make source-map available in the serverless function
+      try {
+        // Use node require for better path resolution
+        const sourceMapPath = require.resolve('source-map');
 
-    // Ensure source-map is included in the bundle
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      // Using dynamic import for ESM compatibility
-      'source-map': new URL('source-map', import.meta.url).href
-    };
+        // Add direct alias to source-map
+        config.resolve.alias = {
+          ...config.resolve.alias,
+          'source-map': sourceMapPath,
+          'next/dist/compiled/source-map': sourceMapPath
+        };
 
+        // Ensure it's not externalized
+        if (config.externals) {
+          const externals = Array.isArray(config.externals) ? config.externals : [config.externals];
+          config.externals = externals.map(external => {
+            if (typeof external !== 'function') return external;
+            return (ctx, req, callback) => {
+              if (req === 'source-map' || req.includes('source-map')) {
+                return callback();
+              }
+              return external(ctx, req, callback);
+            };
+          });
+        }
+
+        console.log('source-map bundling configured');
+      } catch (err) {
+        console.error('Failed to configure source-map bundling:', err);
+      }
+    }
     return config;
-  },
-  // Explicitly include source-map in the server build
-  experimental: {
-    outputFileTracingExcludes: {
-      '*': [
-        // Don't exclude source-map module in the trace
-        '!node_modules/source-map/**',
-      ],
-    },
-    // Force serverless target to include dependencies
-    serverComponentsExternalPackages: [],
   }
 };
 
-// Log the final config
-console.log('Final nextConfig:', JSON.stringify(nextConfig, null, 2));
-console.log('===== END DEBUG INFO =====');
+console.log('Using config:', {
+  output: nextConfig.output,
+  outputFileTracingRoot: nextConfig.outputFileTracingRoot
+});
 
 export default nextConfig;

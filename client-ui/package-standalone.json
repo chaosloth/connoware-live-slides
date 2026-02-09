@@ -1,0 +1,10 @@
+{
+  "name": "client-ui-standalone",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "source-map": "^0.7.4",
+    "source-map-support": "^0.5.21",
+    "next": "^16.1.6"
+  }
+}
