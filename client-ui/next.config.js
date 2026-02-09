@@ -1,23 +1,16 @@
-import nodeExternals from "webpack-node-externals";
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+// Using CommonJS for maximum compatibility
+const path = require('path');
+const fs = require('fs');
 
-// Debug information about environment
-console.log('===== BUILD DEBUG INFO =====');
+console.log('===== BUILD DEBUG INFO (CJS) =====');
 console.log('Current working directory:', process.cwd());
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('NEXT_TURBO:', process.env.NEXT_TURBO);
-console.log('__dirname (ESM):', path.dirname(fileURLToPath(import.meta.url)));
-
-// Get the directory of the current module
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+console.log('__dirname (CJS):', __dirname);
 
 // Debug file structure
 try {
   console.log('Files in current directory:', fs.readdirSync(process.cwd()));
-  console.log('Files in node_modules:', fs.existsSync(path.join(process.cwd(), 'node_modules')) ?
-    fs.readdirSync(path.join(process.cwd(), 'node_modules')).slice(0, 5).join(', ') + '...' : 'node_modules not found');
   console.log('Next.js package exists:', fs.existsSync(path.join(process.cwd(), 'node_modules', 'next', 'package.json')));
 } catch (err) {
   console.error('Error reading directory:', err);
@@ -25,7 +18,6 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: "export",
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
   // Add an empty turbopack config to silence the error
@@ -39,6 +31,6 @@ const nextConfig = {
 
 // Log the final config
 console.log('Final nextConfig:', JSON.stringify(nextConfig, null, 2));
-console.log('===== END DEBUG INFO =====');
+console.log('===== END DEBUG INFO (CJS) =====');
 
-export default nextConfig;
+module.exports = nextConfig;

@@ -1,0 +1,6 @@
+examples/
+serverless/
+.git/
+**/.DS_Store
+node_modules/
+client-ui/node_modules/

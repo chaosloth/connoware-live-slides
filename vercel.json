@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "buildCommand": "cd client-ui && npm run build -- --webpack",
+  "outputDirectory": "client-ui/.next",
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_WEBPACK": "true"
+  }
+}
