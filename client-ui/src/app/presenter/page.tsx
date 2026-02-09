@@ -309,14 +309,12 @@ export default function PresenterPage() {
                   <MessageWithMeta
                     key={idx}
                     message={
-                      `Someone chose ` && (
                         <>
                           Someone said{" "}
                           <Text as={"span"} fontWeight={"fontWeightBold"}>
                             {event.answer}
                           </Text>
                         </>
-                      )
                     }
                     person={event.client_id}
                   />
