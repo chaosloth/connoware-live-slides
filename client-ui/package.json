@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "build": "next build --webpack",
-    "vercel-build": "next build --webpack && node vercel-postbuild.js && cp package-standalone.json .next/package.json && cd .next && npm install --omit=dev",
+    "vercel-build": "next build --webpack && node vercel-postbuild.js",
     "build:serverless": "next build && npm run transfer-assets",
     "transfer-assets": "rm -rfv ../serverless/dist/assets/ && mkdir ../serverless/dist/assets/ && cp -R ./out/* ../serverless/dist/assets/",
     "test": "jest --watch",

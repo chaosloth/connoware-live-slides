@@ -11,8 +11,7 @@ console.log('Building with standalone output mode (ESM)...');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Use standard Next.js output for Vercel
-  // output: 'standalone', // Commented out as it's causing routes-manifest issues on Vercel
+  // Use standard Next.js output - no specific output mode
   outputFileTracingRoot: __dirname,
   // Add an empty turbopack config to silence the error
   turbopack: {},
