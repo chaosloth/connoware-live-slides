@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import useWindowFocus from "use-window-focus";
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import { Phase } from "@/types/Phases";
@@ -8,27 +8,18 @@ import CenterLayout from "@/components/CenterLayout";
 import WelcomeCard from "@/components/WelcomeCard";
 import ErrorCard from "@/components/ErrorCard";
 import {
-  Action,
   CurrentState,
-  IdentifyAction,
   LiveSlidePresentation,
   Slide,
-  SlideAction,
-  StreamAction,
-  TallyAction,
-  TrackAction,
-  UrlAction,
 } from "@/types/LiveSlides";
 import DynamicCardWrapper from "@/components/DynamicCardWrapper";
 import { AnalyticsProvider } from "@/app/context/Analytics";
 import { State, useSyncClient } from "@/app/context/Sync";
-import { useAnalytics } from "@/app/context/Analytics";
-import { ActionType } from "@/types/ActionTypes";
 import LiveSlidesService from "@/utils/LiveSlidesService";
 import { SyncStream } from "twilio-sync";
+import { useActionHandler } from "@/hooks/useActionHandler";
+import { ErrorMessage } from "@/components/ErrorBoundary";
 
-// import bgImage from "../../public/cookies.png";
-// import bgImage from "../../public/signal_bg.svg";
 import bgImage from "../../public/2025_bg_3.svg";
 import { Box } from "@twilio-paste/core";
 import ReconnectingCard from "@/components/ReconnectingCard";
@@ -39,10 +30,12 @@ export default function Home() {
   const [presentationState, setCurrentState] = useState<CurrentState>();
   const [pid, setPresentationId] = useState<string | undefined>();
   const [presentation, setPresentation] = useState<LiveSlidePresentation>();
+  const [error, setError] = useState<Error | null>(null);
 
   const windowFocused = useWindowFocus();
   const { client, identity, state } = useSyncClient();
   const [stream, setStream] = useState<SyncStream>();
+  const [userData, setUserData] = useState<{ [key: string]: string }>({});
 
   /**
    *
@@ -69,8 +62,25 @@ export default function Home() {
     AnalyticsBrowser.load({ writeKey: presentation?.segmentWriteKey });
   }, [presentation, presentation?.segmentWriteKey]);
 
-  // Local user data for events
-  const [userData, setUserData] = useState<{ [key: string]: string }>({});
+  // Initialize action handler with current state
+  const handleSlideChange = useCallback((slide: Slide, phase: Phase) => {
+    setCurrentSlide(slide);
+    setPhase(phase);
+  }, []);
+
+  const handleUserDataChange = useCallback((data: { [key: string]: string }) => {
+    setUserData(data);
+  }, []);
+
+  const { performActions, publishEventToStream } = useActionHandler({
+    presentation,
+    analytics,
+    identity,
+    userData,
+    stream,
+    onSlideChange: handleSlideChange,
+    onUserDataChange: handleUserDataChange,
+  });
 
   /**
    *
@@ -128,24 +138,14 @@ export default function Home() {
       .then((s) => {
         console.log(`Created sync stream [STREAM-${pid}]`);
         setStream(s);
+        setError(null); // Clear any previous errors
       })
-      .catch((err) => console.log(`Error creating sync stream`, err));
+      .catch((err) => {
+        console.error(`Error creating sync stream`, err);
+        setError(new Error('Failed to connect to presentation stream'));
+      });
   }, [client, pid]);
 
-  /**
-   *
-   * Emit event
-   *
-   */
-  const publishEventToStream = (props: any) => {
-    if (!stream) return;
-    const evt = {
-      sid: currentSlide?.id,
-      ...props,
-    };
-    console.log(`Sending to stream`, evt);
-    stream.publishMessage(evt);
-  };
 
   /**
    *
@@ -192,10 +192,14 @@ export default function Home() {
           `[/] Retrieved definition for pid [${pid}]`,
           presentationSyncMapItem
         );
-        if (presentationSyncMapItem)
+        if (presentationSyncMapItem) {
           setPresentation(
             presentationSyncMapItem.data as LiveSlidePresentation
           );
+          setError(null); // Clear any previous errors
+        } else {
+          throw new Error('Presentation not found');
+        }
       })
       .then(() => {
         const presentationStateDoc = `STATE-${pid}`;
@@ -211,7 +215,14 @@ export default function Home() {
             if (event) setCurrentState(event.data as CurrentState);
             console.log("[/] SYNC presentation state updated", event.data);
           });
+        }).catch((err) => {
+          console.error('[/] Error subscribing to presentation state', err);
+          setError(new Error('Failed to sync with presentation'));
         });
+      })
+      .catch((err) => {
+        console.error('[/] Error fetching presentation', err);
+        setError(err instanceof Error ? err : new Error('Failed to load presentation'));
       });
   }, [client, pid]);
 
@@ -249,136 +260,6 @@ export default function Home() {
     presentationState?.currentSlideId,
   ]);
 
-  /**
-   *
-   * Perform the actions in response to user activity
-   *
-   */
-  const performActions = (
-    actions: Action[],
-    properties?: { [key: string]: any }
-  ) => {
-    console.log(`Performing [${actions.length}] actions`);
-
-    actions.map((action) => {
-      switch (action.type) {
-        case ActionType.Slide:
-          let targetSlide = presentation?.slides.find(
-            (p) => p.id === (action as SlideAction).slideId
-          );
-          if (!targetSlide) return;
-          setCurrentSlide(targetSlide);
-          setPhase(targetSlide.kind as Phase);
-          return;
-
-        case ActionType.Tally:
-          publishEventToStream({
-            type: (action as TallyAction).type,
-            answer: (action as TallyAction).answer,
-            client_id: identity?.split(":")[1] || identity,
-          });
-          return;
-
-        case ActionType.Track:
-          console.log(`Track users activity`, action);
-          const act: TrackAction = action as TrackAction;
-
-          // Cache data locally
-          setUserData((data) => ({ ...data, ...act.properties }));
-
-          // Send to Segment
-          analytics.track(act.event, {
-            ...(act as TrackAction).properties,
-            ...properties,
-          });
-          return;
-
-        case ActionType.Stream:
-          console.log(`Stream users activity`, action);
-
-          // Interpolate function to enable user to use templates
-          const interpolate = (str: string, params: { [key: string]: any }) => {
-            const names = Object.keys(params);
-            console.log(`Names`, names);
-            const values = Object.values(params);
-            console.log(`Values`, values);
-            return new Function(...names, `return \`${str}\`;`)(...values);
-          };
-
-          try {
-            let act = action as StreamAction;
-
-            console.log(`Interpolating string: ${act.message}`);
-            console.log(`act = `, act);
-            console.log(`properties = `, properties);
-            const res = interpolate(act.message, {
-              ...act,
-              ...properties,
-            });
-
-            console.log(`Interpolation result: ${res}`);
-
-            publishEventToStream({
-              type: act.type,
-              message: res,
-              client_id: identity?.split(":")[1] || identity,
-            });
-          } catch (err) {
-            console.warn(`Error sending stream event`, err);
-          }
-          return;
-
-        case ActionType.Identify:
-          console.log(`Sending Identify (phone), action`, action, properties);
-          analytics.identify(properties?.phone, {
-            ...userData,
-            ...(action as IdentifyAction).properties,
-            ...properties,
-          });
-          return;
-
-        // case ActionType.Identify:
-        //   console.log(
-        //     `Sending Identify (phone, email or identity), action`,
-        //     action,
-        //     properties
-        //   );
-        //   analytics.identify(
-        //     properties?.phone || properties?.email || identity,
-        //     {
-        //       ...(action as IdentifyAction).properties,
-        //       ...properties,
-        //     }
-        //   );
-        //   return;
-
-        // case ActionType.Identify:
-        //   console.log(
-        //     `Sending Identify (email or identity), action`,
-        //     action,
-        //     properties
-        //   );
-        //   analytics.identify(properties?.email || identity, {
-        //     ...(action as IdentifyAction).properties,
-        //     ...properties,
-        //   });
-        //   return;
-
-        // case ActionType.Identify:
-        //   console.log(`Sending Identify, action`, action, properties);
-        //   analytics.identify(identity?.split(":")[1] || identity, {
-        //     ...(action as IdentifyAction).properties,
-        //     ...properties,
-        //   });
-        //   return;
-        case ActionType.URL:
-          window.open((action as UrlAction).url, "_self");
-          return;
-        default:
-          console.log(`[/] Attempt to run unknown action`, action);
-      }
-    });
-  };
 
   /**
    *
@@ -416,6 +297,19 @@ export default function Home() {
    *
    */
   const getComponentForPhase = () => {
+    // Show error message if there's an error
+    if (error) {
+      return (
+        <ErrorMessage
+          error={error}
+          onRetry={() => {
+            setError(null);
+            window.location.reload();
+          }}
+        />
+      );
+    }
+
     switch (phase) {
       case Phase.Question:
       case Phase.Submitted:
@@ -435,13 +329,6 @@ export default function Home() {
       case Phase.Welcome:
       default:
         return <WelcomeCard data={currentSlide || new Slide()} />;
-      // return (
-      //   <ErrorCard
-      //     title="Nothing to see here..."
-      //     emphasis="Please scan the QR code again. "
-      //     message="If symptoms persists for more than 4 hours consult a doctor!"
-      //   />
-      // );
     }
   };
 

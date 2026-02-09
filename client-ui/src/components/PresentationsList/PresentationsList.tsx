@@ -36,6 +36,7 @@ export interface PresentationListProps {
   handleOpenPresenterView: (presentation: PresentationMapItem) => void;
   handleMonitorPresentation: (presentation: PresentationMapItem) => void;
   handleEditPresentation: (presentation: PresentationMapItem) => void;
+  handleVisualDesigner?: (presentation: PresentationMapItem) => void;
   handleDeletePresentation: (presentation: PresentationMapItem) => void;
   handleNewPresentation: () => void;
 }
@@ -73,8 +74,16 @@ const PresentationList: FC<PresentationListProps> = (props) => {
             {...menu}
             onClick={() => props.handleEditPresentation(menuProps.presentation)}
           >
-            Edit Presentation
+            Edit Presentation (JSON)
           </MenuItem>
+          {props.handleVisualDesigner && (
+            <MenuItem
+              {...menu}
+              onClick={() => props.handleVisualDesigner!(menuProps.presentation)}
+            >
+              Visual Designer
+            </MenuItem>
+          )}
           <MenuSeparator {...menu} />
           <MenuItem
             variant="destructive"
