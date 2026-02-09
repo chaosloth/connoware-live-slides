@@ -1,0 +1,19 @@
+{
+  "name": "connoware-live-slides-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "workspaces": [
+    "client-ui",
+    "serverless"
+  ],
+  "scripts": {
+    "dev": "cd client-ui && npm run dev",
+    "build": "cd client-ui && npm run build",
+    "build:serverless": "cd client-ui && npm run build:serverless && cd ../serverless && npm run build",
+    "start": "cd client-ui && npm start",
+    "deploy": "cd serverless && npm run deploy"
+  }
+}

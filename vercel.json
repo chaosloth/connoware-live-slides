@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd client-ui && pnpm install --no-frozen-lockfile && pnpm build",
+  "outputDirectory": "client-ui/.next",
+  "installCommand": "cd client-ui && pnpm install --no-frozen-lockfile"
+}
