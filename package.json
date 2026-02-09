@@ -14,6 +14,7 @@
     "build": "cd client-ui && npm run build",
     "build:serverless": "cd client-ui && npm run build:serverless && cd ../serverless && npm run build",
     "start": "cd client-ui && npm start",
-    "deploy": "cd serverless && npm run deploy"
+    "deploy": "cd serverless && npm run deploy",
+    "vercel-build": "cd client-ui && npm run build"
   }
 }
