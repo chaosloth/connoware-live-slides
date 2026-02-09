@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "buildCommand": "npm run build -- --webpack",
+  "buildCommand": "NEXT_MINIMAL=1 npm run build -- --webpack",
   "outputDirectory": ".next",
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "nextjs",
   "env": {
-    "NEXT_WEBPACK": "true"
+    "NEXT_WEBPACK": "true",
+    "NEXT_MINIMAL": "1",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
   }
 }

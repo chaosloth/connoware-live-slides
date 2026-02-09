@@ -33,7 +33,26 @@ const nextConfig = {
   // Webpack configuration
   webpack: (config) => {
     console.log('Webpack configuration being applied');
+
+    // Ensure source-map is included in the bundle
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Using dynamic import for ESM compatibility
+      'source-map': new URL('source-map', import.meta.url).href
+    };
+
     return config;
+  },
+  // Explicitly include source-map in the server build
+  experimental: {
+    outputFileTracingExcludes: {
+      '*': [
+        // Don't exclude source-map module in the trace
+        '!node_modules/source-map/**',
+      ],
+    },
+    // Force serverless target to include dependencies
+    serverComponentsExternalPackages: [],
   }
 };
 
