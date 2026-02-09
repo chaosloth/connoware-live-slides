@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
-import { Flex } from "@twilio-paste/core/flex";
+import { Box } from "@twilio-paste/core/box";
 import { Card } from "@twilio-paste/core/card";
 import { Heading } from "@twilio-paste/core/heading";
 import { Spinner } from "@twilio-paste/core/spinner";
@@ -30,10 +30,10 @@ const ReconnectingCard: FC = () => {
         {"Hit the refresh button to reconnect..."}
       </Heading>
       <Stack orientation={"vertical"} spacing={"space40"}>
-        <Flex hAlignContent="center" vertical>
+        <Box display="flex" justifyContent="center">
           <Image src={reconnectIcon} alt={"Reconnecting"} priority={true} />
-        </Flex>
-        <Flex hAlignContent={"center"} paddingTop={"space40"}>
+        </Box>
+        <Box display="flex" justifyContent="center" paddingTop={"space40"}>
           <Button
             disabled={processing}
             variant="primary"
@@ -46,7 +46,7 @@ const ReconnectingCard: FC = () => {
             Tap here to reload
             {processing && <Spinner decorative={true} />}
           </Button>
-        </Flex>
+        </Box>
       </Stack>
     </Card>
   );

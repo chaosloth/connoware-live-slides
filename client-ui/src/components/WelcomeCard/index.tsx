@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Flex } from "@twilio-paste/core/flex";
+import { Box } from "@twilio-paste/core/box";
 import { Card } from "@twilio-paste/core/card";
 import { Heading } from "@twilio-paste/core/heading";
 import { Spinner } from "@twilio-paste/core/spinner";
@@ -16,18 +16,18 @@ const WelcomeCard: FC<WelcomeCardProps> = (props: WelcomeCardProps) => {
   return (
     <Card>
       <LogoHeader />
-      <Flex hAlignContent={"center"}>
+      <Box display="flex" justifyContent="center">
         <Heading as={"div"} variant={"heading20"}>
           {props.data.title || "Standby for the show..."}
         </Heading>
-      </Flex>
-      <Flex hAlignContent={"center"} paddingTop={"space40"}>
+      </Box>
+      <Box display="flex" justifyContent="center" paddingTop={"space40"}>
         <Spinner
           decorative={true}
           size={"sizeIcon80"}
           color={"colorTextDestructive"}
         />
-      </Flex>
+      </Box>
     </Card>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Button,
@@ -21,6 +21,99 @@ import { DragIcon } from "@twilio-paste/icons/esm/DragIcon";
 import { CopyIcon } from "@twilio-paste/icons/esm/CopyIcon";
 import { Slide } from "@/types/LiveSlides";
 import { SLIDE_TYPES } from "@/schemas/presentationSchema";
+
+interface SlideRowProps {
+  slide: Slide;
+  index: number;
+  isSelected: boolean;
+  typeInfo: { label: string; icon?: any } | undefined;
+  onSelectSlide: (slide: Slide) => void;
+  onCloneSlide: (slide: Slide) => void;
+  onDeleteSlide: (slide: Slide) => void;
+  onDragStart: (index: number) => void;
+  onDragOver: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void;
+  onDrop: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void;
+}
+
+function SlideRow({
+  slide,
+  index,
+  isSelected,
+  typeInfo,
+  onSelectSlide,
+  onCloneSlide,
+  onDeleteSlide,
+  onDragStart,
+  onDragOver,
+  onDrop,
+}: SlideRowProps) {
+  const rowRef = useRef<HTMLTableRowElement>(null);
+
+  useEffect(() => {
+    if (rowRef.current) {
+      if (isSelected) {
+        rowRef.current.style.backgroundColor = "rgb(235, 244, 255)";
+      } else {
+        rowRef.current.style.backgroundColor = "";
+      }
+      rowRef.current.style.cursor = "grab";
+    }
+  }, [isSelected]);
+
+  return (
+    <Tr
+      ref={rowRef}
+      draggable
+      onDragStart={() => onDragStart(index)}
+      onDragOver={(e) => onDragOver(e, index)}
+      onDrop={(e) => onDrop(e, index)}
+    >
+      <Td>
+        <Text as="span" fontWeight={isSelected ? "fontWeightSemibold" : "fontWeightNormal"}>
+          {slide.title || "Untitled"}
+        </Text>
+      </Td>
+      <Td>
+        <Text as="span" color="colorTextWeak" fontSize="fontSize30">
+          {typeInfo?.label || slide.kind}
+        </Text>
+      </Td>
+      <Td textAlign="right">
+        <Box display="flex" alignItems="center" justifyContent="flex-end" columnGap="space20">
+          <Button
+            variant={isSelected ? "primary" : "secondary"}
+            size="icon_small"
+            onClick={() => onSelectSlide(slide)}
+            title={isSelected ? "Editing" : "Edit slide"}
+          >
+            <EditIcon decorative={false} title="Edit slide" />
+          </Button>
+          <Button
+            variant="secondary"
+            size="icon_small"
+            onClick={() => onCloneSlide(slide)}
+            title="Clone slide"
+          >
+            <CopyIcon decorative={false} title="Clone slide" />
+          </Button>
+          <Button
+            variant="destructive_secondary"
+            size="icon_small"
+            onClick={() => onDeleteSlide(slide)}
+            title="Delete slide"
+          >
+            <DeleteIcon decorative={false} title="Delete slide" />
+          </Button>
+        </Box>
+      </Td>
+      <Td>
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <DragIcon decorative size="sizeIcon30" color="colorTextWeak" />
+        </Box>
+      </Td>
+    </Tr>
+  );
+}
 
 interface SlideListEditorProps {
   slides: Slide[];
@@ -132,61 +225,19 @@ export function SlideListEditor({
               const isSelected = slide.id === selectedSlideId;
 
               return (
-                <Tr
+                <SlideRow
                   key={slide.id}
-                  draggable
-                  onDragStart={() => handleDragStart(index)}
-                  onDragOver={(e) => handleDragOver(e, index)}
-                  onDrop={(e) => handleDrop(e, index)}
-                  style={{
-                    backgroundColor: isSelected ? "rgb(235, 244, 255)" : undefined,
-                    cursor: "grab",
-                  }}
-                >
-                  <Td>
-                    <Text as="span" fontWeight={isSelected ? "fontWeightSemibold" : "fontWeightNormal"}>
-                      {slide.title || "Untitled"}
-                    </Text>
-                  </Td>
-                  <Td>
-                    <Text as="span" color="colorTextWeak" fontSize="fontSize30">
-                      {typeInfo?.label || slide.kind}
-                    </Text>
-                  </Td>
-                  <Td textAlign="right">
-                    <Box display="flex" alignItems="center" justifyContent="flex-end" columnGap="space20">
-                      <Button
-                        variant={isSelected ? "primary" : "secondary"}
-                        size="icon_small"
-                        onClick={() => onSelectSlide(slide)}
-                        title={isSelected ? "Editing" : "Edit slide"}
-                      >
-                        <EditIcon decorative={false} title="Edit slide" />
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="icon_small"
-                        onClick={() => onCloneSlide(slide)}
-                        title="Clone slide"
-                      >
-                        <CopyIcon decorative={false} title="Clone slide" />
-                      </Button>
-                      <Button
-                        variant="destructive_secondary"
-                        size="icon_small"
-                        onClick={() => onDeleteSlide(slide)}
-                        title="Delete slide"
-                      >
-                        <DeleteIcon decorative={false} title="Delete slide" />
-                      </Button>
-                    </Box>
-                  </Td>
-                  <Td>
-                    <Box display="flex" alignItems="center" justifyContent="center">
-                      <DragIcon decorative size="sizeIcon30" color="colorTextWeak" />
-                    </Box>
-                  </Td>
-                </Tr>
+                  slide={slide}
+                  index={index}
+                  isSelected={isSelected}
+                  typeInfo={typeInfo}
+                  onSelectSlide={onSelectSlide}
+                  onCloneSlide={onCloneSlide}
+                  onDeleteSlide={onDeleteSlide}
+                  onDragStart={handleDragStart}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                />
               );
             })}
           </TBody>

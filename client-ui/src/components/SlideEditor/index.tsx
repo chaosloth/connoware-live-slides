@@ -64,6 +64,7 @@ export function SlideEditor({ slide, onChange, allSlides = [] }: SlideEditorProp
         />
       );
 
+    case Phase.Welcome:
     case Phase.WatchPresenter:
     case Phase.WebRtc:
     case Phase.Submitted:

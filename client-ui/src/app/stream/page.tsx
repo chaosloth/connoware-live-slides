@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { State, useSyncClient } from "../context/Sync";
-import { Phase } from "../../types/Phases";
+import React, { useState, useEffect } from "react";
+import { useSyncClient } from "../context/Sync";
 import { Text } from "@twilio-paste/core/text";
 import { Heading } from "@twilio-paste/core/heading";
 
@@ -14,11 +13,9 @@ import {
   ChatMessage,
   ChatMessageMeta,
   ChatMessageMetaItem,
-  Flex,
   Spinner,
   Stack,
 } from "@twilio-paste/core";
-import LiveSlidesService from "@/utils/LiveSlidesService";
 import LogoHeader from "@/components/LogoHeader";
 
 export type TallyEvent = {
@@ -29,12 +26,9 @@ export type TallyEvent = {
   timestamp: string;
 };
 
-type ChartData = { label: string; value: number; isEmpty: boolean };
-
 export default function PresenterPage() {
-  const [phase, setPhase] = useState<Phase>(Phase.Welcome);
   const [pid, setPresentationId] = useState<string | undefined>();
-  const { client, state } = useSyncClient();
+  const { client } = useSyncClient();
   const [eventList, setEventList] = useState<TallyEvent[]>([]);
 
   /**
@@ -56,7 +50,6 @@ export default function PresenterPage() {
 
     if (!localPid) {
       console.warn(`No PID passed in or found`);
-      setPhase(Phase.ErrorNoPid);
       return;
     }
 
@@ -91,25 +84,6 @@ export default function PresenterPage() {
       });
   }, [client, pid]);
 
-  /**
-   *
-   * Monitor Sync state
-   *
-   */
-  useEffect(() => {
-    if (state === State.Initializing || state === State.Ready) return;
-    console.log(`Setting ErrorSync - state is [${state}]`);
-    setPhase(Phase.ErrorSync);
-  }, [state]);
-
-  const CenteredComponent = ({ children }: { children: React.ReactNode }) => {
-    return (
-      <Flex hAlignContent="center" vAlignContent="center" height="100%">
-        {children}
-      </Flex>
-    );
-  };
-
   type MessageWithMetaProps = {
     message: React.ReactNode;
     person: string;
@@ -131,67 +105,64 @@ export default function PresenterPage() {
 
   if (!client || eventList.length === 0)
     return (
-      <CenteredComponent>
-        <Box
-          height={"100vh"}
-          alignContent={"center"}
-          alignItems={"center"}
-          textAlign={"center"}
-        >
-          <Stack orientation={"vertical"} spacing={"space40"}>
-            <Heading as={"div"} variant={"heading10"}>
-              Waiting for responses
-            </Heading>
-            <Flex hAlignContent={"center"}>
-              <Spinner
-                decorative={true}
-                size={"sizeIcon110"}
-                color={!client ? "colorTextBrand" : "colorTextDestructive"}
-              />
-            </Flex>
-            Powered by
-            <LogoHeader />
-          </Stack>
-        </Box>
-      </CenteredComponent>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+        textAlign="center"
+      >
+        <Stack orientation={"vertical"} spacing={"space40"}>
+          <Heading as={"div"} variant={"heading10"}>
+            Waiting for responses
+          </Heading>
+          <Box display="flex" justifyContent="center">
+            <Spinner
+              decorative={true}
+              size={"sizeIcon110"}
+              color={!client ? "colorTextBrand" : "colorTextDestructive"}
+            />
+          </Box>
+          <Box>Powered by</Box>
+          <LogoHeader />
+        </Stack>
+      </Box>
     );
 
   return (
-    <CenteredComponent>
-      <Flex vertical vAlignContent={"bottom"}>
-        <Box
-          minWidth={"400px"}
-          display="flex"
-          flexDirection="column"
-          paddingY="space120"
-          paddingX="space100"
-          borderRadius="borderRadius30"
-          borderBottomColor={"colorBorder"}
-          borderStyle={"dashed"}
-          overflow={"scroll"}
-        >
-          <Heading as={"div"} variant={"heading30"}>
-            Responses
-          </Heading>
-          <ChatLog>
-            {eventList.map((event, idx) => (
-              <MessageWithMeta
-                key={idx}
-                message={
-                  <>
-                    Someone said{" "}
-                    <Text as={"span"} fontWeight={"fontWeightBold"}>
-                      {event.answer}
-                    </Text>
-                  </>
-                }
-                person={event.client_id}
-                timestamp={event.timestamp}
-              />
-            ))}
-          </ChatLog>
-        </Box>
-      </Flex>
-    </CenteredComponent>
+    <Box display="flex" justifyContent="center" minHeight="100vh">
+      <Box
+        minWidth={"400px"}
+        display="flex"
+        flexDirection="column"
+        paddingY="space120"
+        paddingX="space100"
+        borderRadius="borderRadius30"
+        borderBottomColor={"colorBorder"}
+        borderStyle={"dashed"}
+        overflow={"scroll"}
+      >
+        <Heading as={"div"} variant={"heading30"}>
+          Responses
+        </Heading>
+        <ChatLog>
+          {eventList.map((event, idx) => (
+            <MessageWithMeta
+              key={idx}
+              message={
+                <>
+                  Someone said{" "}
+                  <Text as={"span"} fontWeight={"fontWeightBold"}>
+                    {event.answer}
+                  </Text>
+                </>
+              }
+              person={event.client_id}
+              timestamp={event.timestamp}
+            />
+          ))}
+        </ChatLog>
+      </Box>
+    </Box>
   );
 }

@@ -71,6 +71,8 @@ export function useActionHandler({
     (action: Action) => {
       if (!isSlideAction(action)) return;
 
+      console.log(`[handleSlideAction] Navigating to slide: ${action.slideId}`);
+
       const targetSlide = presentation?.slides.find(
         (p) => p.id === action.slideId
       );
@@ -80,8 +82,13 @@ export function useActionHandler({
         return;
       }
 
+      console.log(`[handleSlideAction] Found target slide:`, targetSlide);
+
       if (onSlideChange && targetSlide.kind) {
+        console.log(`[handleSlideAction] Calling onSlideChange`);
         onSlideChange(targetSlide, targetSlide.kind);
+      } else {
+        console.warn(`[handleSlideAction] Cannot change slide - onSlideChange: ${!!onSlideChange}, kind: ${targetSlide.kind}`);
       }
     },
     [presentation?.slides, onSlideChange]
@@ -210,6 +217,12 @@ export function useActionHandler({
    */
   const performActions = useCallback(
     (actions: Action[], properties?: { [key: string]: any }) => {
+      // Safety check for undefined or null actions
+      if (!actions || !Array.isArray(actions)) {
+        console.warn('performActions called with invalid actions:', actions);
+        return;
+      }
+
       console.log(`Performing [${actions.length}] actions`);
 
       actions.forEach((action) => {

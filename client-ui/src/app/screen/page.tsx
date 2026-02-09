@@ -80,33 +80,24 @@ export default function PresenterPage() {
       );
   }, [client, pid, sid]);
 
-  const CenteredComponent = ({ children }: { children: React.ReactNode }) => {
-    return (
-      <Flex hAlignContent="center" vAlignContent="center" height="100%">
-        {children}
-      </Flex>
-    );
-  };
-
   return (
-    <CenteredComponent>
-      <Box
-        height={"100vh"}
-        alignContent={"center"}
-        alignItems={"center"}
-        textAlign={"center"}
-      >
-        <Stack orientation={"vertical"} spacing={"space40"}>
-          <Heading as={"div"} variant={"heading10"}>
-            Take a look at your phone
-          </Heading>
-          <Flex hAlignContent={"center"}>
-            <Image src={demoReady} alt={"DEmo"} priority={true} />
-          </Flex>
-          Powered by
-          <LogoHeader />
-        </Stack>
-      </Box>
-    </CenteredComponent>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="100vh"
+      textAlign="center"
+    >
+      <Stack orientation={"vertical"} spacing={"space40"}>
+        <Heading as={"div"} variant={"heading10"}>
+          Take a look at your phone
+        </Heading>
+        <Box display="flex" justifyContent="center">
+          <Image src={demoReady} alt={"Demo"} priority={true} />
+        </Box>
+        <Box>Powered by</Box>
+        <LogoHeader />
+      </Stack>
+    </Box>
   );
 }

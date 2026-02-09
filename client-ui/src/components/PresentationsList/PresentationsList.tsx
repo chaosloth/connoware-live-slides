@@ -128,7 +128,7 @@ const PresentationList: FC<PresentationListProps> = (props) => {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    props.handleEditPresentation(item);
+                    props.handleVisualDesigner?.(item);
                   }}
                 >
                   {item.key}
