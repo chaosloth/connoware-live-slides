@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Requirements
+
+- Node.js 18.17.0 or later (v20.x recommended)
+
+If you're using nvm (Node Version Manager), you can simply run:
+
+```bash
+nvm use
+```
+
+This will automatically use the Node.js version specified in the `.nvmrc` file.
+
 ## Getting Started
 
 First, run the development server:
