@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run vercel-build",
+  "buildCommand": "npm run --workspace=client-ui vercel-build",
   "outputDirectory": "client-ui/.next",
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "nextjs"
