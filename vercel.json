@@ -1,12 +1,9 @@
 {
   "version": 2,
   "buildCommand": "npm run vercel-build",
-  "outputDirectory": ".next",
+  "outputDirectory": ".next/standalone",
   "installCommand": "npm install --legacy-peer-deps",
-  "framework": {
-    "name": "nextjs",
-    "useRuntime": true
-  },
+  "framework": "nextjs",
   "env": {
     "NEXT_WEBPACK": "true",
     "NODE_OPTIONS": "--max-old-space-size=4096"
