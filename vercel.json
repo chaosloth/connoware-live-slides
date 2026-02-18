@@ -5,6 +5,8 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
-    "NODE_OPTIONS": "--max-old-space-size=4096"
+    "NODE_OPTIONS": "--max-old-space-size=4096",
+    "NEXT_PUBLIC_API_BASE": "https://connoware-live-slides-6212-dev.twil.io",
+    "NEXT_PUBLIC_VERCEL_ENV": "production"
   }
 }
