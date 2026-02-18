@@ -19,6 +19,7 @@ import { DeleteIcon } from "@twilio-paste/icons/esm/DeleteIcon";
 import { PlusIcon } from "@twilio-paste/icons/esm/PlusIcon";
 import { DragIcon } from "@twilio-paste/icons/esm/DragIcon";
 import { CopyIcon } from "@twilio-paste/icons/esm/CopyIcon";
+import { PlayIcon } from "@twilio-paste/icons/esm/PlayIcon";
 import { Slide } from "@/types/LiveSlides";
 import { SLIDE_TYPES } from "@/schemas/presentationSchema";
 
@@ -28,6 +29,7 @@ interface SlideRowProps {
   isSelected: boolean;
   typeInfo: { label: string; icon?: any } | undefined;
   onSelectSlide: (slide: Slide) => void;
+  onActivateSlide: (slide: Slide) => void;
   onCloneSlide: (slide: Slide) => void;
   onDeleteSlide: (slide: Slide) => void;
   onDragStart: (index: number) => void;
@@ -41,6 +43,7 @@ function SlideRow({
   isSelected,
   typeInfo,
   onSelectSlide,
+  onActivateSlide,
   onCloneSlide,
   onDeleteSlide,
   onDragStart,
@@ -81,6 +84,14 @@ function SlideRow({
       <Td textAlign="right">
         <Box display="flex" alignItems="center" justifyContent="flex-end" columnGap="space20">
           <Button
+            variant="primary"
+            size="icon_small"
+            onClick={() => onActivateSlide(slide)}
+            title="Activate slide"
+          >
+            <PlayIcon decorative={false} title="Activate slide" />
+          </Button>
+          <Button
             variant={isSelected ? "primary" : "secondary"}
             size="icon_small"
             onClick={() => onSelectSlide(slide)}
@@ -119,6 +130,7 @@ interface SlideListEditorProps {
   slides: Slide[];
   selectedSlideId?: string;
   onSelectSlide: (slide: Slide) => void;
+  onActivateSlide: (slide: Slide) => void;
   onReorderSlide: (fromIndex: number, toIndex: number) => void;
   onDeleteSlide: (slide: Slide) => void;
   onCloneSlide: (slide: Slide) => void;
@@ -134,6 +146,7 @@ export function SlideListEditor({
   slides,
   selectedSlideId,
   onSelectSlide,
+  onActivateSlide,
   onReorderSlide,
   onDeleteSlide,
   onCloneSlide,
@@ -232,6 +245,7 @@ export function SlideListEditor({
                   isSelected={isSelected}
                   typeInfo={typeInfo}
                   onSelectSlide={onSelectSlide}
+                  onActivateSlide={onActivateSlide}
                   onCloneSlide={onCloneSlide}
                   onDeleteSlide={onDeleteSlide}
                   onDragStart={handleDragStart}

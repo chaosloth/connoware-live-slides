@@ -8,6 +8,7 @@ import { Box, Spinner, Stack } from "@twilio-paste/core";
 import LogoHeader from "@/components/LogoHeader";
 import { GenericEvent } from "@/types/EventTypes";
 import HighlightedResponse from "@/components/HighlightedResponse";
+import ClearEventsButton from "@/components/ClearEventsButton";
 
 type PositionedEvent = GenericEvent & {
   id: string;
@@ -173,6 +174,10 @@ export default function ResponsesPage() {
       </Box>
     );
 
+  const handleClearEvents = () => {
+    setEventList([]);
+  };
+
   return (
     <>
       <style>{`
@@ -250,6 +255,7 @@ export default function ResponsesPage() {
             )}
           </Box>
         ))}
+        <ClearEventsButton onClear={handleClearEvents} />
       </Box>
     </>
   );

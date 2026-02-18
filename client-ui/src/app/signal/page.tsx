@@ -9,6 +9,7 @@ import { Box, ChatLog, Spinner, Stack } from "@twilio-paste/core";
 import LogoHeader from "@/components/LogoHeader";
 import { GenericEvent } from "@/types/EventTypes";
 import HighlightedResponse from "@/components/HighlightedResponse";
+import ClearEventsButton from "@/components/ClearEventsButton";
 import Image from "next/image";
 import LeftPathImage from "@/icons/Left Path.svg";
 import RightPathImage from "@/icons/Right Path.svg";
@@ -110,6 +111,10 @@ export default function PresenterPage() {
       </Box>
     );
 
+  const handleClearEvents = () => {
+    setEventList([]);
+  };
+
   return (
     <Box display="flex" justifyContent="center" minHeight="100vh">
       <Box>
@@ -141,6 +146,7 @@ export default function PresenterPage() {
           </ChatLog>
         </Box>
       </Box>
+      <ClearEventsButton onClear={handleClearEvents} />
     </Box>
   );
 }

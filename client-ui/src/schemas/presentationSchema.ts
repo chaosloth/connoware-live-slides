@@ -13,6 +13,7 @@ import {
   WaitSlide,
   WebRtcSlide,
   EndedSlide,
+  FreeformSlide,
   Action,
   Option,
 } from "@/types/LiveSlides";
@@ -91,6 +92,13 @@ export const SLIDE_TYPES: SlideTypeMetadata[] = [
     description: "End of presentation screen",
     icon: "CheckboxCheckIcon",
     category: "transition",
+  },
+  {
+    type: Phase.Freeform,
+    label: "Freeform Input",
+    description: "Collect text input from users with a custom prompt",
+    icon: "ProductMessagingIcon",
+    category: "interactive",
   },
 ];
 
@@ -274,6 +282,9 @@ export function createSlide(type: Phase, id: string): Slide {
       const endedSlide = new EndedSlide(id, "", "");
       endedSlide.options = [];
       return endedSlide;
+
+    case Phase.Freeform:
+      return new FreeformSlide(id, "", "");
 
     default:
       return new Slide();

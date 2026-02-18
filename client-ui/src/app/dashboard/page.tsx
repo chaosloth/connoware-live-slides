@@ -32,6 +32,7 @@ import PresentationList from "../../components/PresentationsList/PresentationsLi
 import PresentationListEmpty from "../../components/PresentationsList/PresentationsListEmpty";
 import NewPresentationModal from "../../components/NewPresentationModal";
 import { ErrorMessage } from "@/components/ErrorBoundary";
+import { getApiUrl } from "@/utils/apiUtils";
 
 const Dashboard: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -86,7 +87,7 @@ const Dashboard: FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/generate-presentation', {
+      const response = await fetch(getApiUrl('api/generate-presentation'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

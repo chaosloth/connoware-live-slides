@@ -29,6 +29,7 @@ import {
 import { useRouter } from "next/navigation";
 import { FileImageIcon } from "@twilio-paste/icons/esm/FileImageIcon";
 import { ChevronDoubleRightIcon } from "@twilio-paste/icons/esm/ChevronDoubleRightIcon";
+import { ChevronDoubleLeftIcon } from "@twilio-paste/icons/esm/ChevronDoubleLeftIcon";
 
 import LiveSlidesService from "@/utils/LiveSlidesService";
 import { usePresentationContext } from "@/app/context/Presentation";
@@ -56,6 +57,7 @@ const VisualDesigner: FC = () => {
   const [selectedSlideType, setSelectedSlideType] = useState<Phase | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isSlideListCollapsed, setSlideListCollapsed] = useState<boolean>(false);
+  const [isPreviewCollapsed, setPreviewCollapsed] = useState<boolean>(false);
   const router = useRouter();
 
   /**
@@ -378,6 +380,7 @@ const VisualDesigner: FC = () => {
               slides={slides}
               selectedSlideId={currentSlide?.id}
               onSelectSlide={handleSelectSlide}
+              onActivateSlide={handleActivateSlide}
               onReorderSlide={handleReorderSlide}
               onDeleteSlide={handleDeleteSlide}
               onCloneSlide={handleCloneSlide}
@@ -446,9 +449,48 @@ const VisualDesigner: FC = () => {
         </Box>
 
         {/* Right panel: Preview */}
-        <Box width="450px" backgroundColor="colorBackgroundBody" overflowY="auto" padding="space60">
-          <RealSlidePreview slide={currentSlide || new Slide()} />
-        </Box>
+        {isPreviewCollapsed ? (
+          <Box
+            width="50px"
+            backgroundColor="colorBackgroundWeak"
+            borderLeftWidth="borderWidth10"
+            borderLeftStyle="solid"
+            borderLeftColor="colorBorder"
+            padding="space30"
+          >
+            <Box display="flex" flexDirection="column" alignItems="center" rowGap="space40">
+              <Button
+                variant="link"
+                size="icon_small"
+                onClick={() => setPreviewCollapsed(false)}
+                title="Expand preview"
+              >
+                <ChevronDoubleLeftIcon decorative={false} title="Expand" />
+              </Button>
+              <Separator orientation="horizontal" />
+              <Text as="p" fontSize="fontSize20" color="colorTextWeak" style={{ writingMode: "vertical-rl" }}>
+                Preview
+              </Text>
+            </Box>
+          </Box>
+        ) : (
+          <Box width="450px" backgroundColor="colorBackgroundBody" overflowY="auto" padding="space60">
+            <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom="space40">
+              <Text as="p" fontSize="fontSize30" fontWeight="fontWeightSemibold">
+                Preview
+              </Text>
+              <Button
+                variant="link"
+                size="icon_small"
+                onClick={() => setPreviewCollapsed(true)}
+                title="Collapse preview"
+              >
+                <ChevronDoubleRightIcon decorative={false} title="Collapse" />
+              </Button>
+            </Box>
+            <RealSlidePreview slide={currentSlide || new Slide()} />
+          </Box>
+        )}
       </Box>
 
       {/* New Slide Modal */}

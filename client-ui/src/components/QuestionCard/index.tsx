@@ -14,7 +14,10 @@ import { QuestionSlide, Action } from "@/types/LiveSlides";
 
 export type QuestionCardProps = {
   data: QuestionSlide;
-  performActions: (actions: Action[]) => void;
+  performActions: (
+    actions: Action[],
+    properties?: { [key: string]: any }
+  ) => void;
 };
 
 const QuestionCard: FC<QuestionCardProps> = (props: QuestionCardProps) => {
@@ -40,7 +43,10 @@ const QuestionCard: FC<QuestionCardProps> = (props: QuestionCardProps) => {
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 (document.activeElement as HTMLButtonElement).blur();
                 (e.target as HTMLButtonElement).blur();
-                props.performActions(option.afterSubmitActions);
+                props.performActions(option.afterSubmitActions, {
+                  question: props.data.title,
+                  answer: option.optionLabel
+                });
               }}
             >
               {option.optionLabel}

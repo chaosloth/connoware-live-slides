@@ -18,6 +18,7 @@ import { Spinner } from "@twilio-paste/core/spinner";
 import { Box } from "@twilio-paste/core/box";
 import { Anchor } from "@twilio-paste/core/anchor";
 import { IPInfo } from "@/types/IPInfo";
+import { getApiUrl } from "@/utils/apiUtils";
 
 export type IdentifyCardProps = {
   data: GateSlide;
@@ -43,13 +44,11 @@ const IdentifyCard: FC<IdentifyCardProps> = (props) => {
     setIsValidPhone(false);
     const controller = new AbortController();
     const signal = controller.signal;
-    const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
     setIsFetchingPhone(true);
     fetch(
-      `${API_BASE}/api/number-lookup?countryCode=${
+      getApiUrl(`api/number-lookup?countryCode=${
         ip_info?.countryCode || "AU"
-      }&From=${encodeURIComponent(phone)}`,
+      }&From=${encodeURIComponent(phone)}`),
       { signal }
     )
       .then((resp) => resp.json())

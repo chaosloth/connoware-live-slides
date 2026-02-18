@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { SyncClient } from "twilio-sync";
 import { generateSlug } from "random-word-slugs";
+import { getApiUrl } from "@/utils/apiUtils";
 
 export enum State {
   Initializing = "Initializing",
@@ -34,7 +35,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
   const [client, setSyncClient] = useState<SyncClient>();
   const [token, setToken] = useState<string>();
 
-  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "";
+  // Using getApiUrl utility for API endpoints
 
   /**
    *
@@ -69,7 +70,7 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
    */
   // Helper method to get an access token
   const getToken = () =>
-    fetch(`${BASE_URL}/api/token?identity=${identity}`)
+    fetch(getApiUrl(`api/token?identity=${identity}`))
       .then((response) => response.json())
       .then((data) => {
         console.log(`Received access token`, data);

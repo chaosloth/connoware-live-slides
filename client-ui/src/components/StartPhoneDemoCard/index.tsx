@@ -17,7 +17,10 @@ import LogoHeader from "../LogoHeader";
 
 export type CtaPageProps = {
   data: CtaSlide;
-  performActions: (actions: Action[]) => void;
+  performActions: (
+    actions: Action[],
+    properties?: { [key: string]: any }
+  ) => void;
 };
 
 const StartPhoneDemoCard: FC<CtaPageProps> = (props: CtaPageProps) => {
@@ -38,7 +41,10 @@ const StartPhoneDemoCard: FC<CtaPageProps> = (props: CtaPageProps) => {
               key={idx}
               fullWidth={true}
               variant={option.primary ? "primary" : "secondary"}
-              onClick={() => props.performActions(option.afterSubmitActions)}
+              onClick={() => props.performActions(option.afterSubmitActions, {
+                option: option.optionLabel,
+                selection: option.optionValue
+              })}
             >
               {option.optionLabel}
             </Button>

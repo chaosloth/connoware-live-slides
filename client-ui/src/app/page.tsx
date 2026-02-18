@@ -366,6 +366,7 @@ export default function Home() {
       case Phase.DemoCta:
       case Phase.Ended:
       case Phase.WebRtc:
+      case Phase.Freeform:
         return (
           <DynamicCardWrapper
             slide={currentSlide}

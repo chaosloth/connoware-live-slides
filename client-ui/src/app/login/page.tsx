@@ -16,6 +16,7 @@ import {
   Spinner,
 } from "@twilio-paste/core";
 import { useAuth } from "../context/Auth";
+import { getApiUrl } from "../../utils/apiUtils";
 
 const stepTransitionStyles = {
   entering: {
@@ -64,13 +65,13 @@ export default function LoginPage() {
 
     const controller = new AbortController();
     const signal = controller.signal;
-    const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+    // API URLs are now handled by getApiUrl utility
 
     setIsValidatingPhone(true);
     setIsValidPhone(false);
 
     fetch(
-      `${API_BASE}/api/number-lookup?countryCode=US&From=${encodeURIComponent(phoneNumber)}`,
+      getApiUrl(`api/number-lookup?countryCode=US&From=${encodeURIComponent(phoneNumber)}`),
       { signal }
     )
       .then((resp) => resp.json())
@@ -104,7 +105,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/send-code", {
+      const response = await fetch(getApiUrl("api/auth/send-code"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phoneNumber: normalizedPhone }),
@@ -134,7 +135,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/verify-code", {
+      const response = await fetch(getApiUrl("api/auth/verify-code"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phoneNumber: normalizedPhone, code }),

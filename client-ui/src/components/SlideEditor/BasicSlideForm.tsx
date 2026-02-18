@@ -58,6 +58,7 @@ export function BasicSlideForm({ slide, onChange, allSlides = [] }: BasicSlideFo
                 <Option value={Phase.DemoCta}>Demo CTA</Option>
                 <Option value={Phase.WatchPresenter}>Watch Presenter</Option>
                 <Option value={Phase.WebRtc}>WebRTC</Option>
+                <Option value={Phase.Freeform}>Freeform Input</Option>
                 <Option value={Phase.Submitted}>Submitted</Option>
                 <Option value={Phase.Ended}>Ended</Option>
               </Select>

@@ -11,23 +11,22 @@ import {
   Stack,
   Separator,
   Heading,
-  Text,
   Select,
   Option,
 } from "@twilio-paste/core";
-import { GateSlide, Slide } from "@/types/LiveSlides";
+import { FreeformSlide, Slide } from "@/types/LiveSlides";
 import { ActionBuilder } from "../ActionBuilder";
 import { Phase } from "@/types/Phases";
 
-interface IdentifySlideFormProps {
-  slide: GateSlide;
-  onChange: (slide: GateSlide) => void;
+interface FreeformSlideFormProps {
+  slide: FreeformSlide;
+  onChange: (slide: FreeformSlide) => void;
   allSlides?: Slide[];
 }
 
-export function IdentifySlideForm({ slide, onChange, allSlides = [] }: IdentifySlideFormProps) {
-  const handleFieldChange = (field: keyof GateSlide, value: any) => {
-    const updated = { ...slide, [field]: value } as GateSlide;
+export function FreeformSlideForm({ slide, onChange, allSlides = [] }: FreeformSlideFormProps) {
+  const handleFieldChange = (field: keyof FreeformSlide, value: any) => {
+    const updated = { ...slide, [field]: value } as FreeformSlide;
     onChange(updated);
   };
 
@@ -65,7 +64,7 @@ export function IdentifySlideForm({ slide, onChange, allSlides = [] }: IdentifyS
           type="text"
           value={slide.id}
           onChange={(e) => handleFieldChange("id", e.target.value)}
-          placeholder="e.g., IDENTIFY-1"
+          placeholder="e.g., feedback-1"
           required
         />
         <HelpText>Unique identifier for this slide</HelpText>
@@ -80,7 +79,7 @@ export function IdentifySlideForm({ slide, onChange, allSlides = [] }: IdentifyS
           type="text"
           value={slide.title}
           onChange={(e) => handleFieldChange("title", e.target.value)}
-          placeholder="e.g., Tell us about yourself"
+          placeholder="e.g., Share Your Feedback"
           required
         />
         <HelpText>Heading shown to users</HelpText>
@@ -102,21 +101,54 @@ export function IdentifySlideForm({ slide, onChange, allSlides = [] }: IdentifyS
       <Separator orientation="horizontal" />
 
       <Box>
-        <Box marginBottom="space20">
+        <Box marginBottom="space40">
           <Heading as="h3" variant="heading40">
-            User Information Collection
+            Freeform Input Configuration
           </Heading>
         </Box>
-        <Box
-          padding="space50"
-          backgroundColor="colorBackgroundPrimaryWeakest"
-          borderRadius="borderRadius20"
-          marginBottom="space40"
-        >
-          <Text as="p" fontSize="fontSize30" color="colorText">
-            This slide will collect the user&apos;s phone number. Additional fields can be customized through the component.
-          </Text>
-        </Box>
+
+        <FormControl>
+          <Label htmlFor="slide-prompt" required>
+            Prompt / Question
+          </Label>
+          <Input
+            id="slide-prompt"
+            type="text"
+            value={slide.prompt}
+            onChange={(e) => handleFieldChange("prompt", e.target.value)}
+            placeholder="e.g., What did you think of today's presentation?"
+            required
+          />
+          <HelpText>The label/question shown above the text input field</HelpText>
+        </FormControl>
+
+        <FormControl>
+          <Label htmlFor="slide-placeholder">
+            Placeholder Text
+          </Label>
+          <Input
+            id="slide-placeholder"
+            type="text"
+            value={slide.placeholder}
+            onChange={(e) => handleFieldChange("placeholder", e.target.value)}
+            placeholder="e.g., Enter your response here..."
+          />
+          <HelpText>Placeholder text shown inside the input field</HelpText>
+        </FormControl>
+
+        <FormControl>
+          <Label htmlFor="slide-submit-label">
+            Submit Button Label
+          </Label>
+          <Input
+            id="slide-submit-label"
+            type="text"
+            value={slide.submitButtonLabel}
+            onChange={(e) => handleFieldChange("submitButtonLabel", e.target.value)}
+            placeholder="Submit"
+          />
+          <HelpText>Text displayed on the submit button (defaults to "Submit")</HelpText>
+        </FormControl>
       </Box>
 
       <Separator orientation="horizontal" />
@@ -126,7 +158,7 @@ export function IdentifySlideForm({ slide, onChange, allSlides = [] }: IdentifyS
         onChange={(actions) => handleFieldChange("afterSubmitActions", actions)}
         availableSlides={allSlides}
         label="Actions after submission"
-        helpText="Actions that run when user submits their information"
+        helpText="Actions that run when user submits their response"
       />
     </Stack>
   );

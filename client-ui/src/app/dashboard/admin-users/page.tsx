@@ -37,6 +37,7 @@ import { PlusIcon } from "@twilio-paste/icons/esm/PlusIcon";
 import { DeleteIcon } from "@twilio-paste/icons/esm/DeleteIcon";
 import { useAuth } from "@/app/context/Auth";
 import { ErrorMessage } from "@/components/ErrorBoundary";
+import { getApiUrl } from "@/utils/apiUtils";
 
 interface AuthorizedUser {
   phoneNumber: string;
@@ -59,7 +60,7 @@ const AdminUsersPage: FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/users", {
+      const response = await fetch(getApiUrl("api/auth/users"), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +91,7 @@ const AdminUsersPage: FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/users", {
+      const response = await fetch(getApiUrl("api/auth/users"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,7 +130,7 @@ const AdminUsersPage: FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/users", {
+      const response = await fetch(getApiUrl("api/auth/users"), {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

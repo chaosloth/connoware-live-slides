@@ -112,6 +112,7 @@ export function QuestionSlideForm({ slide, onChange, allSlides = [] }: QuestionS
                 <SelectOption value={Phase.DemoCta}>Demo CTA</SelectOption>
                 <SelectOption value={Phase.WatchPresenter}>Watch Presenter</SelectOption>
                 <SelectOption value={Phase.WebRtc}>WebRTC</SelectOption>
+                <SelectOption value={Phase.Freeform}>Freeform Input</SelectOption>
                 <SelectOption value={Phase.Submitted}>Submitted</SelectOption>
                 <SelectOption value={Phase.Ended}>Ended</SelectOption>
               </Select>

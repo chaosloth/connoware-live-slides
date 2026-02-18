@@ -8,6 +8,7 @@ import {
   CtaSlide,
   GateSlide,
   QuestionSlide,
+  FreeformSlide,
   Slide,
 } from "@/types/LiveSlides";
 
@@ -20,6 +21,7 @@ import SubmittedCard from "@/components/SubmittedCard";
 import WebRtcCard from "@/components/WebRtcCard";
 import EndedCard from "@/components/EndedCard";
 import WelcomeCard from "@/components/WelcomeCard";
+import FreeformCard from "@/components/FreeformCard";
 
 export type DynamicCardWrapperProps = {
   slide: Slide | undefined;
@@ -75,6 +77,13 @@ const DynamicCardWrapper: FC<DynamicCardWrapperProps> = (
         return (
           <StartPhoneDemoCard
             data={props.slide as CtaSlide}
+            performActions={props.performActions}
+          />
+        );
+      case Phase.Freeform:
+        return (
+          <FreeformCard
+            data={props.slide as FreeformSlide}
             performActions={props.performActions}
           />
         );

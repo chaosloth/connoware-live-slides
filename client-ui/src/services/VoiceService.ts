@@ -1,4 +1,5 @@
 import { Call, Device } from "@twilio/voice-sdk";
+import { getApiUrl } from "../utils/apiUtils";
 
 class VoiceService {
   device: Device | undefined = undefined;
@@ -7,7 +8,7 @@ class VoiceService {
 
   async init(identity: string): Promise<Device> {
     try {
-      const resp = await fetch("/api/voice/token", {
+      const resp = await fetch(getApiUrl("api/voice/token"), {
         method: "POST",
         body: JSON.stringify({ identity }),
         headers: {

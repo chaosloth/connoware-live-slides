@@ -155,3 +155,22 @@ export class EndedSlide extends Slide {
     this.options = [];
   }
 }
+
+export class FreeformSlide extends Slide {
+  prompt: string;
+  placeholder: string;
+  submitButtonLabel: string;
+  afterSubmitActions: Action[];
+
+  constructor(id: string, title: string, description: string) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.kind = Phase.Freeform;
+    this.prompt = "";
+    this.placeholder = "";
+    this.submitButtonLabel = "Submit";
+    this.afterSubmitActions = [];
+  }
+}

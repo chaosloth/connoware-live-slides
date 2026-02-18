@@ -11,11 +11,13 @@ import {
   WaitSlide,
   WebRtcSlide,
   EndedSlide,
+  FreeformSlide,
 } from "@/types/LiveSlides";
 import { QuestionSlideForm } from "./QuestionSlideForm";
 import { IdentifySlideForm } from "./IdentifySlideForm";
 import { CtaSlideForm } from "./CtaSlideForm";
 import { BasicSlideForm } from "./BasicSlideForm";
+import { FreeformSlideForm } from "./FreeformSlideForm";
 
 interface SlideEditorProps {
   slide: Slide;
@@ -60,6 +62,15 @@ export function SlideEditor({ slide, onChange, allSlides = [] }: SlideEditorProp
         <CtaSlideForm
           slide={slide as CtaSlide | EndedSlide}
           onChange={onChange as (slide: CtaSlide | EndedSlide) => void}
+          allSlides={allSlides}
+        />
+      );
+
+    case Phase.Freeform:
+      return (
+        <FreeformSlideForm
+          slide={slide as FreeformSlide}
+          onChange={onChange as (slide: FreeformSlide) => void}
           allSlides={allSlides}
         />
       );

@@ -8,6 +8,7 @@ import { Box, Spinner, Stack } from "@twilio-paste/core";
 import LogoHeader from "@/components/LogoHeader";
 import { GenericEvent } from "@/types/EventTypes";
 import BubbleChart, { BubbleData } from "@/components/BubbleChart";
+import ClearEventsButton from "@/components/ClearEventsButton";
 
 export default function ChartPage() {
   const [pid, setPresentationId] = useState<string | undefined>();
@@ -162,6 +163,12 @@ export default function ChartPage() {
   // Calculate total responses
   const totalResponses = chartData.reduce((sum, item) => sum + item.value, 0);
 
+  const handleClearEvents = () => {
+    setEventList([]);
+    // Also clear the buffer to prevent events from reappearing
+    eventBuffer.current = [];
+  };
+
   return (
     <Box
       position="fixed"
@@ -195,6 +202,8 @@ export default function ChartPage() {
         maxBubbleSize={250}
         minBubbleSize={80}
       />
+
+      <ClearEventsButton onClear={handleClearEvents} />
     </Box>
   );
 }
