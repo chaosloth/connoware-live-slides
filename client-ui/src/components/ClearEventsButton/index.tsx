@@ -15,7 +15,7 @@ const ClearEventsButton: React.FC<ClearEventsButtonProps> = ({ onClear }) => {
       position="fixed"
       bottom="space60"
       right="space60"
-      zIndex={9000}
+      zIndex="zIndex90"
     >
       <Tooltip text="Clear all events" placement="top">
         <Button
