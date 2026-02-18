@@ -1,15 +1,11 @@
-// Basic Next.js config with standalone output
+// Basic Next.js config
 const path = require('path');
-
-console.log('Building with standalone output mode...');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Use standard Next.js output - no specific output mode
-  outputFileTracingRoot: path.join(__dirname),
-  // Add an empty turbopack config to silence the error
-  turbopack: {},
+  // Allow static export when specified in the command
+  output: process.env.NEXT_STATIC_EXPORT ? 'export' : undefined,
   // Webpack configuration
   webpack: (config, { isServer }) => {
     console.log('Webpack configuration being applied, isServer:', isServer);
@@ -27,10 +23,5 @@ const nextConfig = {
     return config;
   }
 };
-
-console.log('Using config:', JSON.stringify({
-  output: nextConfig.output,
-  turbopack: nextConfig.turbopack ? 'configured' : 'not configured'
-}, null, 2));
 
 module.exports = nextConfig;

@@ -147,7 +147,7 @@ export function FreeformSlideForm({ slide, onChange, allSlides = [] }: FreeformS
             onChange={(e) => handleFieldChange("submitButtonLabel", e.target.value)}
             placeholder="Submit"
           />
-          <HelpText>Text displayed on the submit button (defaults to "Submit")</HelpText>
+          <HelpText>Text displayed on the submit button (defaults to &quot;Submit&quot;)</HelpText>
         </FormControl>
       </Box>
 
